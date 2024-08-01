@@ -1,0 +1,19 @@
+meta {
+  name: 조회
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1?serviceKey={{API_KEY}}&type=json
+  body: none
+  auth: none
+}
+
+params:query {
+  serviceKey: {{API_KEY}}
+  type: json
+  ~desc_kor: 된장찌개
+  ~pageNo: 1
+  ~numOfRows: 10
+}
