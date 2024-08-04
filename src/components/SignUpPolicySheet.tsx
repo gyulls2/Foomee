@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircleIcon, ChevronRight } from './icons/IconComponents';
+import { CheckCircleIcon, ChevronRightIcon } from './icons/IconComponents';
 
 const SignUpPolicySheet: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const SignUpPolicySheet: React.FC = () => {
               이용 약관에 동의
             </p>
             <button className="ml-auto">
-              <ChevronRight />
+              <ChevronRightIcon />
             </button>
           </div>
           <div className="w-full flex items-center gap-2">
@@ -28,7 +28,7 @@ const SignUpPolicySheet: React.FC = () => {
               이용 약관에 동의
             </p>
             <button className="ml-auto">
-              <ChevronRight />
+              <ChevronRightIcon />
             </button>
           </div>
           <div className="w-full flex items-center gap-2">
@@ -39,7 +39,7 @@ const SignUpPolicySheet: React.FC = () => {
               이용 약관에 동의
             </p>
             <button className="ml-auto">
-              <ChevronRight />
+              <ChevronRightIcon />
             </button>
           </div>
           <div className="w-full flex items-center gap-2">
@@ -50,7 +50,7 @@ const SignUpPolicySheet: React.FC = () => {
               이용 약관에 동의
             </p>
             <button className="ml-auto">
-              <ChevronRight />
+              <ChevronRightIcon />
             </button>
           </div>
         </div>
