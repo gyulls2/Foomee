@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { AddIcon, RemoveIcon } from './icons/IconComponents';
 
 const ServingInput: React.FC = () => {
