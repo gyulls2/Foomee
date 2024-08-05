@@ -1,0 +1,19 @@
+meta {
+  name: 식약처DB
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://api.data.go.kr/openapi/tn_pubr_public_nutri_info_api?serviceKey={{DB_API_KEY}}&type=json&numOfRows=30&pageNo=1&foodNm=바나나
+  body: none
+  auth: none
+}
+
+params:query {
+  serviceKey: {{DB_API_KEY}}
+  type: json
+  numOfRows: 30
+  pageNo: 1
+  foodNm: 바나나
+}
