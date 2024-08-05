@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* 헤더 제외한 section */
+.section-min-height {
+  min-height: calc(100vh - 5rem);
+}
+
+/* 헤더, 탭메뉴 제외한 section */
+.main-content-min-height {
+  min-height: calc(100vh - 8rem);
+}
+
+/* 검색헤더, 탭메뉴 제외한 section */
+.search-section-min-height {
+  min-height: calc(100vh - 9.125rem);
+}
