@@ -1,7 +1,7 @@
 import React from 'react';
-import { CloseIcon } from './icons/IconComponents';
+import { CloseIcon } from '../icons/IconComponents';
 
-const WeightInput: React.FC = () => {
+const WeightInputSheet: React.FC = () => {
   return (
     <div className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10 flex flex-col justify-end">
       <div className="relative w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-12">
@@ -36,4 +36,4 @@ const WeightInput: React.FC = () => {
   );
 };
 
-export default WeightInput;
+export default WeightInputSheet;

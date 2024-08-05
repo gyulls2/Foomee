@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRightIcon } from './icons/IconComponents';
+import { ChevronRightIcon } from '../icons/IconComponents';
 
 const LogoutSheet: React.FC = () => {
   return (

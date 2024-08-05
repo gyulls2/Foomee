@@ -4,13 +4,13 @@ import {
   SmileyIcon,
 } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
-import WeightInput from '@/components/WeightInput';
+import WeightInputSheet from '@/components/layout/WeightInputSheet';
 import Image from 'next/image';
 
 const HomePage = () => {
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      <WeightInput />
+      <WeightInputSheet />
 
       <header className="flex items-center justify-between w-full px-8 py-4">
         <button aria-label="이전 날짜" className="rotate-180">

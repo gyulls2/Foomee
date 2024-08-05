@@ -3,10 +3,10 @@ import {
   BoltIcon,
   CheckCircleIcon,
   ChevronRightIcon,
-} from './icons/IconComponents';
-import Swiper from './Swiper';
-import BinaryToggleButton from './BinaryToggleButton';
-import ServingInput from './ServingInput';
+} from '../icons/IconComponents';
+import Swiper from '../Swiper';
+import BinaryToggleButton from '../BinaryToggleButton';
+import ServingInput from '../ServingInput';
 
 const AddFoodSheet: React.FC = () => {
   return (
