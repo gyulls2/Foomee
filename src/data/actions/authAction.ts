@@ -1,9 +1,8 @@
 // 서버 액션 정의
 'use server';
 
-import { signIn, auth } from '@/auth';
+import { signIn } from '@/auth';
 import { redirect } from 'next/navigation';
-import useUserStore from '@/zustand/userStore';
 
 type LoginForm = {
   email: string;
