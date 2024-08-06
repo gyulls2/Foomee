@@ -1,7 +1,7 @@
 meta {
   name: 회원 가입
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
@@ -12,26 +12,22 @@ post {
 
 body:json {
   {
-    "email": "api@market.com",
+    "email": "foomeetest@test.com",
     "password": "11111111",
-    "name": "GD",
-    "phone": "0118889999",
-    "address": "서울시 강남구 역삼동 123",
+    "name": "귤귤",
     "type": "user",
     "extra": {
-      "birthday": "10-23",
-      "address": [
-        {
-          "id": 1,
-          "name": "집",
-          "value": "서울시 강남구 역삼동 123"
-        },
-        {
-          "id": 2,
-          "name": "회사",
-          "value": "서울시 강남구 신사동 234"
-        }
-      ]
+      "character": "orange",
+      "gender": "female",
+      "age": 28,
+      "height": 175,
+      "activity_level": "moderate",
+      "starting_weight": 80,
+      "goal_weight": 70,
+      "goal_calories": 2000,
+      "carbohydrates": 250,
+      "protein": 150,
+      "fat": 70
     }
   }
 }

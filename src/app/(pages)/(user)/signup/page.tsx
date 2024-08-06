@@ -1,5 +1,5 @@
 import { BackArrowIcon } from '@/components/icons/IconComponents';
-import SignUpPolicySheet from '@/components/SignUpPolicySheet';
+import SignUpPolicySheet from '@/components/layout/SignUpPolicySheet';
 // import WelcomeModal from '@/components/WelcomeModal';
 
 const SignupPage = () => {

@@ -1,16 +1,48 @@
+'use client';
+
+import { auth } from '@/auth';
 import {
   AddIcon,
   ChevronRightIcon,
   SmileyIcon,
 } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
-import WeightInput from '@/components/WeightInput';
+import WeightInputSheet from '@/components/layout/WeightInputSheet';
+import useUserStore from '@/zustand/userStore';
 import Image from 'next/image';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 const HomePage = () => {
+  const { setUser, user } = useUserStore();
+  const { data: session, status } = useSession();
+  console.log('user : ', user);
+  console.log('session : ', session);
+
+  useEffect(() => {
+    // 유저 정보를 zustand 스토어에 저장
+    if (status === 'authenticated' && session?.user) {
+      console.log('session.user :', session.user);
+      setUser({
+        _id: session.user._id,
+        type: session.user.type || 'user',
+        name: session.user.name || '',
+        email: session.user.email || '',
+        profileImage: session.user.image || '',
+        token: {
+          accessToken: session.user.accessToken || '',
+          refreshToken: session.user.refreshToken || '',
+        },
+        extra: session.user.extra || null,
+        // createdAt: session.user.createdAt || '',
+        // updatedAt: session.user.updatedAt || '',
+      });
+    }
+  }, [session, setUser]);
+
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      <WeightInput />
+      {/* <WeightInputSheet /> */}
 
       <header className="flex items-center justify-between w-full px-8 py-4">
         <button aria-label="이전 날짜" className="rotate-180">
@@ -117,7 +149,7 @@ const HomePage = () => {
               <Image
                 src="/images/asset_egg.png"
                 alt="저녁"
-                width={36.18}
+                width={36}
                 height={45}
               />
               <div>
@@ -133,7 +165,7 @@ const HomePage = () => {
                 src="/images/asset_avocado.png"
                 alt="간식"
                 width={45}
-                height={40}
+                height={66}
               />
               <div>
                 <h3 className="font-semibold text-white">간식</h3>

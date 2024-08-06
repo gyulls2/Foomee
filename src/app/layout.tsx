@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import React from 'react';
+import { SessionProvider } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,9 +28,11 @@ export default function RootLayout({
       <body
         className={`${inter.className} w-full flex justify-center h-full min-h-screen bg-gray-400`}
       >
-        <div className="overflow-hidden flex flex-col relative w-full min-h-screen h-full max-w-[475px] bg-white">
-          {children}
-        </div>
+        <SessionProvider>
+          <div className="overflow-hidden flex flex-col relative w-full min-h-screen h-full max-w-[475px] bg-white">
+            {children}
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );

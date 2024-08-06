@@ -1,4 +1,4 @@
-import AddFoodSheet from '@/components/AddFoodSheet';
+import AddFoodSheet from '@/components/layout/AddFoodSheet';
 import {
   BackArrowIcon,
   SearchIcon,
@@ -11,7 +11,7 @@ const SearchPage = () => {
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
       <AddFoodSheet />
-      
+
       <header className="flex text-center relative w-full px-4 py-4 gap-3 items-center">
         <button>
           <BackArrowIcon />
