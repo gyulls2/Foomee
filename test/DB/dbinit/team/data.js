@@ -216,7 +216,7 @@ export const initData = async (clientId, nextSeq) => {
           image: `/files/${clientId}/user-tube.webp`,
         },
         extra: {
-          weight: '75.5kg',
+          weight: 70.2,
         },
         createdAt: getTime(0, -60 * 60 * 12),
         updatedAt: getTime(0, -60 * 60 * 12),
