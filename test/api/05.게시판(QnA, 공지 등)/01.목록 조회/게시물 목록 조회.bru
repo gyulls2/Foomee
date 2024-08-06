@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{url}}/posts?type=qna
+  url: {{url}}/posts?type=weight
   body: none
   auth: none
 }
 
-query {
-  type: qna
+params:query {
+  type: weight
   ~type: recipe
   ~type: community
   ~type: notice
