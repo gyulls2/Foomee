@@ -4,7 +4,13 @@ import { JWT } from 'next-auth/jwt';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth({
   providers: [
     CredentialsProvider({
       // email/password 로그인

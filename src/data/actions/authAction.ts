@@ -1,7 +1,7 @@
 // 서버 액션 정의
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, update, auth } from '@/auth';
 import { redirect } from 'next/navigation';
 
 type LoginForm = {
@@ -39,3 +39,5 @@ export async function signInWithCredentials(formData: LoginForm) {
 // export async function signInWithGithub(formData: FormData) {
 //   await signIn('github', { redirectTo: '/' });
 // }
+
+export { auth as getSession, update as updateSession };
