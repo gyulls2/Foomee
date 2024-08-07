@@ -4,7 +4,13 @@ import { JWT } from 'next-auth/jwt';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth({
   providers: [
     CredentialsProvider({
       // email/password 로그인
@@ -14,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'client-id': '00-sample',
+              'client-id': '04-Foomee',
             },
             body: JSON.stringify(credentials),
           });
