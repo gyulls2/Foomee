@@ -13,13 +13,13 @@ const AnalysisPage = () => {
           <BackArrowIcon />
         </button>
       </header>
-      <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full main-content-min-height">
+      <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full min-h-without-header-tab">
         <div>
           <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-bl-[20px] px-8 py-3 flex justify-center items-center bg-[#ffb800] text-base mb-6 ml-auto text-right break-words">
             오늘 식단을 분석해줘!
           </div>
           <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-br-[20px] px-8 py-5 flex flex-col justify-center items-start bg-[#F8F9FE] text-base mb-6 mr-auto text-left break-words">
-            <span   className="font-semibold mb-2">AI 비서</span>
+            <span className="font-semibold mb-2">AI 비서</span>
             Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
             vulputate libero et velit interdum, ac aliquet odio mattis. Class
             aptent taciti sociosqu ad litora torquent per conubia nostra, per
@@ -29,7 +29,7 @@ const AnalysisPage = () => {
           </div>
         </div>
 
-        <div className="mt-auto relative mb-2">
+        <div className="mt-auto relative mb-2 justify-items-end">
           <input
             className="rounded-full w-full h-14 bg-[#F8F9FE] px-6 focus:border-orange-400 focus:outline-none"
             placeholder="오늘 식단을 분석해줘!"

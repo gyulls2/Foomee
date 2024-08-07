@@ -29,7 +29,7 @@ const SearchPage = () => {
           <span className="font-bold text-gray-400">0</span>
         </div>
       </header>
-      <section className="px-8 flex flex-col gap-8 relative w-full h-full search-section-min-height bg-[#FFFBF1] items-center py-4">
+      <section className="px-8 flex flex-col gap-8 relative w-full h-full min-h-without-search-tab bg-[#FFFBF1] items-center py-4">
         {/* <div className="flex flex-col gap-8 items-center my-auto">
           <SmileyIcon />
           <h2>오늘 먹은 음식을 검색해보세요</h2>
