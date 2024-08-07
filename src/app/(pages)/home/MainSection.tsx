@@ -8,19 +8,15 @@ const MainSection = () => {
   const { data: session } = useSession();
   const { user, setUser } = useUserStore();
 
+  // zustand에 사용자 정보 저장
   useEffect(() => {
     if (session?.user) {
       setUser({
         _id: session.user._id,
-        type: session.user.type || 'user',
-        name: session.user.name || '',
-        email: session.user.email || '',
-        profileImage: session.user.image || '',
-        token: {
-          accessToken: session.user.accessToken || '',
-          refreshToken: session.user.refreshToken || '',
-        },
-        extra: session.user.extra || null,
+        type: session.user.type,
+        name: session.user.name,
+        accessToken: session.user.accessToken,
+        refreshToken: session.user.refreshToken,
       });
     }
   }, [session]);

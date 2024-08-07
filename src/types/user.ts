@@ -4,14 +4,14 @@ export interface UserData {
   name: string;
   phone?: string;
   address?: string;
-  type: 'user' | 'seller' | 'admin';
+  type: string;
   loginType?: 'email' | 'kakao';
   profileImage?: string;
   profile?: string;
-  token?: {
-    accessToken: string;
-    refreshToken: string;
-  };
+
+  accessToken: string;
+  refreshToken: string;
+
   createdAt?: string;
   updatedAt?: string;
 

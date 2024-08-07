@@ -40,11 +40,9 @@ export const {
               type: user.type,
               profileImage:
                 user.profileImage && `${SERVER}${user.profileImage}`,
-              token: {
-                accessToken: user.token.accessToken,
-                refreshToken: user.token.refreshToken,
-              },
-              extra: user.extra || null,
+
+              accessToken: user.token.accessToken,
+              refreshToken: user.token.refreshToken,
             };
           } else {
             console.error(`인증 실패: ${resJson.message}`);
@@ -77,21 +75,21 @@ export const {
     // 로그인 성공한 회원 정보로 token 객체 설정
     // 최초 로그인시 user 객체 전달,
     async jwt({ token, user }) {
-      try {
-        if (user) {
-          token.user = user;
-        }
-      } catch (error) {
-        console.error('Error in jwt callback:', error);
+      if (user) {
+        token.id = user.id;
+        token.type = user.type;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
       }
       return token;
     },
     // 클라이언트에서 세션 정보 요청시 호출
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
-      if (token?.user) {
-        session.user = token.user;
-      }
+      session.user.id = token.id as string;
+      session.user.type = token.type as string;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       return session;
     },
   },
