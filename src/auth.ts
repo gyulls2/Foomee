@@ -76,7 +76,7 @@ export const {
     // 최초 로그인시 user 객체 전달,
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token._id = user._id;
         token.type = user.type;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
@@ -86,7 +86,7 @@ export const {
     // 클라이언트에서 세션 정보 요청시 호출
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
-      session.user.id = token.id as string;
+      session.user._id = token._id as number;
       session.user.type = token.type as string;
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;

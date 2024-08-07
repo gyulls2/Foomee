@@ -1,30 +1,37 @@
 'use client';
 
+import { fetchUser } from '@/data/fetch/userFetch';
+import { UserData } from '@/types';
 import useUserStore from '@/zustand/userStore';
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const MainSection = () => {
   const { data: session } = useSession();
-  const { user, setUser } = useUserStore();
+  const [user, setUser] = useState<UserData | null>(null);
 
-  // zustand에 사용자 정보 저장
+  // 사용자 extra 정보 조회
   useEffect(() => {
-    if (session?.user) {
-      setUser({
-        _id: session.user._id,
-        type: session.user.type,
-        name: session.user.name,
-        accessToken: session.user.accessToken,
-        refreshToken: session.user.refreshToken,
-      });
-    }
+    const fetchUserData = async () => {
+      if (session?.user) {
+        try {
+          const userData = await fetchUser(
+            session.user._id,
+            session.accessToken,
+          );
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+    fetchUserData();
   }, [session]);
 
   return (
-    <div className="flex flex-col items-center p-8 w-full main-content-min-height bg-[#FFFBF1]">
+    <div className="flex flex-col items-center p-8 w-full min-h-without-header-tab bg-[#FFFBF1] max-h-[1024px] h-full">
       <div className="flex flex-col items-center pb-6 flex-grow">
-        <div className="border border-black py-1 px-4 rounded-full text-sm mb-4">
+        <div className="border border-black py-1 px-4 rounded-full text-sm">
           {user?.name}님
         </div>
         <div className="relative flex flex-col items-center justify-center flex-grow">

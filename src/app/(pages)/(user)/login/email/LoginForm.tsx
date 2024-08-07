@@ -11,6 +11,9 @@ type LoginForm = {
   experience?: 'auto-login' | 'trial';
 };
 
+const EMAIL = process.env.NEXT_PUBLIC_TRIAL_EMAIL as string;
+const PW = process.env.NEXT_PUBLIC_TRIAL_PW as string;
+
 const LoginForm = () => {
   const {
     register,
@@ -25,10 +28,9 @@ const LoginForm = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedValue = event.target.value;
-    console.log(selectedValue);
     if (selectedValue === 'trial') {
-      setValue('email', 'foomeetest@test.com');
-      setValue('password', '11111111');
+      setValue('email', EMAIL);
+      setValue('password', PW);
     } else {
       setValue('email', '');
       setValue('password', '');
