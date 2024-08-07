@@ -5,6 +5,7 @@ import Image from 'next/image';
 import WeightForm from './WeightForm';
 import { Main } from 'next/document';
 import MainSection from './MainSection';
+import MealSection from './MealSection';
 
 const HomePage = () => {
   return (
@@ -19,7 +20,7 @@ const HomePage = () => {
           <ChevronRightIcon width="30" height="30" />
         </button>
       </header>
-      <section className="flex flex-col relative w-full h-full main-content-min-height">
+      <section className="flex flex-col relative w-full h-full min-h-without-header-tab">
         {/* 메인 페이지 ---------------------------------------------------------------------------------------------- */}
         <MainSection />
         {/* 식단 기록 ------------------------------------------------------------------------------------- */}
@@ -28,68 +29,7 @@ const HomePage = () => {
             {/* TODO:아이콘 추가 */}
             <h2 className="text-lg font-semibold">먹었어요</h2>
           </div>
-          <div className="grid grid-cols-2 gap-6 w-full p-4 pb-10">
-            <div className="bg-[#8BC60F] rounded-[20px] px-6 py-6 flex flex-col justify-between relative h-44">
-              <Image
-                src="/images/asset_tomato.png"
-                alt="아침"
-                width={40}
-                height={40}
-              />
-              <div>
-                <h3 className="font-semibold text-white">아침</h3>
-                <p className="text-white">0 kcal</p>
-              </div>
-              <button className="absolute top-6 right-6">
-                <AddIcon width="36" height="36" fill="#ffffff" />
-              </button>
-            </div>
-            <div className="bg-[#FF8E25] rounded-[20px] px-6 py-6 flex flex-col justify-between relative h-44">
-              <Image
-                src="/images/asset_lime.png"
-                alt="점심"
-                width={40}
-                height={40}
-              />
-              <div>
-                <h3 className="font-semibold text-white">점심</h3>
-                <p className="text-white">0 kcal</p>
-              </div>
-              <button className="absolute top-6 right-6">
-                <AddIcon width="36" height="36" fill="#ffffff" />
-              </button>
-            </div>
-            <div className="bg-[#2AB58B] rounded-[20px] px-6 py-6 flex flex-col justify-between relative h-44">
-              <Image
-                src="/images/asset_egg.png"
-                alt="저녁"
-                width={36}
-                height={45}
-              />
-              <div>
-                <h3 className="font-semibold text-white">저녁</h3>
-                <p className="text-white">0 kcal</p>
-              </div>
-              <button className="absolute top-6 right-6">
-                <AddIcon width="36" height="36" fill="#ffffff" />
-              </button>
-            </div>
-            <div className="bg-[#FF7066] rounded-[20px] px-6 py-6 flex flex-col justify-between relative h-44">
-              <Image
-                src="/images/asset_avocado.png"
-                alt="간식"
-                width={45}
-                height={66}
-              />
-              <div>
-                <h3 className="font-semibold text-white">간식</h3>
-                <p className="text-white">0 kcal</p>
-              </div>
-              <button className="absolute top-6 right-6">
-                <AddIcon width="36" height="36" fill="#ffffff" />
-              </button>
-            </div>
-          </div>
+          <MealSection />
         </div>
 
         {/* 체중 기록 -------------------------------------------------------- */}
