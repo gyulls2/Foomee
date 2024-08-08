@@ -14,7 +14,7 @@ const MealsPage = () => {
           <CloseIcon />
         </button>
       </header>
-      <section className="flex flex-col h-full section-min-height">
+      <section className="flex flex-col h-full min-h-without-header">
         <div className="text-center px-8 py-20">
           <div className="flex justify-center mb-4">
             <div className="relative w-36 h-36 rounded-full bg-[#FFB800] flex flex-col justify-center items-center">

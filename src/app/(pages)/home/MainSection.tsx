@@ -1,34 +1,52 @@
 'use client';
 
-import useUserStore from '@/zustand/userStore';
+import { fetchUser } from '@/data/fetch/userFetch';
+import { UserData } from '@/types';
+import useNutritionStore from '@/zustand/nutritionStore';
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+const calculateWidth = (value: number, total: number) => {
+  const width = (value / total) * 100;
+  return width > 100 ? 100 : width;
+};
 
 const MainSection = () => {
   const { data: session } = useSession();
-  const { user, setUser } = useUserStore();
+  const [user, setUser] = useState<UserData | null>(null);
+  const { nutrition } = useNutritionStore();
 
+  console.log(nutrition);
+
+  // 사용자 extra 정보 조회
   useEffect(() => {
-    if (session?.user) {
-      setUser({
-        _id: session.user._id,
-        type: session.user.type || 'user',
-        name: session.user.name || '',
-        email: session.user.email || '',
-        profileImage: session.user.image || '',
-        token: {
-          accessToken: session.user.accessToken || '',
-          refreshToken: session.user.refreshToken || '',
-        },
-        extra: session.user.extra || null,
-      });
-    }
+    const fetchUserData = async () => {
+      if (session?.user) {
+        try {
+          const userData = await fetchUser(
+            session.user._id,
+            session.accessToken,
+          );
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+    fetchUserData();
   }, [session]);
 
+  const chocdfWidth = calculateWidth(
+    nutrition?.chocdf,
+    user?.extra?.carbohydrates ?? 0,
+  );
+  const protWidth = calculateWidth(nutrition?.prot, user?.extra?.protein ?? 0);
+  const fatceWidth = calculateWidth(nutrition?.fatce, user?.extra?.fat ?? 0);
+
   return (
-    <div className="flex flex-col items-center p-8 w-full main-content-min-height bg-[#FFFBF1]">
+    <div className="flex flex-col items-center p-8 w-full min-h-without-header-tab bg-[#FFFBF1] max-h-[1024px] h-full">
       <div className="flex flex-col items-center pb-6 flex-grow">
-        <div className="border border-black py-1 px-4 rounded-full text-sm mb-4">
+        <div className="border border-black py-1 px-4 rounded-full text-sm">
           {user?.name}님
         </div>
         <div className="relative flex flex-col items-center justify-center flex-grow">
@@ -42,7 +60,7 @@ const MainSection = () => {
             ></div>
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-9xl font-medium">1130</span>
+            <span className="text-9xl font-medium">{nutrition?.enerc}</span>
             <span className="text-2xl">kcal</span>
           </div>
           <div className="absolute top-0 left-0 w-40 h-40">
@@ -60,24 +78,37 @@ const MainSection = () => {
         <div className="bg-[#FFC632] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">순탄수</h3>
           <p className="text-sm text-white">
-            0 / {user?.extra?.carbohydrates}g
+            {nutrition?.chocdf} / {user?.extra?.carbohydrates}g
           </p>
           <div className="w-full h-1.5 bg-[#FFEDC1] rounded-full mt-10 relative">
-            <div className="w-1/2 h-1.5 bg-[#FF8A00] rounded-l-full absolute top-0 left-0"></div>
+            <div
+              className="h-1.5 bg-[#FF8A00] rounded-l-full absolute top-0 left-0"
+              style={{ width: `${chocdfWidth}%` }}
+            ></div>
           </div>
         </div>
         <div className="bg-[#FF6363] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">단백질</h3>
-          <p className="text-sm text-white">0 / {user?.extra?.protein}g</p>
+          <p className="text-sm text-white">
+            {nutrition?.prot} / {user?.extra?.protein}g
+          </p>
           <div className="w-full h-1.5 bg-[#FFD0D0] rounded-full mt-10 relative">
-            <div className="w-1/2 h-1.5 bg-[#B1004B] rounded-l-full absolute top-0 left-0"></div>
+            <div
+              className="h-1.5 bg-[#B1004B] rounded-l-full absolute top-0 left-0"
+              style={{ width: `${protWidth}%` }}
+            ></div>
           </div>
         </div>
         <div className="bg-[#FF9C65] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">지방</h3>
-          <p className="text-sm text-white">0 / {user?.extra?.fat}g</p>
-          <div className="w-full h-1.5 bg-[#FFE1D0] rounded-full mt-10 relative">
-            <div className="w-1/2 h-1.5 bg-[#FF5B00] rounded-l-full absolute top-0 left-0"></div>
+          <p className="text-sm text-white">
+            {nutrition?.fatce} / {user?.extra?.fat}g
+          </p>
+          <div className="w-full h-1.5 bg-[#FFE1D0] rounded-full mt-10 relative overflow-hidden">
+            <div
+              className="h-1.5 bg-[#FF5B00] rounded-l-full absolute top-0 left-0"
+              style={{ width: `${fatceWidth}%` }}
+            ></div>
           </div>
         </div>
       </div>

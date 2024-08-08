@@ -13,7 +13,7 @@ const ProfilePage = () => {
           <SettingsIcon fill="#d9d9d9" />
         </button>
       </header>
-      <section className="py-2.5 px-10 flex flex-col gap-16 items-center relative w-full h-full main-content-min-height">
+      <section className="py-2.5 px-10 flex flex-col gap-16 items-center relative w-full h-full min-h-without-header-tab">
         <div className="flex mt-10 gap-10">
           <div className="flex flex-col justify-center items-center gap-2">
             <p>⛳ 목표</p>
