@@ -1,6 +1,8 @@
-import { AddIcon } from '@/components/icons/IconComponents';
-import Image from 'next/image';
+'use client';
+
 import MealCard from './MealCard';
+import useNutritionStore from '@/zustand/nutritionStore';
+import { useEffect } from 'react';
 
 const MealList = [
   {
@@ -34,6 +36,12 @@ const MealList = [
 ];
 
 const MealSection = () => {
+  const { reset } = useNutritionStore();
+
+  useEffect(() => {
+    reset();
+  }, []);
+
   return (
     <div className="grid grid-cols-2 gap-6 w-full p-4 pb-10">
       {MealList.map((meal, index) => (

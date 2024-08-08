@@ -1,8 +1,8 @@
 'use client';
 
 import { AddIcon } from '@/components/icons/IconComponents';
-import { getSession } from '@/data/actions/authAction';
 import { fetchPosts } from '@/data/fetch/postFetch';
+import useNutritionStore from '@/zustand/nutritionStore';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -27,7 +27,7 @@ interface Food {
   foodSize: string;
 }
 
-interface Total {
+export interface Total {
   enerc: number;
   prot: number;
   fatce: number;
@@ -39,6 +39,10 @@ const MealCard = ({ meal }: { meal: Meal }) => {
   const { data: session } = useSession();
   // TODO: total 칼로리, 탄단지 계산 필요
   const [total, setTotal] = useState<Total | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
+
+  const { addNutrition } = useNutritionStore();
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');
@@ -46,6 +50,8 @@ const MealCard = ({ meal }: { meal: Meal }) => {
 
   // foodList 조회
   useEffect(() => {
+    let isMounted = true;
+
     const fetchFoodList = async () => {
       const data = await fetchPosts(type, undefined, getDay(0));
       const foodList: Food[] | undefined = Array.isArray(
@@ -54,7 +60,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
         ? data?.[0]?.extra?.foods
         : undefined;
 
-      if (foodList) {
+      if (foodList && isMounted) {
         // 각 영양소의 총합을 계산
         const totals = foodList.reduce(
           (acc, cur) => {
@@ -73,10 +79,23 @@ const MealCard = ({ meal }: { meal: Meal }) => {
           fatce: totals.fatce,
           chocdf: totals.chocdf,
         });
+        setIsLoaded(true);
       }
     };
     fetchFoodList();
-  }, [session]);
+
+    return () => {
+      isMounted = false; // 컴포넌트가 언마운트되면 상태를 false로 설정
+    };
+  }, [session, type]);
+
+  // zustand total 칼로리, 탄단지 업데이트
+  useEffect(() => {
+    if (total && isLoaded && !hasAdded) {
+      addNutrition(total);
+      setHasAdded(true);
+    }
+  }, [total, isLoaded, addNutrition]);
 
   const bgColorClass =
     {

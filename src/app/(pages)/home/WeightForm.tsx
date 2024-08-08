@@ -1,14 +1,11 @@
 import Image from 'next/image';
 import { SmileyIcon } from '@/components/icons/IconComponents';
-import useUserStore from '@/zustand/userStore';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import moment from 'moment';
-import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import { getSession } from '@/data/actions/authAction';
+// import { getSession } from '@/data/actions/authAction';
 
 const WeightForm = async () => {
-  const session = await getSession();
+  // const session = await getSession();
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');

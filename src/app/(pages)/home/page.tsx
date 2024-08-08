@@ -1,9 +1,7 @@
-import { AddIcon, ChevronRightIcon } from '@/components/icons/IconComponents';
+import { ChevronRightIcon } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
-import WeightInputSheet from '@/components/layout/WeightInputSheet';
-import Image from 'next/image';
+// import WeightInputSheet from '@/components/layout/WeightInputSheet';
 import WeightForm from './WeightForm';
-import { Main } from 'next/document';
 import MainSection from './MainSection';
 import MealSection from './MealSection';
 
