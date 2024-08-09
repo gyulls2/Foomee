@@ -18,6 +18,7 @@ const WeightForm = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
   const [diff, setDiff] = useState('-0');
+  const [bmi, setBmi] = useState(0);
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');
@@ -77,6 +78,19 @@ const WeightForm = () => {
     }
   }, [data, user]);
 
+  // BMI 계산
+  useEffect(() => {
+    const weight = parseFloat(data?.content || '0');
+    const height = user?.extra?.height || 0;
+    if (weight === 0 || height === 0) {
+      setBmi(0);
+      return;
+    }
+    // 체중(kg) / [신장(m)]2
+    const bmi = (weight / (height / 100) ** 2).toFixed(1);
+    setBmi(parseFloat(bmi));
+  }, [data, user]);
+
   const handleOpenSheet = () => {
     setIsSheetOpen(true);
     setRefresh(false);
@@ -122,7 +136,8 @@ const WeightForm = () => {
           </button>
           <div className="mt-4 flex justify-center gap-1 pb-16">
             <SmileyIcon width="24" height="24" />
-            <p className="text-gray-600 pt-0.5">나의 BMI : 26.8</p>
+            {/* TODO : bmi 지수 그래프로 시각화 */}
+            <p className="text-gray-600 pt-0.5">나의 BMI : {bmi}</p>
           </div>
         </div>
       </div>
