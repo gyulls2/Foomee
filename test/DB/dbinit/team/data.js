@@ -215,9 +215,7 @@ export const initData = async (clientId, nextSeq) => {
           name: '귤귤',
           image: `/files/${clientId}/user-tube.webp`,
         },
-        extra: {
-          weight: 70.2,
-        },
+        content: '70.0',
         createdAt: getTime(0, -60 * 60 * 12),
         updatedAt: getTime(0, -60 * 60 * 12),
       },
