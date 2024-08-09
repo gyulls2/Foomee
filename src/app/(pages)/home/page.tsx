@@ -1,6 +1,5 @@
 import { ChevronRightIcon } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
-// import WeightInputSheet from '@/components/layout/WeightInputSheet';
 import WeightForm from './WeightForm';
 import MainSection from './MainSection';
 import MealSection from './MealSection';
@@ -8,7 +7,6 @@ import MealSection from './MealSection';
 const HomePage = () => {
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {/* <WeightInputSheet /> */}
       <header className="flex items-center justify-between w-full px-8 py-4">
         <button aria-label="이전 날짜" className="rotate-180">
           <ChevronRightIcon width="30" height="30" />
