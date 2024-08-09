@@ -17,7 +17,7 @@ interface Meal {
   height: number;
 }
 
-interface Food {
+export interface Food {
   foodNm: string;
   enerc: string;
   nutConSrtrQua: string;
@@ -37,7 +37,6 @@ export interface Total {
 const MealCard = ({ meal }: { meal: Meal }) => {
   const { name, type, icon, width, height } = meal;
   const { data: session } = useSession();
-  // TODO: total 칼로리, 탄단지 계산 필요
   const [total, setTotal] = useState<Total | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
@@ -107,7 +106,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
 
   return (
     <div className="relative h-44">
-      <Link href={`/meals/${type}/20240807`}>
+      <Link href={`/meals/${type}/${getDay(0)}`}>
         <div
           className={`${bgColorClass} rounded-[20px] px-6 py-6 flex flex-col justify-between relative w-full h-full`}
         >
