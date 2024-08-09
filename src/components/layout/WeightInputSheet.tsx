@@ -42,6 +42,7 @@ const WeightInputSheet: React.FC<Props> = ({
       data.type = 'weight';
       data.title = getDay();
       console.log('data: ', data);
+      console.log('isEdit: ', isEdit);
 
       if (isEdit) {
         // 수정

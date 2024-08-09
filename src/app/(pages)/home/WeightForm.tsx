@@ -15,8 +15,9 @@ const WeightForm = () => {
   const [data, setData] = useState<Post | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [isEdit, setIsEdit] = useState(!!data);
+  const [isEdit, setIsEdit] = useState(false);
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
+  const [diff, setDiff] = useState('-0');
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');
@@ -34,6 +35,7 @@ const WeightForm = () => {
         return;
       } else {
         setData(res[0]);
+        setIsEdit(true);
       }
     };
     fetchWeight();
@@ -56,6 +58,24 @@ const WeightForm = () => {
     };
     fetchUserData();
   }, [session]);
+
+  // 체중 변화 계산
+  useEffect(() => {
+    const start = user?.extra?.starting_weight || 0;
+    const current = parseFloat(data?.content || '0');
+    if (start === 0 || current === 0) {
+      setDiff('0');
+      return;
+    }
+    const num = ((start - current) * -1).toFixed(1);
+    if (start < current) {
+      setDiff(`+${num}`);
+      console.log('diff:', diff);
+    } else {
+      setDiff(num);
+      console.log('diff:', diff);
+    }
+  }, [data, user]);
 
   const handleOpenSheet = () => {
     setIsSheetOpen(true);
@@ -82,7 +102,7 @@ const WeightForm = () => {
           <h2 className="text-lg font-semibold">나의 변화</h2>
         </div>
         <div className="flex flex-col flex-grow justify-center items-center">
-          <p className="mt-4 text-gray-600">이전보다 -0 kg</p>
+          <p className="mt-4 text-gray-600">이전보다 {diff} kg</p>
           <h3 className="mt-2 text-6xl font-bold text-orange-600">
             {data?.content || '00.0'} kg
           </h3>
