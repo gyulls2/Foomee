@@ -23,8 +23,6 @@ export async function signInWithCredentials(formData: LoginForm) {
     if (result?.error) {
       console.error('로그인 실패:', result.error);
       throw new Error(result.error);
-    } else {
-      console.log('로그인 성공 : ', result);
     }
   } catch (err) {
     console.error(err);

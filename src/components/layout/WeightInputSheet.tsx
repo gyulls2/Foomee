@@ -35,14 +35,10 @@ const WeightInputSheet: React.FC<Props> = ({
     return moment().add(day, 'days').format('YYYY.MM.DD');
   };
 
-  console.log('isEdit', isEdit);
-
   const postWeight = async (data: WeightInput) => {
     try {
       data.type = 'weight';
       data.title = getDay();
-      console.log('data: ', data);
-      console.log('isEdit: ', isEdit);
 
       if (isEdit) {
         // 수정

@@ -16,8 +16,6 @@ const MainSection = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const { nutrition } = useNutritionStore();
 
-  console.log(nutrition);
-
   // 사용자 extra 정보 조회
   useEffect(() => {
     const fetchUserData = async () => {

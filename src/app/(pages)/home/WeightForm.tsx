@@ -26,11 +26,8 @@ const WeightForm = () => {
 
   // 오늘 체중 조회
   useEffect(() => {
-    console.log('WeightForm useEffect');
     const fetchWeight = async () => {
       const res = await fetchPosts('weight', undefined, getDay());
-      console.log('fetchWeight res:', res);
-
       if (res.length === 0) {
         setData(null);
         return;
@@ -71,10 +68,8 @@ const WeightForm = () => {
     const num = ((start - current) * -1).toFixed(1);
     if (start < current) {
       setDiff(`+${num}`);
-      console.log('diff:', diff);
     } else {
       setDiff(num);
-      console.log('diff:', diff);
     }
   }, [data, user]);
 
@@ -112,7 +107,6 @@ const WeightForm = () => {
       )}
       <div className="flex flex-col bg-[#FFF9EA] p-8 w-full h-full min-h-without-header-tab max-h-[1240px] overflow-hidden">
         <div className="flex items-center space-x-2">
-          {/* TODO:아이콘 추가 */}
           <h2 className="text-lg font-semibold">나의 변화</h2>
         </div>
         <div className="flex flex-col flex-grow justify-center items-center">
