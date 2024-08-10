@@ -10,7 +10,7 @@ import BottomNav from '@/components/layout/BottomNav';
 import { useForm } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
-import FoodCard from './FoodCard';
+import AddFoodCard from './AddFoodCard';
 
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -58,8 +58,6 @@ const SearchPage = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [foodData, setFoodData] = useState({});
 
-  console.log('foodData : ', foodData);
-
   const inputValue = watch('foodName');
 
   const debouncedData = useRef(
@@ -81,7 +79,9 @@ const SearchPage = () => {
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {isOpened && <AddFoodSheet foodData={foodData} setIsOpened={setIsOpened}/>}
+      {isOpened && (
+        <AddFoodSheet foodData={foodData} setIsOpened={setIsOpened} />
+      )}
 
       <header className="flex text-center relative w-full px-4 py-4 gap-3 items-center">
         <button>
@@ -112,7 +112,7 @@ const SearchPage = () => {
         {foodList.length > 0 && (
           <div className="w-full">
             {foodList.map(item => (
-              <FoodCard
+              <AddFoodCard
                 key={item.FOOD_CD}
                 item={item}
                 setIsOpened={setIsOpened}

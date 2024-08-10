@@ -5,12 +5,23 @@ import BinaryToggleButton from '../BinaryToggleButton';
 import ServingInput from '../ServingInput';
 
 const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
+  const {
+    FOOD_NM_KR: name,
+    AMT_NUM1: enerc,
+    AMT_NUM7: chocdf,
+    AMT_NUM3: prot,
+    AMT_NUM4: fatce,
+    SERVING_SIZE: size,
+    Z10500: serving,
+  } = foodData;
   const handleCloseSheet = (e: React.MouseEvent) => {
     // 클릭된 요소가 배경일 경우에만 시트를 닫음
     if (e.target === e.currentTarget) {
       setIsOpened(false);
     }
   };
+
+  console.log(foodData);
 
   return (
     <div
@@ -19,7 +30,7 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
     >
       <div className="max-w-[475px] w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-8 fixed bottom-0">
         <h2 className="font-semibold leading-5 text-2xl">
-          {foodData.FOOD_NM_KR.replaceAll('_', ' ')}
+          {name.replaceAll('_', ' ')}
         </h2>
         <div className="w-full flex flex-col gap-6 items-center">
           {/* 칼로리 카드 */}
@@ -30,22 +41,22 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     탄
                   </div>
-                  <span className="font-semibold">0%</span>
+                  <span className="font-semibold">{chocdf}g</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     단
                   </div>
-                  <span className="font-semibold">0%</span>
+                  <span className="font-semibold">{prot}g</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     지
                   </div>
-                  <span className="font-semibold">0%</span>
+                  <span className="font-semibold">{fatce}g</span>
                 </div>
               </div>
-              <div className="font-semibold text-xl">92kcal</div>
+              <div className="font-semibold text-xl">{enerc}kcal</div>
             </div>
           </div>
 
@@ -59,10 +70,7 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
           <Swiper />
         </div>
         <div className="flex gap-4 w-full">
-          <button
-            type="submit"
-            className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]"
-          >
+          <button className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]">
             음식 상세
           </button>
           <button

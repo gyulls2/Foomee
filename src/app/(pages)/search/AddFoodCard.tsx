@@ -2,7 +2,7 @@ import { AddIcon } from '@/components/icons/IconComponents';
 
 type Props = {};
 
-const FoodCard = ({ item, setIsOpened, setFoodData }) => {
+const AddFoodCard = ({ item, setIsOpened, setFoodData }) => {
   const handleOpenSheet = () => {
     setFoodData(item);
     setIsOpened(true);
@@ -33,4 +33,4 @@ const FoodCard = ({ item, setIsOpened, setFoodData }) => {
   );
 };
 
-export default FoodCard;
+export default AddFoodCard;
