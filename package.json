@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.51.16",
+    "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.20",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.51.16",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
