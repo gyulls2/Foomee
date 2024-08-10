@@ -55,6 +55,10 @@ async function fetchData(foodName: string) {
 const SearchPage = () => {
   const { register, watch } = useForm();
   const [foodList, setFoodList] = useState([]);
+  const [isOpened, setIsOpened] = useState(false);
+  const [foodData, setFoodData] = useState({});
+
+  console.log('foodData : ', foodData);
 
   const inputValue = watch('foodName');
 
@@ -77,7 +81,7 @@ const SearchPage = () => {
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {/* <AddFoodSheet /> */}
+      {isOpened && <AddFoodSheet foodData={foodData} setIsOpened={setIsOpened}/>}
 
       <header className="flex text-center relative w-full px-4 py-4 gap-3 items-center">
         <button>
@@ -108,7 +112,12 @@ const SearchPage = () => {
         {foodList.length > 0 && (
           <div className="w-full">
             {foodList.map(item => (
-              <FoodCard key={item.FOOD_CD} item={item} />
+              <FoodCard
+                key={item.FOOD_CD}
+                item={item}
+                setIsOpened={setIsOpened}
+                setFoodData={setFoodData}
+              />
             ))}
           </div>
         )}

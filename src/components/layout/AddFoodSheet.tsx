@@ -1,18 +1,26 @@
 import React from 'react';
-import {
-  BoltIcon,
-  CheckCircleIcon,
-  ChevronRightIcon,
-} from '../icons/IconComponents';
+import { BoltIcon } from '../icons/IconComponents';
 import Swiper from '../Swiper';
 import BinaryToggleButton from '../BinaryToggleButton';
 import ServingInput from '../ServingInput';
 
-const AddFoodSheet: React.FC = () => {
+const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
+  const handleCloseSheet = (e: React.MouseEvent) => {
+    // 클릭된 요소가 배경일 경우에만 시트를 닫음
+    if (e.target === e.currentTarget) {
+      setIsOpened(false);
+    }
+  };
+
   return (
-    <div className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10 flex flex-col justify-end">
-      <div className="relative w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-8">
-        <h2 className="font-semibold leading-5 text-2xl">된짱찌개</h2>
+    <div
+      className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10 flex flex-col justify-end"
+      onClick={handleCloseSheet}
+    >
+      <div className="max-w-[475px] w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-8 fixed bottom-0">
+        <h2 className="font-semibold leading-5 text-2xl">
+          {foodData.FOOD_NM_KR.replaceAll('_', ' ')}
+        </h2>
         <div className="w-full flex flex-col gap-6 items-center">
           {/* 칼로리 카드 */}
           <div className="w-full">

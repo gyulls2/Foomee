@@ -2,8 +2,12 @@ import { AddIcon } from '@/components/icons/IconComponents';
 
 type Props = {};
 
-const FoodCard = ({ item }) => {
-  console.log(item);
+const FoodCard = ({ item, setIsOpened, setFoodData }) => {
+  const handleOpenSheet = () => {
+    setFoodData(item);
+    setIsOpened(true);
+  };
+
   return (
     <div className="flex items-center justify-between px-8 py-6 bg-white rounded-2xl mb-4">
       <div>
@@ -15,7 +19,10 @@ const FoodCard = ({ item }) => {
         </p>
       </div>
       <div className="flex flex-col items-end gap-2">
-        <button className="w-8 h-8 flex items-center justify-center bg-[#FFB800] rounded-full">
+        <button
+          className="w-8 h-8 flex items-center justify-center bg-[#FFB800] rounded-full"
+          onClick={handleOpenSheet}
+        >
           <AddIcon fill="#ffffff" />
         </button>
         <span className="text-sm font-medium text-gray-500">
