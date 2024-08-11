@@ -81,7 +81,7 @@ export const {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
       }
-      return token;
+      return token as JWT;
     },
     // 클라이언트에서 세션 정보 요청시 호출
     // token 객체 정보로 session 객체 설정

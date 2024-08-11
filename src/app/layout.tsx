@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import React from 'react';
 import { SessionProvider } from 'next-auth/react';
 import localFont from 'next/font/local';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',

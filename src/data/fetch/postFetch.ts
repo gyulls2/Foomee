@@ -32,7 +32,7 @@ export async function fetchPosts(
     const resJson: ApiRes<MultiItem<Post>> = await res.json();
 
     if (!resJson.ok) {
-      throw new Error(`API error: ${resJson.error || 'Unknown error'}`);
+      throw new Error(`API error: ${resJson.message || 'Unknown error'}`);
     }
 
     return resJson.item;

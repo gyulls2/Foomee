@@ -1,8 +1,8 @@
 import { ApiRes, SingleItem, UserData } from '@/types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
-const DELAY = process.env.NEXT_PUBLIC_DELAY;
+// const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
+// const DELAY = process.env.NEXT_PUBLIC_DELAY;
 
 /**
  * 사용자 정보 조회

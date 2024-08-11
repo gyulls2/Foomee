@@ -14,7 +14,7 @@ const SplashPage = () => {
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [router]);
 
   return (
     <div className="flex flex-col justify-center items-end min-h-screen h-full px-12 py-14 bg-[#FFF9EA]">

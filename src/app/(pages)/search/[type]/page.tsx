@@ -10,11 +10,11 @@ import useDebounce from '@/hooks/useDebounce';
 import { FoodData, Post } from '@/types';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { fetchData } from '../page';
 import AddFoodCard from '../AddFoodCard';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
+import { foodApiFetch } from '@/data/fetch/foodApiFetch';
 
 const SearchTypePage = ({ params }: { params: { type: string } }) => {
   const { register, watch } = useForm();
@@ -48,7 +48,7 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
   useEffect(() => {
     if (debouncedValue) {
       const fetchFoodData = async (foodName: string) => {
-        const data = await fetchData(foodName);
+        const data = await foodApiFetch(foodName);
         if (data) {
           setFoodList(data.items);
         }
