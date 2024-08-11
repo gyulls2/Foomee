@@ -50,10 +50,7 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
     // let isMounted = true;
 
     const fetchFoodList = async () => {
-      const data = await fetchPosts(type, undefined, id);
-      const list: Food[] | null = Array.isArray(data?.[0]?.extra?.foods)
-        ? data?.[0]?.extra?.foods
-        : null;
+      const list = await fetchPosts(type, undefined, id);
 
       if (list) {
         setFoodList(list);
@@ -61,10 +58,10 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
         // 각 영양소의 총합을 계산
         const totals = list.reduce(
           (acc, cur) => {
-            acc.enerc += parseInt(cur.enerc);
-            acc.prot += parseInt(cur.prot);
-            acc.fatce += parseInt(cur.fatce);
-            acc.chocdf += parseInt(cur.chocdf);
+            acc.enerc += parseInt(cur.extra.enerc.toString());
+            acc.prot += parseInt(cur.extra.prot.toString());
+            acc.fatce += parseInt(cur.extra.fatce.toString());
+            acc.chocdf += parseInt(cur.extra.chocdf.toString());
             return acc;
           },
           { enerc: 0, prot: 0, fatce: 0, chocdf: 0 },

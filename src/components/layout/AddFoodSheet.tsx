@@ -8,6 +8,18 @@ import {
 import Swiper from '../Swiper';
 import BinaryToggleButton from '../BinaryToggleButton';
 import ServingInput from '../ServingInput';
+import moment from 'moment';
+import postSubmit from '@/data/fetch/postSubmit';
+import { useRouter } from 'next/navigation';
+
+const mealTypes: { [key: string]: { kr: string; en: string } } = {
+  breakfast: { kr: '아침', en: 'breakfast' },
+  lunch: { kr: '점심', en: 'lunch' },
+  dinner: { kr: '저녁', en: 'dinner' },
+  snack: { kr: '간식', en: 'snack' },
+};
+
+const mealTypeKeys = Object.keys(mealTypes);
 
 const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
   const {
@@ -22,8 +34,12 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
   const [isServing, setIsServing] = useState(true);
   const [quantity, setQuantity] = useState<string>('1'); // 초기값을 '1'로 설정
   const [isInputting, setIsInputting] = useState(false); // 사용자가 입력 중인지 추적
-  const items = ['아침', '점심', '저녁', '간식'];
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
+
+  const getDay = (day = 0) => {
+    return moment().add(day, 'days').format('YYYY.MM.DD');
+  };
 
   const handleCloseSheet = (e: React.MouseEvent) => {
     // 클릭된 요소가 배경일 경우에만 시트를 닫음
@@ -72,19 +88,63 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
   };
 
   const handlePrev = () => {
-    setCurrentIndex(prev => (prev === 0 ? items.length - 1 : prev - 1));
+    setCurrentIndex(prev => (prev === 0 ? mealTypeKeys.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => (prev === items.length - 1 ? 0 : prev + 1));
+    setCurrentIndex(prev => (prev === mealTypeKeys.length - 1 ? 0 : prev + 1));
   };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const calculatedData = calculatedValues();
+    const mealType = mealTypeKeys[currentIndex]; // 현재 선택된 끼니 정보
+
+    const formData = {
+      type: mealType,
+      title: getDay(0),
+      extra: {
+        foodNm: name.replaceAll('_', ' '),
+        enerc: calculatedData.enerc,
+        inputQua: isServing
+          ? `${parseFloat(quantity) * parseFloat(size)}`
+          : `${parseFloat(quantity)}`,
+        prot: calculatedData.prot,
+        fatce: calculatedData.fatce,
+        chocdf: calculatedData.chocdf,
+      },
+    };
+
     console.log('submit');
+    console.log('formData : ', formData);
     // TODO: 서버로 데이터 전송
-    // 섭취량에 따른 칼로리, 탄단지 계산
-    // 필요한 데이터: (인분/그램)섭취량, 끼니, 음식명, 칼로리, 탄단지
+    postDiet(formData);
+  };
+
+  // 실제 섭취량에 따른 영양소 값을 계산하는 로직
+  const calculatedValues = () => {
+    const ratio = isServing
+      ? parseFloat(quantity)
+      : parseFloat(quantity) / parseFloat(size);
+
+    return {
+      enerc: (parseFloat(enerc) * ratio).toFixed(0),
+      prot: (parseFloat(prot) * ratio).toFixed(0),
+      fatce: (parseFloat(fatce) * ratio).toFixed(0),
+      chocdf: (parseFloat(chocdf) * ratio).toFixed(0),
+    };
+  };
+
+  const postDiet = async data => {
+    try {
+      await postSubmit({
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      console.log('식단 기록 오류', error);
+    } finally {
+      router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDay(0)}`);
+    }
   };
 
   console.log(foodData);
@@ -187,11 +247,13 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
             {/* 끼니 선택 */}
             {/* <Swiper /> */}
             <div className="w-full flex items-center justify-between bg-[#FFF7E1] rounded-full py-4 px-4 space-x-4">
-              <button onClick={handlePrev} className="rotate-180">
+              <button type="button" onClick={handlePrev} className="rotate-180">
                 <ChevronRightIcon />
               </button>
-              <div className="font-semibold">{items[currentIndex]}</div>
-              <button onClick={handleNext}>
+              <div className="font-semibold">
+                {mealTypes[mealTypeKeys[currentIndex]].kr}
+              </div>
+              <button type="button" onClick={handleNext}>
                 <ChevronRightIcon />
               </button>
             </div>
@@ -202,7 +264,6 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
             음식 상세
           </button>
           <button
-            type="submit"
             form="addFood"
             className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100 flex justify-center items-center gap-1 pr-2"
           >

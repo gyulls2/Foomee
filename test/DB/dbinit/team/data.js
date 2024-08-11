@@ -213,6 +213,20 @@ export const initData = async (clientId, nextSeq) => {
         createdAt: getTime(0, -60 * 60 * 0.5),
         updatedAt: getTime(0, -60 * 60 * 0.5),
       },
+      {
+        _id: await nextSeq('post'),
+        type: 'weight',
+        title: getDay(0),
+        views: 0,
+        user: {
+          _id: 5,
+          name: '귤귤',
+          image: `/files/${clientId}/user-tube.webp`,
+        },
+        content: '70.0',
+        createdAt: getTime(0, -60 * 60 * 12),
+        updatedAt: getTime(0, -60 * 60 * 12),
+      },
       // {
       //   _id: await nextSeq('post'),
       //   type: 'info',

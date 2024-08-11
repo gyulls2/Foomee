@@ -20,7 +20,7 @@ interface Meal {
 export interface Food {
   foodNm: string;
   enerc: string;
-  nutConSrtrQua: string;
+  inputQua: string;
   prot: string;
   fatce: string;
   chocdf: string;
@@ -52,21 +52,18 @@ const MealCard = ({ meal }: { meal: Meal }) => {
     let isMounted = true;
 
     const fetchFoodList = async () => {
-      const data = await fetchPosts(type, undefined, getDay(0));
-      const foodList: Food[] | undefined = Array.isArray(
-        data?.[0]?.extra?.foods,
-      )
-        ? data?.[0]?.extra?.foods
-        : undefined;
+      const foodList = await fetchPosts(type, undefined, getDay(0));
 
       if (foodList && isMounted) {
         // 각 영양소의 총합을 계산
         const totals = foodList.reduce(
           (acc, cur) => {
-            acc.enerc += parseInt(cur.enerc);
-            acc.prot += parseInt(cur.prot);
-            acc.fatce += parseInt(cur.fatce);
-            acc.chocdf += parseInt(cur.chocdf);
+            if (cur.extra) {
+              acc.enerc += parseInt(cur.extra.enerc);
+              acc.prot += parseInt(cur.extra.prot);
+              acc.fatce += parseInt(cur.extra.fatce);
+              acc.chocdf += parseInt(cur.extra.chocdf);
+            }
             return acc;
           },
           { enerc: 0, prot: 0, fatce: 0, chocdf: 0 },
