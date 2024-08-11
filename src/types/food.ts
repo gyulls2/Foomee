@@ -6,6 +6,14 @@ export interface FoodData {
   AMT_NUM3: string; // 단백질(g)
   AMT_NUM4: string; // 지방(g)
   AMT_NUM7: string; // 탄수화물(g)
-  Z10500?: string; // 식품중량
-  // TODO: 다른 필드 필요하면 추가
+
+  // 추가적인 속성들은 선택적으로 정의
+  [key: string]: string | undefined;
+}
+
+export interface FoodDataResponse {
+  items: FoodData[];
+  totalCount: number;
+  pageNo: number;
+  numOfRows: number;
 }

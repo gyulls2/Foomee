@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AddIcon,
   BoltIcon,
@@ -21,11 +21,12 @@ const mealTypes: { [key: string]: { kr: string; en: string } } = {
 const mealTypeKeys = Object.keys(mealTypes);
 
 interface Props {
+  type?: string;
   foodData: FoodData;
   setIsOpened: (isOpen: boolean) => void;
 }
 
-const AddFoodSheet: React.FC<Props> = ({ foodData, setIsOpened }) => {
+const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
   const {
     FOOD_NM_KR: name,
     AMT_NUM1: enerc,
@@ -39,6 +40,13 @@ const AddFoodSheet: React.FC<Props> = ({ foodData, setIsOpened }) => {
   const [isInputting, setIsInputting] = useState(false); // 사용자가 입력 중인지 추적
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
+
+  // type이 있다면 currentIndex를 변경
+  useEffect(() => {
+    if (type) {
+      setCurrentIndex(mealTypeKeys.indexOf(type));
+    }
+  }, [type]);
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');
@@ -258,14 +266,24 @@ const AddFoodSheet: React.FC<Props> = ({ foodData, setIsOpened }) => {
             {/* 끼니 선택 */}
             {/* <Swiper /> */}
             <div className="w-full flex items-center justify-between bg-[#FFF7E1] rounded-full py-4 px-4 space-x-4">
-              <button type="button" onClick={handlePrev} className="rotate-180">
-                <ChevronRightIcon />
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="rotate-180 disabled:cursor-not-allowed"
+                disabled={!!type}
+              >
+                <ChevronRightIcon fill={type && '#FFF7E1'} />
               </button>
               <div className="font-semibold">
                 {mealTypes[mealTypeKeys[currentIndex]].kr}
               </div>
-              <button type="button" onClick={handleNext}>
-                <ChevronRightIcon />
+              <button
+                type="button"
+                onClick={handleNext}
+                className="disabled:cursor-not-allowed"
+                disabled={!!type}
+              >
+                <ChevronRightIcon fill={type && '#FFF7E1'} />
               </button>
             </div>
           </form>
