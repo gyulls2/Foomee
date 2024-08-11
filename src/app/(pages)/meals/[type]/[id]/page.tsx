@@ -1,6 +1,6 @@
 'use client';
 
-import { Food, Total } from '@/app/(pages)/home/MealCard';
+import { Total } from '@/app/(pages)/home/MealCard';
 import {
   AddIcon,
   CloseIcon,
@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FoodCard from './FoodCard';
+import { Post } from '@/types';
 
 const calculateWidth = (total: Total) => {
   const { prot, fatce, chocdf } = total;
@@ -41,7 +42,7 @@ const MealList = {
 
 const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
   const { type, id } = params;
-  const [foodList, setFoodList] = useState<Food[] | null>(null);
+  const [foodList, setFoodList] = useState<Post[] | null>(null);
   const [total, setTotal] = useState<Total | null>(null);
   const [width, setWidth] = useState({ chocdf: 0, prot: 0, fatce: 0 });
 
@@ -58,10 +59,10 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
         // 각 영양소의 총합을 계산
         const totals = list.reduce(
           (acc, cur) => {
-            acc.enerc += parseInt(cur.extra.enerc.toString());
-            acc.prot += parseInt(cur.extra.prot.toString());
-            acc.fatce += parseInt(cur.extra.fatce.toString());
-            acc.chocdf += parseInt(cur.extra.chocdf.toString());
+            acc.enerc += parseInt(cur.extra?.enerc || '0');
+            acc.prot += parseInt(cur.extra?.prot || '0');
+            acc.fatce += parseInt(cur.extra?.fatce || '0');
+            acc.chocdf += parseInt(cur.extra?.chocdf || '0');
             return acc;
           },
           { enerc: 0, prot: 0, fatce: 0, chocdf: 0 },
@@ -161,9 +162,12 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
               <AddIcon fill="#ffb800" />
               <p>추가</p>
             </Link>
-            <button className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100">
+            <Link
+              href="/home"
+              className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100"
+            >
               <p>수정 완료</p>
-            </button>
+            </Link>
           </div>
         </div>
       </section>

@@ -1,8 +1,13 @@
 import { AddIcon } from '@/components/icons/IconComponents';
+import { FoodData } from '@/types';
 
-type Props = {};
+type Props = {
+  item: FoodData;
+  setIsOpened: (state: boolean) => void;
+  setFoodData: (state: FoodData) => void;
+};
 
-const AddFoodCard = ({ item, setIsOpened, setFoodData }) => {
+const AddFoodCard = ({ item, setIsOpened, setFoodData }: Props) => {
   const handleOpenSheet = () => {
     setFoodData(item);
     setIsOpened(true);

@@ -5,12 +5,11 @@ import {
   ChevronRightIcon,
   RemoveIcon,
 } from '../icons/IconComponents';
-import Swiper from '../Swiper';
-import BinaryToggleButton from '../BinaryToggleButton';
-import ServingInput from '../ServingInput';
 import moment from 'moment';
 import postSubmit from '@/data/fetch/postSubmit';
 import { useRouter } from 'next/navigation';
+import { Food } from '@/app/(pages)/home/MealCard';
+import { FoodData } from '@/types';
 
 const mealTypes: { [key: string]: { kr: string; en: string } } = {
   breakfast: { kr: '아침', en: 'breakfast' },
@@ -21,7 +20,12 @@ const mealTypes: { [key: string]: { kr: string; en: string } } = {
 
 const mealTypeKeys = Object.keys(mealTypes);
 
-const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
+interface Props {
+  foodData: FoodData;
+  setIsOpened: (isOpen: boolean) => void;
+}
+
+const AddFoodSheet: React.FC<Props> = ({ foodData, setIsOpened }) => {
   const {
     FOOD_NM_KR: name,
     AMT_NUM1: enerc,
@@ -29,7 +33,6 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
     AMT_NUM3: prot,
     AMT_NUM4: fatce,
     SERVING_SIZE: size,
-    Z10500: serving,
   } = foodData;
   const [isServing, setIsServing] = useState(true);
   const [quantity, setQuantity] = useState<string>('1'); // 초기값을 '1'로 설정
@@ -104,7 +107,7 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
       type: mealType,
       title: getDay(0),
       extra: {
-        foodNm: name.replaceAll('_', ' '),
+        foodNm: name?.replaceAll('_', ' '),
         enerc: calculatedData.enerc,
         inputQua: isServing
           ? `${parseFloat(quantity) * parseFloat(size)}`
@@ -112,6 +115,7 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
         prot: calculatedData.prot,
         fatce: calculatedData.fatce,
         chocdf: calculatedData.chocdf,
+        foodSize: size,
       },
     };
 
@@ -135,7 +139,11 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
     };
   };
 
-  const postDiet = async data => {
+  const postDiet = async (data: {
+    type: string;
+    title: string;
+    extra: Food;
+  }) => {
     try {
       await postSubmit({
         body: JSON.stringify(data),
@@ -146,8 +154,6 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
       router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDay(0)}`);
     }
   };
-
-  console.log(foodData);
 
   return (
     <div
@@ -213,6 +219,7 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
             {/* <ServingInput /> */}
             <div className="w-full flex items-center justify-between bg-[#FFF7E1] rounded-full py-4 px-4">
               <button
+                type="button"
                 onClick={handleSubtract}
                 className={`text-gray-700 rotate-180 ${isInputting ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={isInputting}
@@ -239,7 +246,11 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
                   step="0.5"
                 />
               )}
-              <button onClick={handleAdd} className="text-gray-700">
+              <button
+                type="button"
+                onClick={handleAdd}
+                className="text-gray-700"
+              >
                 <AddIcon />
               </button>
             </div>
@@ -260,11 +271,15 @@ const AddFoodSheet: React.FC = ({ foodData, setIsOpened }) => {
           </form>
         </div>
         <div className="flex gap-4 w-full">
-          <button className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]">
+          <button
+            type="button"
+            className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]"
+          >
             음식 상세
           </button>
           <button
             form="addFood"
+            type="submit"
             className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100 flex justify-center items-center gap-1 pr-2"
           >
             <BoltIcon />

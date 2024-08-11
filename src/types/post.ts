@@ -21,5 +21,13 @@ export interface Post {
   replies?: PostComment[];
   createdAt: string;
   updatedAt: string;
-  extra?: { weight?: number; [key: string]: number | string | undefined };
+  extra?: {
+    weight?: number;
+    foodNm?: string;
+    enerc?: string;
+    inputQua?: string;
+    prot?: string;
+    fatce?: string;
+    chocdf?: string;
+  };
 }

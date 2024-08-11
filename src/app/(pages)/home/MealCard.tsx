@@ -59,10 +59,10 @@ const MealCard = ({ meal }: { meal: Meal }) => {
         const totals = foodList.reduce(
           (acc, cur) => {
             if (cur.extra) {
-              acc.enerc += parseInt(cur.extra.enerc);
-              acc.prot += parseInt(cur.extra.prot);
-              acc.fatce += parseInt(cur.extra.fatce);
-              acc.chocdf += parseInt(cur.extra.chocdf);
+              acc.enerc += parseInt(cur.extra.enerc || '0');
+              acc.prot += parseInt(cur.extra.prot || '0');
+              acc.fatce += parseInt(cur.extra.fatce || '0');
+              acc.chocdf += parseInt(cur.extra.chocdf || '0');
             }
             return acc;
           },

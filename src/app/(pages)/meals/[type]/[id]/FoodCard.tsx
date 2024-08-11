@@ -2,7 +2,6 @@ import { CloseIcon } from '@/components/icons/IconComponents';
 import { Post } from '@/types';
 
 const FoodCard = ({ item }: { item: Post }) => {
-
   return (
     <div className="flex justify-between items-center py-8 border-b last:border-b-0">
       <div>

@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import AddFoodCard from './AddFoodCard';
+import { FoodData } from '@/types';
 
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -56,7 +57,7 @@ const SearchPage = () => {
   const { register, watch } = useForm();
   const [foodList, setFoodList] = useState([]);
   const [isOpened, setIsOpened] = useState(false);
-  const [foodData, setFoodData] = useState({});
+  const [foodData, setFoodData] = useState<FoodData | null>(null);
 
   const inputValue = watch('foodName');
 
@@ -79,7 +80,7 @@ const SearchPage = () => {
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {isOpened && (
+      {isOpened && foodData && (
         <AddFoodSheet foodData={foodData} setIsOpened={setIsOpened} />
       )}
 
@@ -111,9 +112,9 @@ const SearchPage = () => {
 
         {foodList.length > 0 && (
           <div className="w-full">
-            {foodList.map(item => (
+            {foodList.map((item, idx) => (
               <AddFoodCard
-                key={item.FOOD_CD}
+                key={idx}
                 item={item}
                 setIsOpened={setIsOpened}
                 setFoodData={setFoodData}
