@@ -1,4 +1,4 @@
-import { AuthBase } from "next-auth";
+import { AuthBase } from 'next-auth';
 
 declare module 'next-auth' {
   interface ExtraInfo {
@@ -17,14 +17,12 @@ declare module 'next-auth' {
 
   interface AuthBase {
     _id: number;
-    type: 'user' | 'seller' | 'admin';
-    email: string;
+    type: string;
+    email?: string;
     name: string;
     profileImage?: string;
-    token: {
-      accessToken: string;
-      refreshToken: string;
-    };
+    accessToken: string;
+    refreshToken: string;
     createdAt?: string;
     updatedAt?: string;
     extra?: ExtraInfo;
@@ -38,5 +36,8 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-  interface JWT extends AuthBase {}
+  interface JWT {
+    accessToken: string;
+    refreshToken: string;
+  }
 }

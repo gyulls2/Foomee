@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircleIcon, ChevronRightIcon } from './icons/IconComponents';
+import { CheckCircleIcon, ChevronRightIcon } from '../icons/IconComponents';
 
 const SignUpPolicySheet: React.FC = () => {
   return (

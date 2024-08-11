@@ -1,14 +1,18 @@
 'use client';
 
-import InputError from "@/components/InputError";
-import { signInWithCredentials } from "@/data/actions/authAction";
-import { useForm } from "react-hook-form";
+import InputError from '@/components/InputError';
+import { signInWithCredentials } from '@/data/actions/authAction';
+import useUserStore from '@/zustand/userStore';
+import { useForm } from 'react-hook-form';
 
 type LoginForm = {
   email: string;
   password: string;
   experience?: 'auto-login' | 'trial';
 };
+
+const EMAIL = process.env.NEXT_PUBLIC_TRIAL_EMAIL as string;
+const PW = process.env.NEXT_PUBLIC_TRIAL_PW as string;
 
 const LoginForm = () => {
   const {
@@ -24,10 +28,9 @@ const LoginForm = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedValue = event.target.value;
-    console.log(selectedValue);
     if (selectedValue === 'trial') {
-      setValue('email', 'foomeetest@test.com');
-      setValue('password', '11111111');
+      setValue('email', EMAIL);
+      setValue('password', PW);
     } else {
       setValue('email', '');
       setValue('password', '');
@@ -36,11 +39,14 @@ const LoginForm = () => {
     trigger(['email', 'password']);
   };
 
+  const { clearUser } = useUserStore();
+
   return (
     <form
       onSubmit={handleSubmit(formData => signInWithCredentials(formData))}
       className="flex flex-col gap-3.5 items-start w-full"
     >
+      <button onClick={clearUser}>로그아웃</button>
       <div className="w-full">
         <label htmlFor="email" className="sr-only">
           이메일

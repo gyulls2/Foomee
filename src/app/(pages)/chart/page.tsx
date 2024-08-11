@@ -10,7 +10,7 @@ const ChartPage = () => {
           <BackArrowIcon />
         </button>
       </header>
-      <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full main-content-min-height"></section>
+      <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full min-h-without-header-tab"></section>
 
       <BottomNav />
     </main>

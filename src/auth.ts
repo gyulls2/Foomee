@@ -4,7 +4,13 @@ import { JWT } from 'next-auth/jwt';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth({
   providers: [
     CredentialsProvider({
       // email/password 로그인
@@ -14,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'client-id': '00-sample',
+              'client-id': '04-Foomee',
             },
             body: JSON.stringify(credentials),
           });
@@ -34,11 +40,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               type: user.type,
               profileImage:
                 user.profileImage && `${SERVER}${user.profileImage}`,
-              token: {
-                accessToken: user.token.accessToken,
-                refreshToken: user.token.refreshToken,
-              },
-              extra: user.extra || null,
+
+              accessToken: user.token.accessToken,
+              refreshToken: user.token.refreshToken,
             };
           } else {
             console.error(`인증 실패: ${resJson.message}`);
@@ -71,21 +75,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // 로그인 성공한 회원 정보로 token 객체 설정
     // 최초 로그인시 user 객체 전달,
     async jwt({ token, user }) {
-      try {
-        if (user) {
-          token.user = user;
-        }
-      } catch (error) {
-        console.error('Error in jwt callback:', error);
+      if (user) {
+        token._id = user._id;
+        token.type = user.type;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
       }
-      return token;
+      return token as JWT;
     },
     // 클라이언트에서 세션 정보 요청시 호출
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
-      if (token?.user) {
-        session.user = token.user;
-      }
+      session.user._id = token._id as number;
+      session.user.type = token.type as string;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       return session;
     },
   },
