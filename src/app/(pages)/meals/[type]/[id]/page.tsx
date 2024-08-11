@@ -45,11 +45,10 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
   const [foodList, setFoodList] = useState<Post[] | null>(null);
   const [total, setTotal] = useState<Total | null>(null);
   const [width, setWidth] = useState({ chocdf: 0, prot: 0, fatce: 0 });
+  const [refresh, setRefresh] = useState(false);
 
   // foodList 조회
   useEffect(() => {
-    // let isMounted = true;
-
     const fetchFoodList = async () => {
       const list = await fetchPosts(type, undefined, id);
 
@@ -74,10 +73,12 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
           fatce: totals.fatce,
           chocdf: totals.chocdf,
         });
+
+        setRefresh(false);
       }
     };
     fetchFoodList();
-  }, [id, type]);
+  }, [id, type, refresh]);
 
   // 탄단지 비율 계산
   useEffect(() => {
@@ -150,7 +151,9 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
               {MealList[type].name} 메뉴{' '}
               <span className="text-[#FF7A00]">{foodList?.length || 0}</span>
             </h2>
-            {foodList?.map((item, idx) => <FoodCard key={idx} item={item} />)}
+            {foodList?.map((item, idx) => (
+              <FoodCard key={idx} item={item} setRefresh={setRefresh} />
+            ))}
           </div>
         </div>
         <div className="fixed bottom-0 left-0 right-0 bg-white p-8 mx-auto max-w-[475px]">
