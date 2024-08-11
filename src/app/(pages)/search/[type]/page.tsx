@@ -49,7 +49,6 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
     if (debouncedValue) {
       const fetchFoodData = async (foodName: string) => {
         const data = await fetchData(foodName);
-        console.log('fetchData 실행 : ', data);
         if (data) {
           setFoodList(data.items);
         }
