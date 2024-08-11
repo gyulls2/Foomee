@@ -1,8 +1,8 @@
 import { getSession } from '../actions/authAction';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
-const DELAY = process.env.NEXT_PUBLIC_DELAY;
+// const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
+// const DELAY = process.env.NEXT_PUBLIC_DELAY;
 
 const postSubmit = async <T>(options: RequestInit = {}): Promise<T> => {
   const session = await getSession();
