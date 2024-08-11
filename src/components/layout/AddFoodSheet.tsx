@@ -40,6 +40,12 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
   const [isInputting, setIsInputting] = useState(false); // 사용자가 입력 중인지 추적
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
+  const [nutrient, setNutrient] = useState({
+    enerc: enerc,
+    prot: prot,
+    fatce: fatce,
+    chocdf: chocdf,
+  });
 
   // type이 있다면 currentIndex를 변경
   useEffect(() => {
@@ -47,6 +53,13 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
       setCurrentIndex(mealTypeKeys.indexOf(type));
     }
   }, [type]);
+
+  // quantity가 변경될 때마다 nutrient 값을 계산
+  useEffect(() => {
+    if (parseInt(quantity) > 0) {
+      setNutrient(calculatedValues());
+    }
+  }, [quantity]);
 
   const getDay = (day = 0) => {
     return moment().add(day, 'days').format('YYYY.MM.DD');
@@ -108,7 +121,6 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const calculatedData = calculatedValues();
     const mealType = mealTypeKeys[currentIndex]; // 현재 선택된 끼니 정보
 
     const formData = {
@@ -116,13 +128,13 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
       title: getDay(0),
       extra: {
         foodNm: name?.replaceAll('_', ' '),
-        enerc: calculatedData.enerc,
+        enerc: nutrient.enerc,
         inputQua: isServing
           ? `${parseFloat(quantity) * parseFloat(size)}`
           : `${parseFloat(quantity)}`,
-        prot: calculatedData.prot,
-        fatce: calculatedData.fatce,
-        chocdf: calculatedData.chocdf,
+        prot: nutrient.prot,
+        fatce: nutrient.fatce,
+        chocdf: nutrient.chocdf,
         foodSize: size,
       },
     };
@@ -181,22 +193,22 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     탄
                   </div>
-                  <span className="font-semibold">{chocdf}g</span>
+                  <span className="font-semibold">{nutrient.chocdf}g</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     단
                   </div>
-                  <span className="font-semibold">{prot}g</span>
+                  <span className="font-semibold">{nutrient.prot}g</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold">
                     지
                   </div>
-                  <span className="font-semibold">{fatce}g</span>
+                  <span className="font-semibold">{nutrient.fatce}g</span>
                 </div>
               </div>
-              <div className="font-semibold text-xl">{enerc}kcal</div>
+              <div className="font-semibold text-xl">{nutrient.enerc}kcal</div>
             </div>
           </div>
           <form
