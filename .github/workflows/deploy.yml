@@ -33,6 +33,10 @@ jobs:
       - name: Compress build folder
         run: tar -czf next-app.tar.gz .next package.json node_modules public
 
+      - name: Add EC2 to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy files to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
