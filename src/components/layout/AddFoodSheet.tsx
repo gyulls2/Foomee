@@ -139,9 +139,6 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
       },
     };
 
-    console.log('submit');
-    console.log('formData : ', formData);
-    // TODO: 서버로 데이터 전송
     postDiet(formData);
   };
 
@@ -169,7 +166,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
         body: JSON.stringify(data),
       });
     } catch (error) {
-      console.log('식단 기록 오류', error);
+      console.error('식단 기록 오류', error);
     } finally {
       router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDay(0)}`);
     }

@@ -14,7 +14,6 @@ export const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 export const fetchData = async (
   foodName: string,
 ): Promise<FoodDataResponse | null> => {
-  console.log('fetchData 실행 : ', foodName);
   try {
     const url =
       'https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01';
@@ -66,7 +65,6 @@ const SearchPage = () => {
     if (debouncedValue) {
       const fetchFoodData = async (foodName: string) => {
         const data = await fetchData(foodName);
-        console.log('fetchData 실행 : ', data);
         if (data) {
           setFoodList(data.items);
         }
