@@ -1,7 +1,18 @@
 import { CloseIcon } from '@/components/icons/IconComponents';
+import postDelete from '@/data/fetch/postDelete';
 import { Post } from '@/types';
 
-const FoodCard = ({ item }: { item: Post }) => {
+type Props = {
+  item: Post;
+  setRefresh: (value: boolean) => void;
+};
+
+const FoodCard = ({ item, setRefresh }: Props) => {
+  const handleDeleteFood = async () => {
+    const response = await postDelete(item._id);
+    if (response) setRefresh(true);
+  };
+
   return (
     <div className="flex justify-between items-center py-8 border-b last:border-b-0">
       <div>
@@ -10,7 +21,7 @@ const FoodCard = ({ item }: { item: Post }) => {
       </div>
       <div className="flex text-right gap-2">
         <p className="font-semibold">{item.extra?.enerc}kcal</p>
-        <button>
+        <button onClick={handleDeleteFood}>
           <CloseIcon width="18" height="18" fill="#b3b3b3" />
         </button>
       </div>
