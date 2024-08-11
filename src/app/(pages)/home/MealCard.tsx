@@ -114,7 +114,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
           </div>
         </div>
       </Link>
-      <Link href="/search" className="absolute top-6 right-6">
+      <Link href={`/search/${type}`} className="absolute top-6 right-6">
         <AddIcon width="36" height="36" fill="#ffffff" />
       </Link>
     </div>

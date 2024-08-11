@@ -164,7 +164,7 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
             </Link>
             <Link
               href="/home"
-              className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100"
+              className="flex-grow rounded-full h-12 bg-[#ffb800] text-center font-semibold leading-7 text-lg text-neutral-100 flex justify-center items-center"
             >
               <p>수정 완료</p>
             </Link>
