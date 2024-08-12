@@ -2,8 +2,8 @@
 
 import InputError from '@/components/InputError';
 import { signInWithCredentials } from '@/data/actions/authAction';
-import useUserStore from '@/zustand/userStore';
 import { useForm } from 'react-hook-form';
+import { signOut } from 'next-auth/react';
 
 type LoginForm = {
   email: string;
@@ -39,14 +39,14 @@ const LoginForm = () => {
     trigger(['email', 'password']);
   };
 
-  const { clearUser } = useUserStore();
-
   return (
     <form
       onSubmit={handleSubmit(formData => signInWithCredentials(formData))}
       className="flex flex-col gap-3.5 items-start w-full"
     >
-      <button onClick={clearUser}>로그아웃</button>
+      <button type="button" onClick={() => signOut()}>
+        로그아웃
+      </button>
       <div className="w-full">
         <label htmlFor="email" className="sr-only">
           이메일
