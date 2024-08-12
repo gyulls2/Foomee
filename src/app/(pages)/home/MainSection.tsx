@@ -1,38 +1,15 @@
 'use client';
 
-import { fetchUser } from '@/data/fetch/userFetch';
 import { UserData } from '@/types';
 import useNutritionStore from '@/zustand/nutritionStore';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 
 const calculateWidth = (value: number, total: number) => {
   const width = (value / total) * 100;
   return width > 100 ? 100 : width;
 };
 
-const MainSection = () => {
-  const { data: session } = useSession();
-  const [user, setUser] = useState<UserData | null>(null);
+const MainSection = ({ user }: { user: UserData }) => {
   const { nutrition } = useNutritionStore();
-
-  // 사용자 extra 정보 조회
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (session?.user) {
-        try {
-          const userData = await fetchUser(
-            session.user._id,
-            session.accessToken,
-          );
-          setUser(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-    fetchUserData();
-  }, [session]);
 
   const chocdfWidth = calculateWidth(
     nutrition?.chocdf,

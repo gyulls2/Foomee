@@ -28,6 +28,8 @@ jobs:
           NEXT_PUBLIC_LIMIT: ${{ secrets.NEXT_PUBLIC_LIMIT }}
           NEXT_PUBLIC_TRIAL_EMAIL: ${{ secrets.NEXT_PUBLIC_TRIAL_EMAIL }}
           NEXT_PUBLIC_TRIAL_PW: ${{ secrets.NEXT_PUBLIC_TRIAL_PW }}
+          NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_NEXT_PUBLIC_API_KEY }}
+
         run: npm run build
 
       - name: Compress build folder
@@ -50,7 +52,6 @@ jobs:
 
       - name: Deploy on EC2
         env:
-          API_KEY: ${{ secrets.API_KEY }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           DB_NAME: ${{ secrets.DB_NAME }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -60,7 +61,6 @@ jobs:
           cd /home/${{ secrets.EC2_USER }}
           tar -xzf next-app.tar.gz
           npm install --production
-          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           nohup npm run start & 
