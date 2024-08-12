@@ -8,7 +8,7 @@ const calculateWidth = (value: number, total: number) => {
   return width > 100 ? 100 : width;
 };
 
-const MainSection = ({ user }: { user: UserData }) => {
+const MainSection = ({ user }: { user: UserData | undefined }) => {
   const { nutrition } = useNutritionStore();
 
   const chocdfWidth = calculateWidth(

@@ -4,7 +4,6 @@ import { AddIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import useNutritionStore from '@/zustand/nutritionStore';
 import moment from 'moment';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -36,7 +35,6 @@ export interface Total {
 
 const MealCard = ({ meal }: { meal: Meal }) => {
   const { name, type, icon, width, height } = meal;
-  const { data: session } = useSession();
   const [total, setTotal] = useState<Total | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
@@ -83,7 +81,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
     return () => {
       isMounted = false; // 컴포넌트가 언마운트되면 상태를 false로 설정
     };
-  }, [session, type]);
+  }, [type]);
 
   // zustand total 칼로리, 탄단지 업데이트
   useEffect(() => {

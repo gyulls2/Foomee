@@ -44,7 +44,7 @@ const HomePage = async () => {
       </header>
       <section className="flex flex-col relative w-full h-full min-h-without-header-tab">
         {/* 메인 페이지 ---------------------------------------------------------------------------------------------- */}
-        {user && <MainSection user={user} />}
+        <MainSection user={user} />
         {/* 식단 기록 ------------------------------------------------------------------------------------- */}
         <div className="flex flex-col bg-[#FFECBA] p-8 w-full">
           <div className="flex items-center space-x-2 mb-4">
@@ -55,7 +55,7 @@ const HomePage = async () => {
         </div>
 
         {/* 체중 기록 -------------------------------------------------------- */}
-        <WeightForm />
+        <WeightForm user={user} />
       </section>
 
       <BottomNav />
