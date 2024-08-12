@@ -159,7 +159,7 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
         <div className="fixed bottom-0 left-0 right-0 bg-white p-8 mx-auto max-w-[475px]">
           <div className="flex gap-4 w-full">
             <Link
-              href="/search"
+              href={`/search/${type}`}
               className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800] flex justify-center items-center gap-1 pr-2"
             >
               <AddIcon fill="#ffb800" />

@@ -15,6 +15,7 @@ import { fetchPosts } from '@/data/fetch/postFetch';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { foodApiFetch } from '@/data/fetch/foodApiFetch';
+import Link from 'next/link';
 
 const SearchTypePage = ({ params }: { params: { type: string } }) => {
   const { register, watch } = useForm();
@@ -72,9 +73,9 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
       )}
 
       <header className="flex text-center relative w-full px-4 py-4 gap-3 items-center">
-        <button>
+        <Link href="/home">
           <BackArrowIcon />
-        </button>
+        </Link>
         <div className="relative flex-grow">
           <input
             className="rounded-full w-full h-10 bg-[#F5F5F5] pl-12 pr-4 focus:border-orange-400 focus:outline-none"
