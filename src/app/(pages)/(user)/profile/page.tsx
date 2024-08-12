@@ -1,15 +1,23 @@
-import { SettingsIcon } from '@/components/icons/IconComponents';
-import BottomNav from '@/components/layout/BottomNav';
-// import LogoutSheet from '@/components/LogoutSheet';
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
+import BottomNav from '@/components/layout/BottomNav';
+import LogoutSheet from '@/components/layout/LogoutSheet';
+import { SettingsIcon } from '@/components/icons/IconComponents';
 
 const ProfilePage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {/* <LogoutSheet /> */}
+      {isOpen && <LogoutSheet setIsOpen={setIsOpen} />}
       <header className="text-center relative w-full h-12 px-8 py-4">
         <h1 className="font-semibold text-xl">마이페이지</h1>
-        <button className="absolute right-6 top-4">
+        <button
+          className="absolute right-6 top-4"
+          onClick={() => setIsOpen(true)}
+        >
           <SettingsIcon fill="#d9d9d9" />
         </button>
       </header>

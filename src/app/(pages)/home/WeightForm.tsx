@@ -7,13 +7,9 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Post, UserData } from '@/types';
 import WeightInputSheet from '@/components/layout/WeightInputSheet';
-import { useSession } from 'next-auth/react';
-import { fetchUser } from '@/data/fetch/userFetch';
 
-const WeightForm = () => {
-  const { data: session } = useSession();
+const WeightForm = ({ user }: { user: UserData | undefined }) => {
   const [data, setData] = useState<Post | null>(null);
-  const [user, setUser] = useState<UserData | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
@@ -38,24 +34,6 @@ const WeightForm = () => {
     };
     fetchWeight();
   }, [refresh]);
-
-  // 사용자 extra 정보 조회
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (session?.user) {
-        try {
-          const userData = await fetchUser(
-            session.user._id,
-            session.accessToken,
-          );
-          setUser(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-    fetchUserData();
-  }, [session]);
 
   // 체중 변화 계산
   useEffect(() => {
