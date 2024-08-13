@@ -2,29 +2,86 @@
 
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
+import Calendar, { OnArgs } from 'react-calendar';
 import './calendar.css';
-import { fetchPost } from '@/data/fetch/postFetch';
+import { fetchPosts } from '@/data/fetch/postFetch';
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
+type WeightType = {
+  content: string;
+  title: string;
+};
+
 const CalendarSection = () => {
   const [value, onChange] = useState<Value>(new Date());
   const [isDiet, setIsDiet] = useState(true);
+  const [activeStartDate, setActiveStartDate] = useState<ValuePiece>(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1); // 현재 달의 첫째 날
+  });
+
+  // 선택된 달 구하기
+  const handleActiveStartDateChange = ({ activeStartDate }: OnArgs) => {
+    setActiveStartDate(activeStartDate);
+  };
 
   // 체중 데이터 불러오기
-  const [weightData, setWeightData] = useState([]);
+  const [weightData, setWeightData] = useState<WeightType[]>([]);
 
   useEffect(() => {
-    const fetchWeight = async () => {
-      const response = await fetchPost('weight');
-      console.log(response);
-      // setWeightData(data);
-    };
-    fetchWeight();
-  }, []);
+    if (!isDiet) {
+      const fetchWeight = async () => {
+        const keyword = moment(activeStartDate).format('YYYY.MM');
+        const response = await fetchPosts('weight', undefined, keyword);
+        console.log(response);
+        if (response) {
+          const weightArr = response.map(item => ({
+            title: item.title,
+            content: item.content,
+          }));
+          setWeightData(weightArr);
+        }
+      };
+      fetchWeight();
+    }
+  }, [isDiet, activeStartDate]);
+
+  // 각 날짜 타일에 컨텐츠 추가
+  const addContent = ({ date, view }: { date: Date; view: string }) => {
+    if (view !== 'month') return null;
+
+    // date가 weightData의 title과 일치하면 해당 content를 표시
+    const match = weightData.find(
+      item => item.title === moment(date).format('YYYY.MM.DD'),
+    );
+
+    return (
+      <div>
+        {match ? (
+          <span className="text-gray-500 font-semibold">{match.content}kg</span>
+        ) : (
+          <span className="text-gray-500 font-semibold">-</span>
+        )}
+      </div>
+    );
+  };
+
+  // 기록이 있을 경우 배경색 변경
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (view === 'month') {
+      const match = weightData.find(
+        item => item.title === moment(date).format('YYYY.MM.DD'),
+      );
+
+      if (match) {
+        return 'weight-recorded';
+      }
+    }
+    return '';
+  };
 
   return (
     <div className="flex flex-col gap-4 relative">
@@ -47,6 +104,7 @@ const CalendarSection = () => {
 
       <div>
         <Calendar
+          onActiveStartDateChange={handleActiveStartDateChange}
           onChange={onChange}
           value={value}
           next2Label={null}
@@ -58,7 +116,8 @@ const CalendarSection = () => {
           formatLongDate={(locale, date) => moment(date).format('YYYY.MM.DD')}
           minDetail="year"
           calendarType="gregory"
-          tileContent="100"
+          tileContent={addContent}
+          tileClassName={tileClassName}
         />
       </div>
     </div>

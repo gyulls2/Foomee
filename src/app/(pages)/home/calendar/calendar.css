@@ -150,6 +150,14 @@
   z-index: 0;
 }
 
+.react-calendar__month-view__days__day.weight-recorded::before {
+  background-color: #ff7081;
+}
+
+.react-calendar__month-view__days__day.weight-recorded > abbr {
+  color: white;
+}
+
 .react-calendar__tile--active,
 .react-calendar__tile--now {
   overflow: visible;
