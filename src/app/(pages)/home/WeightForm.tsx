@@ -83,7 +83,7 @@ const WeightForm = ({ user }: { user: UserData | undefined }) => {
           setRefresh={setRefresh}
         />
       )}
-      <div className="flex flex-col bg-[#FFF9EA] p-8 w-full h-full min-h-without-header-tab max-h-[1240px] overflow-hidden">
+      <div className="flex flex-col bg-[#FFF9EA] p-8 w-full h-full min-h-screen max-h-[1240px] overflow-hidden">
         <div className="flex items-center space-x-2">
           <h2 className="text-lg font-semibold">나의 변화</h2>
         </div>
