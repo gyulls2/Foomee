@@ -14,7 +14,7 @@ const CalendarSeciont = () => {
 
   return (
     <div className="flex flex-col gap-4 relative">
-      <div className="flex gap-2 absolute top-16">
+      <div className="flex gap-2 absolute top-12">
         <button className="bg-main-primary-yellow py-1 px-2 rounded-full flex items-center">
           <div className="rounded-full w-3 h-3 bg-point-green mr-2"></div>
           <p className="text-white text-sm">먹었어요</p>
@@ -25,7 +25,7 @@ const CalendarSeciont = () => {
         </button>
       </div>
 
-      <div className="mt-2">
+      <div>
         <Calendar
           onChange={onChange}
           value={value}
@@ -37,6 +37,7 @@ const CalendarSeciont = () => {
           formatMonthYear={(locale, date) => moment(date).format('YYYY. MM')}
           minDetail="year"
           calendarType="gregory"
+          tileContent="100"
         />
       </div>
     </div>
