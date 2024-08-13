@@ -1,7 +1,23 @@
 'use client';
 
+import { fetchPosts } from '@/data/fetch/postFetch';
+import postPatch from '@/data/fetch/postPatch';
+import postSubmit from '@/data/fetch/postSubmit';
 import { UserData } from '@/types';
 import useNutritionStore from '@/zustand/nutritionStore';
+import moment from 'moment';
+import { useEffect } from 'react';
+
+interface NutritionData {
+  type: string;
+  title: string;
+  content: {
+    enerc: number;
+    chocdf: number;
+    prot: number;
+    fatce: number;
+  };
+}
 
 const calculateWidth = (value: number, total: number) => {
   const width = (value / total) * 100;
@@ -10,6 +26,41 @@ const calculateWidth = (value: number, total: number) => {
 
 const MainSection = ({ user }: { user: UserData | undefined }) => {
   const { nutrition } = useNutritionStore();
+
+  const getDay = (day = 0) => {
+    return moment().add(day, 'days').format('YYYY.MM.DD');
+  };
+
+  // nutrition 상태가 업데이트 되면 nutri 게시판에 전송
+  useEffect(() => {
+    console.log('nutrition', nutrition);
+    const fetchNutri = async () => {
+      try {
+        const res = await fetchPosts('nutri', undefined, getDay());
+        if (res.length === 0) {
+          // 생성
+          await postSubmit({
+            body: JSON.stringify(nutrition),
+          });
+        } else {
+          // 수정
+          const id = res[0]._id;
+          const nutriData: NutritionData = {
+            type: 'nutri',
+            title: getDay(),
+            content: nutrition,
+          };
+
+          await postPatch(id, {
+            body: JSON.stringify(nutriData),
+          });
+        }
+      } catch (error) {
+        console.error('섭취 칼로리 업로드 실패 : ', error);
+      }
+    };
+    fetchNutri();
+  }, [nutrition]);
 
   const chocdfWidth = calculateWidth(
     nutrition?.chocdf,
@@ -42,7 +93,7 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
             {/* TODO: 차트 삽입 */}
           </div>
 
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center">
             <div className="w-10 h-0.5 bg-black mb-6"></div>
             <p className="text-base">{user?.extra?.goal_calories} kcal</p>
           </div>
