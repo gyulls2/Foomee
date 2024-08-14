@@ -1,23 +1,7 @@
 'use client';
 
-import { fetchPosts } from '@/data/fetch/postFetch';
-import postPatch from '@/data/fetch/postPatch';
-import postSubmit from '@/data/fetch/postSubmit';
 import { UserData } from '@/types';
-import useDateStore from '@/zustand/dateStore';
 import useNutritionStore from '@/zustand/nutritionStore';
-import { useEffect } from 'react';
-
-interface NutritionData {
-  type: string;
-  title: string;
-  extra: {
-    enerc: number;
-    chocdf: number;
-    prot: number;
-    fatce: number;
-  };
-}
 
 const calculateWidth = (value: number, total: number) => {
   const width = (value / total) * 100;
@@ -26,45 +10,6 @@ const calculateWidth = (value: number, total: number) => {
 
 const MainSection = ({ user }: { user: UserData | undefined }) => {
   const { nutrition } = useNutritionStore();
-  const getDate = useDateStore(state => state.getDate);
-
-  // nutrition 상태가 업데이트 되면 nutri 게시판에 전송
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const fetchNutri = async () => {
-        try {
-          const res = await fetchPosts('nutri', undefined, getDate());
-          if (res.length === 0) {
-            // 생성
-            const nutriData: NutritionData = {
-              type: 'nutri',
-              title: getDate(),
-              extra: nutrition,
-            };
-            await postSubmit({
-              body: JSON.stringify(nutriData),
-            });
-          } else {
-            // 수정
-            const id = res[0]._id;
-            const nutriData: NutritionData = {
-              type: 'nutri',
-              title: res[0].title,
-              extra: nutrition,
-            };
-            await postPatch(id, {
-              body: JSON.stringify(nutriData),
-            });
-          }
-        } catch (error) {
-          console.error('섭취 칼로리 업로드 실패 : ', error);
-        }
-      };
-      fetchNutri();
-    }, 1000); // 1초 지연
-
-    return () => clearTimeout(timer);
-  }, [nutrition]);
 
   const chocdfWidth = calculateWidth(
     nutrition?.chocdf,
@@ -132,7 +77,7 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
         <div className="bg-[#FF9C65] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">지방</h3>
           <p className="text-sm text-white">
-            {nutrition?.fatce} / {user?.extra?.fat}g
+            {nutrition?.fatce || 0} / {user?.extra?.fat}g
           </p>
           <div className="w-full h-1.5 bg-[#FFE1D0] rounded-full mt-10 relative overflow-hidden">
             <div

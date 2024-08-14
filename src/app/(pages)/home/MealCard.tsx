@@ -3,10 +3,10 @@
 import { AddIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import useDateStore from '@/zustand/dateStore';
-import useNutritionStore from '@/zustand/nutritionStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Total } from './MealSection';
 
 interface Meal {
   name: string;
@@ -26,21 +26,21 @@ export interface Food {
   foodSize: string;
 }
 
-export interface Total {
-  enerc: number;
-  prot: number;
-  fatce: number;
-  chocdf: number;
-}
+type Props = {
+  meal: Meal;
+  setTotals: (data: (prev: Total) => Total) => void;
+};
 
-const MealCard = ({ meal }: { meal: Meal }) => {
+const MealCard = ({ meal, setTotals }: Props) => {
   const { name, type, icon, width, height } = meal;
-  const [total, setTotal] = useState<Total | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
+  const [total, setTotal] = useState<Total>({
+    enerc: 0,
+    prot: 0,
+    fatce: 0,
+    chocdf: 0,
+  });
 
-  const { addNutrition } = useNutritionStore();
-  const getDate = useDateStore(state => state.getDate);
+  const { date, getDate } = useDateStore();
 
   // foodList 조회
   useEffect(() => {
@@ -70,7 +70,6 @@ const MealCard = ({ meal }: { meal: Meal }) => {
           fatce: totals.fatce,
           chocdf: totals.chocdf,
         });
-        setIsLoaded(true);
       }
     };
     fetchFoodList();
@@ -78,15 +77,18 @@ const MealCard = ({ meal }: { meal: Meal }) => {
     return () => {
       isMounted = false; // 컴포넌트가 언마운트되면 상태를 false로 설정
     };
-  }, [type]);
+  }, [type, date, getDate]);
 
-  // zustand total 칼로리, 탄단지 업데이트
   useEffect(() => {
-    if (total && isLoaded && !hasAdded) {
-      addNutrition(total);
-      setHasAdded(true);
-    }
-  }, [total, isLoaded, addNutrition]);
+    setTotals(prev => {
+      return {
+        enerc: (prev?.enerc || 0) + (total.enerc || 0),
+        prot: (prev?.prot || 0) + (total.prot || 0),
+        fatce: (prev?.fatce || 0) + (total.fatce || 0),
+        chocdf: (prev?.chocdf || 0) + (total.chocdf || 0),
+      };
+    });
+  }, [total]);
 
   const bgColorClass =
     {
