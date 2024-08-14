@@ -10,8 +10,8 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-type WeightType = {
-  content: string;
+type PostType = {
+  content: string | undefined;
   title: string;
 };
 
@@ -29,14 +29,16 @@ const CalendarSection = () => {
   };
 
   // 체중 데이터 불러오기
-  const [weightData, setWeightData] = useState<WeightType[]>([]);
+  const [weightData, setWeightData] = useState<PostType[]>([]);
+
+  // 섭취 칼로리 데이터 불러오기
+  const [calorieData, setCalorieData] = useState<PostType[]>([]);
 
   useEffect(() => {
     if (!isDiet) {
       const fetchWeight = async () => {
         const keyword = moment(activeStartDate).format('YYYY.MM');
         const response = await fetchPosts('weight', undefined, keyword);
-        console.log(response);
         if (response) {
           const weightArr = response.map(item => ({
             title: item.title,
@@ -46,6 +48,19 @@ const CalendarSection = () => {
         }
       };
       fetchWeight();
+    } else {
+      const fetchCalorie = async () => {
+        const keyword = moment(activeStartDate).format('YYYY.MM');
+        const response = await fetchPosts('nutri', undefined, keyword);
+        if (response) {
+          const calorieArr = response.map(item => ({
+            title: item.title,
+            content: item.extra?.enerc,
+          }));
+          setCalorieData(calorieArr);
+        }
+      };
+      fetchCalorie();
     }
   }, [isDiet, activeStartDate]);
 
@@ -54,14 +69,23 @@ const CalendarSection = () => {
     if (view !== 'month') return null;
 
     // date가 weightData의 title과 일치하면 해당 content를 표시
-    const match = weightData.find(
-      item => item.title === moment(date).format('YYYY.MM.DD'),
-    );
+    let match: PostType | undefined;
+    if (isDiet) {
+      match = calorieData.find(
+        item => item.title === moment(date).format('YYYY.MM.DD'),
+      );
+    } else {
+      match = weightData.find(
+        item => item.title === moment(date).format('YYYY.MM.DD'),
+      );
+    }
 
     return (
       <div>
         {match ? (
-          <span className="text-gray-500 font-semibold">{match.content}kg</span>
+          <span className="text-gray-500 font-semibold">
+            {isDiet ? `+${match.content}` : `${match.content}kg`}
+          </span>
         ) : (
           <span className="text-gray-500 font-semibold">-</span>
         )}
@@ -72,12 +96,19 @@ const CalendarSection = () => {
   // 기록이 있을 경우 배경색 변경
   const tileClassName = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
-      const match = weightData.find(
-        item => item.title === moment(date).format('YYYY.MM.DD'),
-      );
+      let match: PostType | undefined;
+      if (isDiet) {
+        match = calorieData.find(
+          item => item.title === moment(date).format('YYYY.MM.DD'),
+        );
+      } else {
+        match = weightData.find(
+          item => item.title === moment(date).format('YYYY.MM.DD'),
+        );
+      }
 
       if (match) {
-        return 'weight-recorded';
+        return isDiet ? 'diet-recorded' : 'weight-recorded';
       }
     }
     return '';

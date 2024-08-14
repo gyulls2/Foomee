@@ -105,7 +105,7 @@
   text-align: center;
   line-height: 16px;
   font: inherit;
-  font-size: 0.825rem;
+  font-size: 0.8rem;
   overflow: visible;
   position: relative;
   display: flex;
@@ -150,10 +150,15 @@
   z-index: 0;
 }
 
+.react-calendar__month-view__days__day.diet-recorded::before {
+  background-color: #2ab58b;
+}
+
 .react-calendar__month-view__days__day.weight-recorded::before {
   background-color: #ff7081;
 }
 
+.react-calendar__month-view__days__day.diet-recorded > abbr,
 .react-calendar__month-view__days__day.weight-recorded > abbr {
   color: white;
 }
