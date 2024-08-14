@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import postPatch from '@/data/fetch/postPatch';
 import postSubmit from '@/data/fetch/postSubmit';
+import { Total } from '@/types';
 
 const MealList = [
   {
@@ -48,13 +49,6 @@ interface NutritionData {
     prot: number;
     fatce: number;
   };
-}
-
-interface Total {
-  enerc: number;
-  prot: number;
-  fatce: number;
-  chocdf: number;
 }
 
 const MealSection = () => {

@@ -2,6 +2,7 @@
 
 import { AddIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
+import { Total } from '@/types';
 import useDateStore from '@/zustand/dateStore';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,13 +30,6 @@ type Props = {
   meal: Meal;
   setTotals: (data: (prev: Total) => Total) => void;
 };
-
-interface Total {
-  enerc: number;
-  prot: number;
-  fatce: number;
-  chocdf: number;
-}
 
 const MealCard = ({ meal, setTotals }: Props) => {
   const { name, type, icon, width, height } = meal;
