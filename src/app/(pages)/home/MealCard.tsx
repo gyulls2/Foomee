@@ -6,7 +6,6 @@ import useDateStore from '@/zustand/dateStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Total } from './MealSection';
 
 interface Meal {
   name: string;
@@ -30,6 +29,13 @@ type Props = {
   meal: Meal;
   setTotals: (data: (prev: Total) => Total) => void;
 };
+
+interface Total {
+  enerc: number;
+  prot: number;
+  fatce: number;
+  chocdf: number;
+}
 
 const MealCard = ({ meal, setTotals }: Props) => {
   const { name, type, icon, width, height } = meal;

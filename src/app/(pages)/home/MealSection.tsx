@@ -50,7 +50,7 @@ interface NutritionData {
   };
 }
 
-export interface Total {
+interface Total {
   enerc: number;
   prot: number;
   fatce: number;
