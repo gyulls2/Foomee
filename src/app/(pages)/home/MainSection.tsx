@@ -4,8 +4,8 @@ import { fetchPosts } from '@/data/fetch/postFetch';
 import postPatch from '@/data/fetch/postPatch';
 import postSubmit from '@/data/fetch/postSubmit';
 import { UserData } from '@/types';
+import useDateStore from '@/zustand/dateStore';
 import useNutritionStore from '@/zustand/nutritionStore';
-import moment from 'moment';
 import { useEffect } from 'react';
 
 interface NutritionData {
@@ -26,22 +26,19 @@ const calculateWidth = (value: number, total: number) => {
 
 const MainSection = ({ user }: { user: UserData | undefined }) => {
   const { nutrition } = useNutritionStore();
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const getDate = useDateStore(state => state.getDate);
 
   // nutrition 상태가 업데이트 되면 nutri 게시판에 전송
   useEffect(() => {
     const timer = setTimeout(() => {
       const fetchNutri = async () => {
         try {
-          const res = await fetchPosts('nutri', undefined, getDay(0));
+          const res = await fetchPosts('nutri', undefined, getDate());
           if (res.length === 0) {
             // 생성
             const nutriData: NutritionData = {
               type: 'nutri',
-              title: getDay(0),
+              title: getDate(),
               extra: nutrition,
             };
             await postSubmit({

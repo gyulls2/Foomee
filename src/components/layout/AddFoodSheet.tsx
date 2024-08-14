@@ -5,11 +5,11 @@ import {
   ChevronRightIcon,
   RemoveIcon,
 } from '../icons/IconComponents';
-import moment from 'moment';
 import postSubmit from '@/data/fetch/postSubmit';
 import { useRouter } from 'next/navigation';
 import { Food } from '@/app/(pages)/home/MealCard';
 import { FoodData } from '@/types';
+import useDateStore from '@/zustand/dateStore';
 
 const mealTypes: { [key: string]: { kr: string; en: string } } = {
   breakfast: { kr: '아침', en: 'breakfast' },
@@ -47,6 +47,8 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     chocdf: chocdf,
   });
 
+  const getDate = useDateStore(state => state.getDate);
+
   // type이 있다면 currentIndex를 변경
   useEffect(() => {
     if (type) {
@@ -60,10 +62,6 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
       setNutrient(calculatedValues());
     }
   }, [quantity]);
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
 
   const handleCloseSheet = (e: React.MouseEvent) => {
     // 클릭된 요소가 배경일 경우에만 시트를 닫음
@@ -125,7 +123,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
 
     const formData = {
       type: mealType,
-      title: getDay(0),
+      title: getDate(),
       extra: {
         foodNm: name?.replaceAll('_', ' '),
         enerc: nutrient.enerc,
@@ -168,7 +166,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     } catch (error) {
       console.error('식단 기록 오류', error);
     } finally {
-      router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDay(0)}`);
+      router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDate()}`);
     }
   };
 

@@ -2,8 +2,8 @@
 
 import { AddIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
+import useDateStore from '@/zustand/dateStore';
 import useNutritionStore from '@/zustand/nutritionStore';
-import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -40,17 +40,14 @@ const MealCard = ({ meal }: { meal: Meal }) => {
   const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
 
   const { addNutrition } = useNutritionStore();
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const getDate = useDateStore(state => state.getDate);
 
   // foodList 조회
   useEffect(() => {
     let isMounted = true;
 
     const fetchFoodList = async () => {
-      const foodList = await fetchPosts(type, undefined, getDay(0));
+      const foodList = await fetchPosts(type, undefined, getDate());
 
       if (foodList && isMounted) {
         // 각 영양소의 총합을 계산
@@ -101,7 +98,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
 
   return (
     <div className="relative h-44">
-      <Link href={`/meals/${type}/${getDay(0)}`}>
+      <Link href={`/meals/${type}/${getDate()}`}>
         <div
           className={`${bgColorClass} rounded-[20px] px-6 py-6 flex flex-col justify-between relative w-full h-full`}
         >

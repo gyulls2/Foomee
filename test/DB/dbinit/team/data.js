@@ -223,7 +223,7 @@ export const initData = async (clientId, nextSeq) => {
           name: '귤귤',
           image: `/files/${clientId}/user-tube.webp`,
         },
-        content: '70.0',
+        content: '70',
         createdAt: getTime(0, -60 * 60 * 12),
         updatedAt: getTime(0, -60 * 60 * 12),
       },

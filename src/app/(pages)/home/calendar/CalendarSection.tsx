@@ -72,17 +72,10 @@ const CalendarSection = () => {
   const addContent = ({ date, view }: { date: Date; view: string }) => {
     if (view !== 'month') return null;
 
-    // date가 weightData의 title과 일치하면 해당 content를 표시
-    let match: PostType | undefined;
-    if (isDiet) {
-      match = calorieData.find(
-        item => item.title === moment(date).format('YYYY.MM.DD'),
-      );
-    } else {
-      match = weightData.find(
-        item => item.title === moment(date).format('YYYY.MM.DD'),
-      );
-    }
+    // date가 post의 title과 일치하면 해당 content를 표시
+    const match = (isDiet ? calorieData : weightData).find(
+      item => item.title === moment(date).format('YYYY.MM.DD') && item.content,
+    );
 
     return (
       <div>
@@ -100,16 +93,10 @@ const CalendarSection = () => {
   // 기록이 있을 경우 배경색 변경
   const tileClassName = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
-      let match: PostType | undefined;
-      if (isDiet) {
-        match = calorieData.find(
-          item => item.title === moment(date).format('YYYY.MM.DD'),
-        );
-      } else {
-        match = weightData.find(
-          item => item.title === moment(date).format('YYYY.MM.DD'),
-        );
-      }
+      const match = (isDiet ? calorieData : weightData).find(
+        item =>
+          item.title === moment(date).format('YYYY.MM.DD') && item.content,
+      );
 
       if (match) {
         return isDiet ? 'diet-recorded' : 'weight-recorded';

@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { SmileyIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Post, UserData } from '@/types';
 import WeightInputSheet from '@/components/layout/WeightInputSheet';
+import useDateStore from '@/zustand/dateStore';
 
 const WeightForm = ({ user }: { user: UserData | undefined }) => {
   const [data, setData] = useState<Post | null>(null);
@@ -15,15 +15,12 @@ const WeightForm = ({ user }: { user: UserData | undefined }) => {
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
   const [diff, setDiff] = useState('-0');
   const [bmi, setBmi] = useState(0);
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const getDate = useDateStore(state => state.getDate);
 
   // 오늘 체중 조회
   useEffect(() => {
     const fetchWeight = async () => {
-      const res = await fetchPosts('weight', undefined, getDay());
+      const res = await fetchPosts('weight', undefined, getDate());
       if (res.length === 0) {
         setData(null);
         return;
