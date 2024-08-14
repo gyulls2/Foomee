@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 interface NutritionData {
   type: string;
   title: string;
-  content: {
+  extra: {
     enerc: number;
     chocdf: number;
     prot: number;
@@ -36,21 +36,25 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
     const timer = setTimeout(() => {
       const fetchNutri = async () => {
         try {
-          const res = await fetchPosts('nutri', undefined, getDay());
+          const res = await fetchPosts('nutri', undefined, getDay(0));
           if (res.length === 0) {
             // 생성
+            const nutriData: NutritionData = {
+              type: 'nutri',
+              title: getDay(0),
+              extra: nutrition,
+            };
             await postSubmit({
-              body: JSON.stringify(nutrition),
+              body: JSON.stringify(nutriData),
             });
           } else {
             // 수정
             const id = res[0]._id;
             const nutriData: NutritionData = {
               type: 'nutri',
-              title: getDay(),
-              content: nutrition,
+              title: res[0].title,
+              extra: nutrition,
             };
-
             await postPatch(id, {
               body: JSON.stringify(nutriData),
             });
