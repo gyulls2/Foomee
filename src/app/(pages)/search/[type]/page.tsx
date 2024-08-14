@@ -27,7 +27,7 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
   const router = useRouter();
   const { type } = params;
 
-  const getDate = useDateStore(state => state.getDate);
+  const { getDate } = useDateStore();
 
   const inputValue = watch('foodName');
 

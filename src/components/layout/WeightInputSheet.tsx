@@ -30,7 +30,7 @@ const WeightInputSheet: React.FC<Props> = ({
     handleSubmit,
     formState: { isSubmitting, isValid },
   } = useForm<WeightInput>({ mode: 'onChange' });
-  const getDate = useDateStore(state => state.getDate);
+  const { getDate } = useDateStore();
 
   const postWeight = async (data: WeightInput) => {
     try {

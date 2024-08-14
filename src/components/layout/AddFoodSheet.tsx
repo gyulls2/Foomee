@@ -47,7 +47,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     chocdf: chocdf,
   });
 
-  const getDate = useDateStore(state => state.getDate);
+  const { getDate } = useDateStore();
 
   // type이 있다면 currentIndex를 변경
   useEffect(() => {
