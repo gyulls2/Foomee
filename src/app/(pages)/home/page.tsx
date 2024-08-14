@@ -1,7 +1,3 @@
-import {
-  ChevronRightIcon,
-  DropDownIcon,
-} from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
 import WeightForm from './WeightForm';
 import MainSection from './MainSection';
@@ -9,7 +5,7 @@ import MealSection from './MealSection';
 import { auth } from '@/auth';
 import { fetchUser } from '@/data/fetch/userFetch';
 import { UserData } from '@/types';
-import Link from 'next/link';
+import Header from './Header';
 
 const HomePage = async () => {
   const session = await auth();
@@ -37,21 +33,7 @@ const HomePage = async () => {
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      <header className="flex items-center justify-between w-full px-8 py-4">
-        <button aria-label="이전 날짜" className="rotate-180">
-          <ChevronRightIcon width="30" height="30" />
-        </button>
-        <Link
-          href="/home/calendar"
-          className="pl-4 flex justify-center items-center"
-        >
-          <h1 className="text-lg font-semibold">8.5 (월)</h1>
-          <DropDownIcon />
-        </Link>
-        <button aria-label="다음 날짜">
-          <ChevronRightIcon width="30" height="30" />
-        </button>
-      </header>
+      <Header />
       <section className="flex flex-col relative w-full h-full min-h-without-header-tab">
         {/* 메인 페이지 ---------------------------------------------------------------------------------------------- */}
         <MainSection user={user} />
