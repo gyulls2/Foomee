@@ -1,6 +1,5 @@
 'use client';
 
-import { Total } from '@/app/(pages)/home/MealCard';
 import {
   AddIcon,
   CloseIcon,
@@ -11,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FoodCard from './FoodCard';
-import { Post } from '@/types';
+import { Post, Total } from '@/types';
 
 const calculateWidth = (total: Total) => {
   const { prot, fatce, chocdf } = total;

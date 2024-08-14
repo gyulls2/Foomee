@@ -2,8 +2,8 @@
 
 import { AddIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
-import useNutritionStore from '@/zustand/nutritionStore';
-import moment from 'moment';
+import { Total } from '@/types';
+import useDateStore from '@/zustand/dateStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -26,31 +26,28 @@ export interface Food {
   foodSize: string;
 }
 
-export interface Total {
-  enerc: number;
-  prot: number;
-  fatce: number;
-  chocdf: number;
-}
+type Props = {
+  meal: Meal;
+  setTotals: (data: (prev: Total) => Total) => void;
+};
 
-const MealCard = ({ meal }: { meal: Meal }) => {
+const MealCard = ({ meal, setTotals }: Props) => {
   const { name, type, icon, width, height } = meal;
-  const [total, setTotal] = useState<Total | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasAdded, setHasAdded] = useState(false); // 값이 이미 추가되었는지
+  const [total, setTotal] = useState<Total>({
+    enerc: 0,
+    prot: 0,
+    fatce: 0,
+    chocdf: 0,
+  });
 
-  const { addNutrition } = useNutritionStore();
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const { date, getDate } = useDateStore();
 
   // foodList 조회
   useEffect(() => {
     let isMounted = true;
 
     const fetchFoodList = async () => {
-      const foodList = await fetchPosts(type, undefined, getDay(0));
+      const foodList = await fetchPosts(type, undefined, getDate());
 
       if (foodList && isMounted) {
         // 각 영양소의 총합을 계산
@@ -73,7 +70,6 @@ const MealCard = ({ meal }: { meal: Meal }) => {
           fatce: totals.fatce,
           chocdf: totals.chocdf,
         });
-        setIsLoaded(true);
       }
     };
     fetchFoodList();
@@ -81,15 +77,18 @@ const MealCard = ({ meal }: { meal: Meal }) => {
     return () => {
       isMounted = false; // 컴포넌트가 언마운트되면 상태를 false로 설정
     };
-  }, [type]);
+  }, [type, date, getDate]);
 
-  // zustand total 칼로리, 탄단지 업데이트
   useEffect(() => {
-    if (total && isLoaded && !hasAdded) {
-      addNutrition(total);
-      setHasAdded(true);
-    }
-  }, [total, isLoaded, addNutrition]);
+    setTotals(prev => {
+      return {
+        enerc: (prev?.enerc || 0) + (total.enerc || 0),
+        prot: (prev?.prot || 0) + (total.prot || 0),
+        fatce: (prev?.fatce || 0) + (total.fatce || 0),
+        chocdf: (prev?.chocdf || 0) + (total.chocdf || 0),
+      };
+    });
+  }, [total]);
 
   const bgColorClass =
     {
@@ -101,7 +100,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
 
   return (
     <div className="relative h-44">
-      <Link href={`/meals/${type}/${getDay(0)}`}>
+      <Link href={`/meals/${type}/${getDate()}`}>
         <div
           className={`${bgColorClass} rounded-[20px] px-6 py-6 flex flex-col justify-between relative w-full h-full`}
         >

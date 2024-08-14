@@ -12,10 +12,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import AddFoodCard from '../AddFoodCard';
 import { fetchPosts } from '@/data/fetch/postFetch';
-import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { foodApiFetch } from '@/data/fetch/foodApiFetch';
 import Link from 'next/link';
+import useDateStore from '@/zustand/dateStore';
 
 const SearchTypePage = ({ params }: { params: { type: string } }) => {
   const { register, watch } = useForm();
@@ -27,18 +27,16 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
   const router = useRouter();
   const { type } = params;
 
+  const { getDate } = useDateStore();
+
   const inputValue = watch('foodName');
 
   const debouncedValue = useDebounce(inputValue, 1000);
 
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
-
   // 입력된 식단 게시물 조회
   useEffect(() => {
     const fetchDietList = async () => {
-      const data = await fetchPosts(type, undefined, getDay(0));
+      const data = await fetchPosts(type, undefined, getDate());
       if (data) {
         setDietList(data);
       }
@@ -59,7 +57,7 @@ const SearchTypePage = ({ params }: { params: { type: string } }) => {
   }, [debouncedValue]);
 
   const handleMoveToList = () => {
-    router.push(`/meals/${type}/${getDay(0)}`);
+    router.push(`/meals/${type}/${getDate()}`);
   };
 
   return (

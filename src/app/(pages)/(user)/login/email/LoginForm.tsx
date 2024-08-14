@@ -4,6 +4,7 @@ import InputError from '@/components/InputError';
 import { signInWithCredentials } from '@/data/actions/authAction';
 import { useForm } from 'react-hook-form';
 import { signOut } from 'next-auth/react';
+import useNutritionStore from '@/zustand/nutritionStore';
 
 type LoginForm = {
   email: string;
@@ -23,6 +24,8 @@ const LoginForm = () => {
     formState: { isSubmitting, errors, isValid },
   } = useForm<LoginForm>({ mode: 'onChange' });
 
+  const { reset } = useNutritionStore();
+
   // 체험하기 선택 시 폼 자동 채우기
   const handleExperienceChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -39,12 +42,17 @@ const LoginForm = () => {
     trigger(['email', 'password']);
   };
 
+  const logout = () => {
+    signOut();
+    reset();
+  };
+
   return (
     <form
       onSubmit={handleSubmit(formData => signInWithCredentials(formData))}
       className="flex flex-col gap-3.5 items-start w-full"
     >
-      <button type="button" onClick={() => signOut()}>
+      <button type="button" onClick={logout}>
         로그아웃
       </button>
       <div className="w-full">

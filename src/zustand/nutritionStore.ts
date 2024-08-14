@@ -7,7 +7,7 @@ type NutritionState = {
     fatce: number;
     chocdf: number;
   };
-  addNutrition: (newNutrition: Partial<NutritionState['nutrition']>) => void;
+  setNutrition: (state: NutritionState['nutrition']) => void;
   reset: () => void;
 };
 
@@ -18,15 +18,7 @@ const useNutritionStore = create<NutritionState>(set => ({
     fatce: 0, // 지방
     chocdf: 0, // 탄수화물
   },
-  addNutrition: newNutrition =>
-    set(state => ({
-      nutrition: {
-        enerc: state.nutrition.enerc + (newNutrition.enerc || 0),
-        prot: state.nutrition.prot + (newNutrition.prot || 0),
-        fatce: state.nutrition.fatce + (newNutrition.fatce || 0),
-        chocdf: state.nutrition.chocdf + (newNutrition.chocdf || 0),
-      },
-    })),
+  setNutrition: state => set({ nutrition: state }),
   reset: () => set({ nutrition: { enerc: 0, prot: 0, fatce: 0, chocdf: 0 } }),
 }));
 

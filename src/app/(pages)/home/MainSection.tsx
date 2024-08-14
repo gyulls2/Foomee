@@ -42,7 +42,7 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
             {/* TODO: 차트 삽입 */}
           </div>
 
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center">
             <div className="w-10 h-0.5 bg-black mb-6"></div>
             <p className="text-base">{user?.extra?.goal_calories} kcal</p>
           </div>
@@ -77,7 +77,7 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
         <div className="bg-[#FF9C65] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">지방</h3>
           <p className="text-sm text-white">
-            {nutrition?.fatce} / {user?.extra?.fat}g
+            {nutrition?.fatce || 0} / {user?.extra?.fat}g
           </p>
           <div className="w-full h-1.5 bg-[#FFE1D0] rounded-full mt-10 relative overflow-hidden">
             <div
