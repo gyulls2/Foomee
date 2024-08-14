@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import Calendar, { OnArgs } from 'react-calendar';
 import './calendar.css';
 import { fetchPosts } from '@/data/fetch/postFetch';
+import { useRouter } from 'next/navigation';
+import useDateStore from '@/zustand/dateStore';
 
 type ValuePiece = Date | null;
 
@@ -22,6 +24,8 @@ const CalendarSection = () => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1); // 현재 달의 첫째 날
   });
+  const router = useRouter();
+  const setDate = useDateStore(state => state.setDate);
 
   // 선택된 달 구하기
   const handleActiveStartDateChange = ({ activeStartDate }: OnArgs) => {
@@ -114,6 +118,20 @@ const CalendarSection = () => {
     return '';
   };
 
+  // 오늘로 이동
+  const handleMoveToday = () => {
+    setDate(new Date());
+    router.push('/home');
+  };
+
+  // 선택한 날짜로 이동
+  const handleMoveSelected = () => {
+    if (value instanceof Date) {
+      setDate(value);
+    }
+    router.push('/home');
+  };
+
   return (
     <div className="flex flex-col gap-4 relative">
       <div className="flex gap-2 absolute top-12">
@@ -150,6 +168,25 @@ const CalendarSection = () => {
           tileContent={addContent}
           tileClassName={tileClassName}
         />
+      </div>
+
+      <div className="mt-auto flex gap-4">
+        <button
+          className="rounded-full w-6/12 h-14 border-2 border-main-primary-yellow"
+          onClick={handleMoveToday}
+        >
+          <p className="text-center font-semibold leading-5 text-lg text-main-primary-yellow">
+            오늘로 이동
+          </p>
+        </button>
+        <button
+          className="rounded-full w-full h-14 bg-[#ffb800]"
+          onClick={handleMoveSelected}
+        >
+          <p className="text-center font-semibold leading-5 text-lg text-neutral-100">
+            선택한 날짜로 이동
+          </p>
+        </button>
       </div>
     </div>
   );
