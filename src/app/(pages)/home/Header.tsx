@@ -10,13 +10,26 @@ import Link from 'next/link';
 import 'moment/locale/ko';
 
 const Header = () => {
-  const { date } = useDateStore();
+  const { date, setDate } = useDateStore();
   const getDay = (day: Date) => {
     return moment(day).format('M. D (dd)');
   };
+
+  const handlePrevDate = () => {
+    setDate(moment(date).subtract(1, 'days').toDate());
+  };
+
+  const handleNextDate = () => {
+    setDate(moment(date).add(1, 'days').toDate());
+  };
+
   return (
     <header className="flex items-center justify-between w-full px-8 py-4">
-      <button aria-label="이전 날짜" className="rotate-180">
+      <button
+        aria-label="이전 날짜"
+        className="rotate-180"
+        onClick={handlePrevDate}
+      >
         <ChevronRightIcon width="30" height="30" />
       </button>
       <Link
@@ -26,7 +39,7 @@ const Header = () => {
         <h1 className="text-lg font-semibold">{getDay(date)}</h1>
         <DropDownIcon />
       </Link>
-      <button aria-label="다음 날짜">
+      <button aria-label="다음 날짜" onClick={handleNextDate}>
         <ChevronRightIcon width="30" height="30" />
       </button>
     </header>
