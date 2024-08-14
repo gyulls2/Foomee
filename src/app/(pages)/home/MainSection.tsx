@@ -33,33 +33,36 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
 
   // nutrition 상태가 업데이트 되면 nutri 게시판에 전송
   useEffect(() => {
-    console.log('nutrition', nutrition);
-    const fetchNutri = async () => {
-      try {
-        const res = await fetchPosts('nutri', undefined, getDay());
-        if (res.length === 0) {
-          // 생성
-          await postSubmit({
-            body: JSON.stringify(nutrition),
-          });
-        } else {
-          // 수정
-          const id = res[0]._id;
-          const nutriData: NutritionData = {
-            type: 'nutri',
-            title: getDay(),
-            content: nutrition,
-          };
+    const timer = setTimeout(() => {
+      const fetchNutri = async () => {
+        try {
+          const res = await fetchPosts('nutri', undefined, getDay());
+          if (res.length === 0) {
+            // 생성
+            await postSubmit({
+              body: JSON.stringify(nutrition),
+            });
+          } else {
+            // 수정
+            const id = res[0]._id;
+            const nutriData: NutritionData = {
+              type: 'nutri',
+              title: getDay(),
+              content: nutrition,
+            };
 
-          await postPatch(id, {
-            body: JSON.stringify(nutriData),
-          });
+            await postPatch(id, {
+              body: JSON.stringify(nutriData),
+            });
+          }
+        } catch (error) {
+          console.error('섭취 칼로리 업로드 실패 : ', error);
         }
-      } catch (error) {
-        console.error('섭취 칼로리 업로드 실패 : ', error);
-      }
-    };
-    fetchNutri();
+      };
+      fetchNutri();
+    }, 1000); // 1초 지연
+
+    return () => clearTimeout(timer);
   }, [nutrition]);
 
   const chocdfWidth = calculateWidth(
