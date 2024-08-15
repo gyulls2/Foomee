@@ -1,10 +1,35 @@
+'use client';
+
 import {
   ArrowCircleIcon,
   BackArrowIcon,
 } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
+import { getChatResponse } from '@/data/actions/chatAction';
+import { useState } from 'react';
 
 const AnalysisPage = () => {
+  const [prompt, setPrompt] = useState<string>('');
+  const [response, setResponse] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // OpenAI API 호출
+  const handleSubmit = async () => {
+    setPrompt('오늘 식단을 분석해줘!');
+    setLoading(true);
+    try {
+      const result = await getChatResponse(prompt);
+      if (result) {
+        setResponse(result);
+      }
+    } catch (error) {
+      console.error(error);
+      console.log('Error occurred while fetching the response');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
       <header className="text-center relative w-full h-12 px-8 py-4">
@@ -15,18 +40,17 @@ const AnalysisPage = () => {
       </header>
       <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full min-h-without-header-tab">
         <div>
-          <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-bl-[20px] px-8 py-3 flex justify-center items-center bg-[#ffb800] text-base mb-6 ml-auto text-right break-words">
-            오늘 식단을 분석해줘!
-          </div>
-          <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-br-[20px] px-8 py-5 flex flex-col justify-center items-start bg-[#F8F9FE] text-base mb-6 mr-auto text-left break-words">
-            <span className="font-semibold mb-2">AI 비서</span>
-            Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis. Class
-            aptent taciti sociosqu ad litora torquent per conubia nostra, per
-            inceptos himenaeos. Curabitur tempus urna at turpis condimentum
-            lobortis. Ut commodo efficitur neque. Ut diam quam, semper iaculis
-            condimentum ac, vestibulum eu nisl.
-          </div>
+          {prompt && (
+            <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-bl-[20px] px-8 py-3 flex justify-center items-center bg-[#ffb800] text-base mb-6 ml-auto text-right break-words">
+              {prompt}
+            </div>
+          )}
+          {response && !loading && (
+            <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-br-[20px] px-8 py-5 flex flex-col justify-center items-start bg-[#F8F9FE] text-base mb-6 mr-auto text-left break-words">
+              <span className="font-semibold mb-2">AI 비서</span>
+              {response}
+            </div>
+          )}
         </div>
 
         <div className="mt-auto relative mb-2 justify-items-end">
@@ -34,9 +58,13 @@ const AnalysisPage = () => {
             className="rounded-full w-full h-14 bg-[#F8F9FE] px-6 focus:border-orange-400 focus:outline-none"
             placeholder="오늘 식단을 분석해줘!"
           />
-          <span className="absolute bottom-2.5 right-4">
+          <button
+            type="button"
+            className="absolute bottom-2.5 right-4"
+            onClick={handleSubmit}
+          >
             <ArrowCircleIcon width="38" height="38" fill="#ffb800" />
-          </span>
+          </button>
         </div>
       </section>
 
