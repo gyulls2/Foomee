@@ -1,10 +1,10 @@
 import React from 'react';
 import { CloseIcon } from '../icons/IconComponents';
 import { useForm } from 'react-hook-form';
-import moment from 'moment';
 import postSubmit from '@/data/fetch/postSubmit';
 import { Post } from '@/types';
 import postPatch from '@/data/fetch/postPatch';
+import useDateStore from '@/zustand/dateStore';
 
 type WeightInput = {
   content: string;
@@ -30,15 +30,12 @@ const WeightInputSheet: React.FC<Props> = ({
     handleSubmit,
     formState: { isSubmitting, isValid },
   } = useForm<WeightInput>({ mode: 'onChange' });
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const { getDate } = useDateStore();
 
   const postWeight = async (data: WeightInput) => {
     try {
       data.type = 'weight';
-      data.title = getDay();
+      data.title = getDate();
 
       if (isEdit) {
         // 수정

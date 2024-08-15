@@ -17,3 +17,10 @@ export interface FoodDataResponse {
   pageNo: number;
   numOfRows: number;
 }
+
+export interface Total {
+  enerc: number;
+  prot: number;
+  fatce: number;
+  chocdf: number;
+}

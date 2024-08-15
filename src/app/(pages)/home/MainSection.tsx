@@ -1,38 +1,15 @@
 'use client';
 
-import { fetchUser } from '@/data/fetch/userFetch';
 import { UserData } from '@/types';
 import useNutritionStore from '@/zustand/nutritionStore';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 
 const calculateWidth = (value: number, total: number) => {
   const width = (value / total) * 100;
   return width > 100 ? 100 : width;
 };
 
-const MainSection = () => {
-  const { data: session } = useSession();
-  const [user, setUser] = useState<UserData | null>(null);
+const MainSection = ({ user }: { user: UserData | undefined }) => {
   const { nutrition } = useNutritionStore();
-
-  // 사용자 extra 정보 조회
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (session?.user) {
-        try {
-          const userData = await fetchUser(
-            session.user._id,
-            session.accessToken,
-          );
-          setUser(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-    fetchUserData();
-  }, [session]);
 
   const chocdfWidth = calculateWidth(
     nutrition?.chocdf,
@@ -65,7 +42,7 @@ const MainSection = () => {
             {/* TODO: 차트 삽입 */}
           </div>
 
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center">
             <div className="w-10 h-0.5 bg-black mb-6"></div>
             <p className="text-base">{user?.extra?.goal_calories} kcal</p>
           </div>
@@ -100,7 +77,7 @@ const MainSection = () => {
         <div className="bg-[#FF9C65] rounded-[20px] px-4 py-6 flex flex-col">
           <h3 className="font-semibold text-white">지방</h3>
           <p className="text-sm text-white">
-            {nutrition?.fatce} / {user?.extra?.fat}g
+            {nutrition?.fatce || 0} / {user?.extra?.fat}g
           </p>
           <div className="w-full h-1.5 bg-[#FFE1D0] rounded-full mt-10 relative overflow-hidden">
             <div

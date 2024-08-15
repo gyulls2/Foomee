@@ -24,6 +24,7 @@ export async function signInWithCredentials(formData: LoginForm) {
       console.error('로그인 실패:', result.error);
       throw new Error(result.error);
     }
+    console.log('로그인 성공, 리다이렉트 시작');
   } catch (err) {
     console.error(err);
   }

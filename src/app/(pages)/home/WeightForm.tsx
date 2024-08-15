@@ -3,31 +3,24 @@
 import Image from 'next/image';
 import { SmileyIcon } from '@/components/icons/IconComponents';
 import { fetchPosts } from '@/data/fetch/postFetch';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Post, UserData } from '@/types';
 import WeightInputSheet from '@/components/layout/WeightInputSheet';
-import { useSession } from 'next-auth/react';
-import { fetchUser } from '@/data/fetch/userFetch';
+import useDateStore from '@/zustand/dateStore';
 
-const WeightForm = () => {
-  const { data: session } = useSession();
+const WeightForm = ({ user }: { user: UserData | undefined }) => {
   const [data, setData] = useState<Post | null>(null);
-  const [user, setUser] = useState<UserData | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
   const [diff, setDiff] = useState('-0');
   const [bmi, setBmi] = useState(0);
-
-  const getDay = (day = 0) => {
-    return moment().add(day, 'days').format('YYYY.MM.DD');
-  };
+  const { getDate } = useDateStore();
 
   // 오늘 체중 조회
   useEffect(() => {
     const fetchWeight = async () => {
-      const res = await fetchPosts('weight', undefined, getDay());
+      const res = await fetchPosts('weight', undefined, getDate());
       if (res.length === 0) {
         setData(null);
         return;
@@ -38,24 +31,6 @@ const WeightForm = () => {
     };
     fetchWeight();
   }, [refresh]);
-
-  // 사용자 extra 정보 조회
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (session?.user) {
-        try {
-          const userData = await fetchUser(
-            session.user._id,
-            session.accessToken,
-          );
-          setUser(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-    fetchUserData();
-  }, [session]);
 
   // 체중 변화 계산
   useEffect(() => {
@@ -105,7 +80,7 @@ const WeightForm = () => {
           setRefresh={setRefresh}
         />
       )}
-      <div className="flex flex-col bg-[#FFF9EA] p-8 w-full h-full min-h-without-header-tab max-h-[1240px] overflow-hidden">
+      <div className="flex flex-col bg-[#FFF9EA] p-8 w-full h-full min-h-screen max-h-[1240px] overflow-hidden">
         <div className="flex items-center space-x-2">
           <h2 className="text-lg font-semibold">나의 변화</h2>
         </div>
