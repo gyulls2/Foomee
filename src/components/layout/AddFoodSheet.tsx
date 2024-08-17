@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { Food } from '@/app/(pages)/home/MealCard';
 import { FoodData } from '@/types';
 import useDateStore from '@/zustand/dateStore';
+import moment from 'moment';
 
 const mealTypes: { [key: string]: { kr: string; en: string } } = {
   breakfast: { kr: '아침', en: 'breakfast' },
@@ -48,6 +49,11 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
   });
 
   const { getDate } = useDateStore();
+
+  // 탭 메뉴로 들어온 경우, 오늘 날짜를 기본값으로 설정
+  function getDay(day = 0) {
+    return moment().add(day, 'days').format('YYYY.MM.DD');
+  }
 
   // type이 있다면 currentIndex를 변경
   useEffect(() => {
@@ -123,7 +129,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
 
     const formData = {
       type: mealType,
-      title: getDate(),
+      title: type ? getDate() : getDay(),
       extra: {
         foodNm: name?.replaceAll('_', ' '),
         enerc: nutrient.enerc,
@@ -166,7 +172,9 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     } catch (error) {
       console.error('식단 기록 오류', error);
     } finally {
-      router.push(`/meals/${mealTypeKeys[currentIndex]}/${getDate()}`);
+      router.push(
+        `/meals/${mealTypeKeys[currentIndex]}/${type ? getDate() : getDay()}`,
+      );
     }
   };
 
