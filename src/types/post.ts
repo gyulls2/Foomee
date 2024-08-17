@@ -12,7 +12,7 @@ export interface PostComment {
 
 export interface Post {
   _id: number;
-  type?: string;
+  type: string;
   title: string;
   content: string;
   user: Pick<UserData, '_id' | 'name' | 'profileImage'>;

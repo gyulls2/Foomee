@@ -1,8 +1,8 @@
 import { ApiRes, SingleItem, Post, MultiItem } from '@/types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
-const DELAY = process.env.NEXT_PUBLIC_DELAY;
+// const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
+// const DELAY = process.env.NEXT_PUBLIC_DELAY;
 
 // 게시판 타입, 제목으로 게시물 조회
 /**
@@ -16,7 +16,7 @@ export async function fetchPosts(
   page?: string | undefined,
   keyword?: string,
 ): Promise<Post[]> {
-  const queryString = `type=${type}${page ? `&page=${page}` : ''}${keyword ? `&keyword=${keyword}` : ''}&limit=${LIMIT}&delay=${DELAY}`;
+  const queryString = `type=${type}${page ? `&page=${page}` : ''}${keyword ? `&keyword=${keyword}` : ''}`;
 
   const url = `${SERVER}/posts?${queryString}`;
 
