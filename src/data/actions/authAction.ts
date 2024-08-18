@@ -2,7 +2,7 @@
 'use server';
 
 import { signIn, update, auth } from '@/auth';
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 
 type LoginForm = {
   email: string;
@@ -25,10 +25,11 @@ export async function signInWithCredentials(formData: LoginForm) {
       throw new Error(result.error);
     }
     console.log('로그인 성공, 리다이렉트 시작');
+    return result;
   } catch (err) {
     console.error(err);
   }
-  redirect('/home');
+  // redirect('/home');
 }
 
 // export async function signInWithGoogle(formData: FormData) {
