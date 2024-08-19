@@ -3,10 +3,28 @@
 import Image from 'next/image';
 import StepIndicator from '@/components/StepIndicator';
 import { useFormContext } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
+import { patchUser } from '@/data/actions/userAction';
+import { useRouter } from 'next/navigation';
+import { UserData } from '@/types';
 
 const Step5Page = () => {
-  const { register, watch } = useFormContext();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { isValid },
+  } = useFormContext();
   const selected = watch('character');
+  const session = useSession();
+  const router = useRouter();
+
+  const onSubmit = async (data: Pick<UserData, 'extra'>) => {
+    const _id = session?.data?.user._id;
+    if (!_id) return;
+    const res = await patchUser(_id, data);
+    if (res) router.push('/home');
+  };
 
   return (
     <div className="flex flex-col gap-10  min-h-full h-full">
@@ -81,7 +99,12 @@ const Step5Page = () => {
       </div>
 
       <div className="mt-auto">
-        <button className="rounded-full w-full h-14 bg-[#ffb800]">
+        <button
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+          disabled={!isValid}
+          className="rounded-full w-full h-14 bg-[#ffb800] disabled:opacity-50"
+        >
           <p className="text-center font-semibold leading-5 text-lg text-neutral-100">
             시작하기
           </p>

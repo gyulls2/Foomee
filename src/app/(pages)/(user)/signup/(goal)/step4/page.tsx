@@ -18,8 +18,6 @@ const Step4Page = () => {
   const protein = watch('protein', ((calories * 0.25) / 4).toFixed(0));
   const fat = watch('fat', ((calories * 0.25) / 9).toFixed(0));
 
-  console.log(carboh, protein, fat);
-
   const [goalCal, setGoalCal] = useState(calories);
 
   useEffect(() => {
