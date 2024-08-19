@@ -152,7 +152,7 @@ const Step1Page = () => {
             />
             <div
               className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                selectedActive === 'very-low'
+                selectedActive === '1'
                   ? 'bg-main-secondary-yellow'
                   : 'bg-gray-200'
               }`}
@@ -177,7 +177,7 @@ const Step1Page = () => {
             />
             <div
               className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                selectedActive === 'low'
+                selectedActive === '2'
                   ? 'bg-main-secondary-yellow'
                   : 'bg-gray-200'
               }`}
@@ -202,7 +202,7 @@ const Step1Page = () => {
             />
             <div
               className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                selectedActive === 'moderate'
+                selectedActive === '3'
                   ? 'bg-main-secondary-yellow'
                   : 'bg-gray-200'
               }`}
@@ -227,7 +227,7 @@ const Step1Page = () => {
             />
             <div
               className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                selectedActive === 'high'
+                selectedActive === '4'
                   ? 'bg-main-secondary-yellow'
                   : 'bg-gray-200'
               }`}
