@@ -1,7 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import StepIndicator from '@/components/StepIndicator';
+import { useFormContext } from 'react-hook-form';
 
 const Step5Page = () => {
+  const { register, watch } = useFormContext();
+  const selected = watch('character');
+
   return (
     <div className="flex flex-col gap-10  min-h-full h-full">
       <StepIndicator current="5" />
@@ -12,14 +18,16 @@ const Step5Page = () => {
       </h2>
       <div className="flex flex-col items-start mt-10">
         <div className="flex justify-center space-x-10 self-center">
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
-              name="character"
               value="orange"
               className="hidden"
+              {...register('character', { required: true })}
             />
-            <div className="rounded-full flex items-center justify-center">
+            <div
+              className={`rounded-full flex items-center justify-center ${selected === 'orange' ? '' : 'opacity-50 filter'}`}
+            >
               <Image
                 src="/images/profile_orange.png"
                 alt="탱귤 매니저"
@@ -30,14 +38,16 @@ const Step5Page = () => {
             <span className="text-gray-400 mt-4 font-semibold">탱귤</span>
           </label>
 
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
-              name="character"
               value="peach"
               className="hidden"
+              {...register('character', { required: true })}
             />
-            <div className="rounded-full flex items-center justify-center">
+            <div
+              className={`rounded-full flex items-center justify-center ${selected === 'peach' ? '' : 'opacity-50 filter'}`}
+            >
               <Image
                 src="/images/profile_peach.png"
                 alt="숭숭 매니저"
@@ -48,14 +58,16 @@ const Step5Page = () => {
             <span className="text-gray-400 mt-4 font-semibold">숭숭</span>
           </label>
 
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
-              name="character"
               value="cabbage"
               className="hidden"
+              {...register('character', { required: true })}
             />
-            <div className="rounded-full flex items-center justify-center">
+            <div
+              className={`rounded-full flex items-center justify-center ${selected === 'cabbage' ? '' : 'opacity-50 filter'}`}
+            >
               <Image
                 src="/images/profile_cabbage.png"
                 alt="추추 매니저"
