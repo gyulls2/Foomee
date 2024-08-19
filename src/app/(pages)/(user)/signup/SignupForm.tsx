@@ -22,17 +22,13 @@ const SignupForm = () => {
 
     // 자동 로그인 처리
     if (user) {
-      const res = await signInWithCredentials({
+      const isLogin = await signInWithCredentials({
         email: data.email,
         password: data.password,
       });
-      if (res?.ok) {
-        setIsOpened(true);
-      }
+      if (isLogin) setIsOpened(true);
     }
   };
-
-  console.log('isOpened', isOpened);
 
   return (
     <>

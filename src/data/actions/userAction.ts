@@ -1,9 +1,38 @@
 'use server';
 
-import { UserForm } from '@/types';
+import { UserData, UserForm } from '@/types';
+import { getSession } from '../actions/authAction';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+
+export async function patchUser(
+  _id: number,
+  formData: Pick<UserData, 'extra'>,
+) {
+  const session = await getSession();
+  const accessToken = session?.accessToken;
+  console.log('accessToken', accessToken);
+  try {
+    const res = await fetch(`${SERVER}/users/${_id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'client-id': `${CLIENT_ID}`,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ extra: formData }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to patch user');
+    }
+
+    return res.ok;
+  } catch (error) {
+    console.error('Error patch user:', error);
+  }
+}
 
 export async function signup(formData: UserForm) {
   const userData = {

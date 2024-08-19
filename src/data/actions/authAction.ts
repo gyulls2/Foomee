@@ -25,9 +25,10 @@ export async function signInWithCredentials(formData: LoginForm) {
       throw new Error(result.error);
     }
     console.log('로그인 성공, 리다이렉트 시작');
-    return result;
+    return true;
   } catch (err) {
     console.error(err);
+    return false;
   }
   // redirect('/home');
 }
