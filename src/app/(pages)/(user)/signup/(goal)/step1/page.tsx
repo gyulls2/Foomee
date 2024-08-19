@@ -44,7 +44,7 @@ const Step1Page = () => {
           성별
         </label>
         <div className="flex justify-center space-x-8 self-center">
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value="female"
@@ -62,7 +62,7 @@ const Step1Page = () => {
             </div>
             <span className="text-gray-500 mt-4">여성</span>
           </label>
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value="male"
@@ -141,7 +141,7 @@ const Step1Page = () => {
           평소 활동량
         </label>
         <div className="flex justify-center self-center space-x-2">
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value={1}
@@ -166,7 +166,7 @@ const Step1Page = () => {
               집돌이 집순이
             </p>
           </label>
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value={2}
@@ -191,7 +191,7 @@ const Step1Page = () => {
               학생이나 직장인
             </p>
           </label>
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value={3}
@@ -216,7 +216,7 @@ const Step1Page = () => {
               운동하는 꾸준러
             </p>
           </label>
-          <label className="flex flex-col items-center">
+          <label className="flex flex-col items-center cursor-pointer">
             <input
               type="radio"
               value={4}
