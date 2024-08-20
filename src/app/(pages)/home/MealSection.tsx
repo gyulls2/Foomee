@@ -53,7 +53,7 @@ interface NutritionData {
 
 const MealSection = () => {
   const { date, getDate } = useDateStore();
-  const { setNutrition, reset } = useNutritionStore();
+  const { setNutrition } = useNutritionStore();
   const [totals, setTotals] = useState<Total>({
     enerc: 0,
     prot: 0,
@@ -68,7 +68,7 @@ const MealSection = () => {
       fatce: 0,
       chocdf: 0,
     });
-    reset();
+    // reset();
   }, [date]);
 
   useEffect(() => {

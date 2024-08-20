@@ -2,6 +2,7 @@
 
 import { UserData } from '@/types';
 import useNutritionStore from '@/zustand/nutritionStore';
+import MainChart from './MainChart';
 
 const calculateWidth = (value: number, total: number) => {
   const width = (value / total) * 100;
@@ -24,7 +25,7 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
         <div className="border border-black py-1 px-4 rounded-full text-sm">
           {user?.name}님
         </div>
-        <div className="relative flex flex-col items-center justify-center flex-grow">
+        <div className="relative flex flex-col items-center justify-center flex-grow my-8">
           <div className="relative w-[340px] h-[340px] rounded-full overflow-hidden">
             <div
               className="absolute inset-0"
@@ -35,16 +36,14 @@ const MainSection = ({ user }: { user: UserData | undefined }) => {
             ></div>
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-9xl font-medium">{nutrition?.enerc}</span>
-            <span className="text-2xl">kcal</span>
-          </div>
-          <div className="absolute top-0 left-0 w-40 h-40">
-            {/* TODO: 차트 삽입 */}
-          </div>
-
-          <div className="flex flex-col items-center">
-            <div className="w-10 h-0.5 bg-black mb-6"></div>
+            <span className="text-[5rem] font-medium mt-6">
+              {nutrition?.enerc}
+            </span>
+            <div className="w-4 h-0.5 bg-black mb-4 mt-2"></div>
             <p className="text-base">{user?.extra?.goal_calories} kcal</p>
+          </div>
+          <div className="absolute">
+            <MainChart />
           </div>
         </div>
       </div>

@@ -180,7 +180,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
 
   return (
     <div
-      className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10 flex flex-col justify-end"
+      className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-30 flex flex-col justify-end"
       onClick={handleCloseSheet}
     >
       <div className="max-w-[475px] w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-8 fixed bottom-0">

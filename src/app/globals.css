@@ -26,4 +26,8 @@ input[type='number'] {
   .min-h-without-search-tab {
     @apply min-h-[calc(100vh-9.125rem)];
   }
+
+  .min-h-without-tab {
+    @apply min-h-[calc(100vh-3rem)];
+  }
 }
