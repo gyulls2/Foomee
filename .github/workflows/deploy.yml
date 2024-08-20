@@ -67,5 +67,4 @@ jobs:
           pm2 stop all || true
           pm2 start npm --name "foomee-app" -- run start
           pm2 save
-          pm2 startup 
           EOF
