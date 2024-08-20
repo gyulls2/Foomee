@@ -8,19 +8,24 @@ import useDateStore from '@/zustand/dateStore';
 import moment from 'moment';
 import Link from 'next/link';
 import 'moment/locale/ko';
+import useNutritionStore from '@/zustand/nutritionStore';
 
 const Header = () => {
   const { date, setDate } = useDateStore();
+  const { reset } = useNutritionStore();
+
   const getDay = (day: Date) => {
     return moment(day).format('M. D (dd)');
   };
 
   const handlePrevDate = () => {
     setDate(moment(date).subtract(1, 'days').toDate());
+    reset();
   };
 
   const handleNextDate = () => {
     setDate(moment(date).add(1, 'days').toDate());
+    reset();
   };
 
   return (

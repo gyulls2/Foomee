@@ -7,6 +7,7 @@ import './calendar.css';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import { useRouter } from 'next/navigation';
 import useDateStore from '@/zustand/dateStore';
+import useNutritionStore from '@/zustand/nutritionStore';
 
 type ValuePiece = Date | null;
 
@@ -26,6 +27,7 @@ const CalendarSection = () => {
   });
   const router = useRouter();
   const setDate = useDateStore(state => state.setDate);
+  const { reset } = useNutritionStore();
 
   // 선택된 달 구하기
   const handleActiveStartDateChange = ({ activeStartDate }: OnArgs) => {
@@ -108,6 +110,7 @@ const CalendarSection = () => {
   // 오늘로 이동
   const handleMoveToday = () => {
     setDate(new Date());
+    reset();
     router.push('/home');
   };
 
@@ -115,6 +118,7 @@ const CalendarSection = () => {
   const handleMoveSelected = () => {
     if (value instanceof Date) {
       setDate(value);
+      reset();
     }
     router.push('/home');
   };
