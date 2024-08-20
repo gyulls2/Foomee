@@ -3,12 +3,13 @@
 import useNutritionStore from '@/zustand/nutritionStore';
 import { ResponsivePie } from '@nivo/pie';
 import { BasicTooltip } from '@nivo/tooltip';
+import { ComputedDatum } from '@nivo/pie';
 import { useEffect, useState } from 'react';
 
-const PieTooltip = ({ datum }) => (
+const PieTooltip = ({ datum }: { datum: ComputedDatum<unknown> }) => (
   <BasicTooltip
     id={datum.id}
-    value={`${datum.formattedValue}%`} // formattedValue 뒤에 % 추가
+    value={`${Math.round(parseFloat(datum.formattedValue))}%`}
     enableChip={true}
     color={datum.color}
   />
@@ -60,10 +61,10 @@ const commonProperties = {
 };
 
 const MainChart = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<
+    { color: string; id: string; value: number }[]
+  >([]);
   const { nutrition } = useNutritionStore();
-
-  console.log('nutrition', nutrition);
 
   useEffect(() => {
     const caloriesFromProtein = nutrition?.prot * 4;
@@ -75,17 +76,23 @@ const MainChart = () => {
         {
           color: 'hsl(43, 100%, 60%)',
           id: '탄수화물',
-          value: Math.round((caloriesFromCarbs / nutrition?.enerc) * 100),
+          value: nutrition?.chocdf
+            ? (caloriesFromCarbs / nutrition?.enerc) * 100
+            : 0.1,
         },
         {
           color: 'hsl(0, 100%, 70%)',
           id: '단백질',
-          value: Math.round((caloriesFromProtein / nutrition?.enerc) * 100),
+          value: nutrition?.prot
+            ? (caloriesFromProtein / nutrition?.enerc) * 100
+            : 0.1,
         },
         {
           color: 'hsl(22, 100%, 70%)',
           id: '지방',
-          value: Math.round((caloriesFromFat / nutrition?.enerc) * 100),
+          value: nutrition?.fatce
+            ? (caloriesFromFat / nutrition?.enerc) * 100
+            : 0.1,
         },
       ]);
     }, 500); // 500ms 후에 데이터를 설정
