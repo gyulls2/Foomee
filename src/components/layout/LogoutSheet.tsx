@@ -21,7 +21,7 @@ const LogoutSheet: React.FC<Props> = ({ setIsOpen }) => {
 
   return (
     <div
-      className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10 flex flex-col justify-end"
+      className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-30 flex flex-col justify-end"
       onClick={handleCloseSheet}
     >
       <div className="relative w-full bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-12">
