@@ -37,6 +37,9 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Compress build folder
+        run: tar -czf next-app.tar.gz .next package.json node_modules public
+
       - name: Copy files to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -45,7 +48,7 @@ jobs:
         run: |
           echo "${{ secrets.EC2_KEY }}" > ec2_key.pem
           chmod 600 ec2_key.pem
-          scp -i ec2_key.pem -r .next package.json node_modules public ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+          scp -i ec2_key.pem next-app.tar.gz ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
 
       - name: Deploy on EC2
         env:
@@ -55,6 +58,7 @@ jobs:
         run: |
           ssh -i ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           cd /home/${{ secrets.EC2_USER }}
+          tar -xzf next-app.tar.gz
           npm install --production
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
