@@ -1,26 +1,91 @@
 'use client';
 
-import {
-  ArrowCircleIcon,
-  BackArrowIcon,
-} from '@/components/icons/IconComponents';
+import { ArrowCircleIcon } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
 import { getChatResponse } from '@/data/actions/chatAction';
-import { useState } from 'react';
+import { fetchPosts } from '@/data/fetch/postFetch';
+import { Post } from '@/types';
+import moment from 'moment';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
+const customMarkdownComponents = {
+  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 className="text-2xl font-medium my-4" {...props} />
+  ),
+  p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="text-base leading-relaxed my-2" {...props} />
+  ),
+  ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul className="list-disc pl-5 my-2" {...props} />
+  ),
+  ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol className="list-decimal pl-5 my-2" {...props} />
+  ),
+};
+
+const type = ['breakfast', 'lunch', 'dinner', 'snack'];
+
+function getDay(day = 0) {
+  return moment().add(day, 'days').format('YYYY.MM.DD');
+}
+
+type DietType = {
+  type: string;
+  content: Pick<Post, 'extra'>;
+};
 
 const AnalysisPage = () => {
   const [prompt, setPrompt] = useState<string>('');
   const [response, setResponse] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [dietList, setDietList] = useState<DietType[]>([]);
+  const router = useRouter();
+
+  // TODO: 로딩 스피너 추가
+  // TODO: alert대신 모달로 변경
+
+  // 오늘 식단 조회
+  useEffect(() => {
+    const fetchFoodList = async () => {
+      const allItems = await Promise.all(
+        type.map(async meal => {
+          const response = await fetchPosts(meal, undefined, getDay(0));
+          return response?.map(item => ({
+            type: item.type,
+            content: item.extra,
+          }));
+        }),
+      );
+      setDietList(allItems.flat() as DietType[]);
+    };
+    fetchFoodList();
+
+    return () => {
+      setDietList([]);
+    };
+  }, [prompt]);
 
   // OpenAI API 호출
   const handleSubmit = async () => {
-    setPrompt('오늘 식단을 분석해줘!');
+    if (dietList.length === 0) {
+      alert('식단을 먼저 입력해주세요.');
+      return router.push('/search');
+    }
+    const result = dietList
+      ?.map(
+        item => `Type: ${item.type}, Content: ${JSON.stringify(item.content)}`,
+      )
+      .join(', ');
+
+    const newPrompt = `오늘 내가 먹은 식단을 분석해줘! 식단은 ${result} 이야. 결과에서 식단 요약은 간단하게 음식명만 표시하고, 영양성분 계산은 제외해줘.`;
+    setPrompt(newPrompt);
     setLoading(true);
     try {
-      const result = await getChatResponse(prompt);
-      if (result) {
-        setResponse(result);
+      const response = await getChatResponse(newPrompt);
+      if (response) {
+        setResponse(response);
       }
     } catch (error) {
       console.error(error);
@@ -34,33 +99,33 @@ const AnalysisPage = () => {
     <main className="flex-col justify-center min-h-screen h-full bg-white">
       <header className="text-center relative w-full h-12 px-8 py-4">
         <h1 className="font-semibold text-xl">AI 식단분석</h1>
-        <button className="absolute left-6 top-4">
-          <BackArrowIcon />
-        </button>
       </header>
-      <section className="py-2.5 px-8 flex flex-col gap-16 relative w-full pt-8 h-full min-h-without-header-tab">
-        <div>
+      <section className="py-2.5 flex flex-col gap-16 relative w-full pt-8 h-full min-h-without-header-tab">
+        <div className="px-8">
           {prompt && (
             <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-bl-[20px] px-8 py-3 flex justify-center items-center bg-[#ffb800] text-base mb-6 ml-auto text-right break-words">
-              {prompt}
+              오늘 식단을 분석해줘!
             </div>
           )}
           {response && !loading && (
-            <div className="w-fit max-w-[80%] rounded-t-[20px] rounded-br-[20px] px-8 py-5 flex flex-col justify-center items-start bg-[#F8F9FE] text-base mb-6 mr-auto text-left break-words">
+            <div className="w-fit max-w-[100%] rounded-t-[20px] rounded-br-[20px] px-6 py-5 flex flex-col justify-center items-start bg-[#F8F9FE] text-base mb-36 mr-auto text-left break-words">
               <span className="font-semibold mb-2">AI 비서</span>
-              {response}
+              <ReactMarkdown components={customMarkdownComponents}>
+                {response}
+              </ReactMarkdown>
             </div>
           )}
         </div>
 
-        <div className="mt-auto relative mb-2 justify-items-end">
+        <div className="fixed bottom-0 px-8 pb-20 pt-4 w-[475px] mx-auto bg-white">
           <input
             className="rounded-full w-full h-14 bg-[#F8F9FE] px-6 focus:border-orange-400 focus:outline-none"
-            placeholder="오늘 식단을 분석해줘!"
+            defaultValue="오늘 식단을 분석해줘!"
+            readOnly
           />
           <button
             type="button"
-            className="absolute bottom-2.5 right-4"
+            className="absolute top-6 right-10"
             onClick={handleSubmit}
           >
             <ArrowCircleIcon width="38" height="38" fill="#ffb800" />

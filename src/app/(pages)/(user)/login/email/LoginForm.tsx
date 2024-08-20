@@ -5,6 +5,7 @@ import { signInWithCredentials } from '@/data/actions/authAction';
 import { useForm } from 'react-hook-form';
 import { signOut } from 'next-auth/react';
 import useNutritionStore from '@/zustand/nutritionStore';
+import { useRouter } from 'next/navigation';
 
 type LoginForm = {
   email: string;
@@ -23,6 +24,7 @@ const LoginForm = () => {
     setValue,
     formState: { isSubmitting, errors, isValid },
   } = useForm<LoginForm>({ mode: 'onChange' });
+  const router = useRouter();
 
   const { reset } = useNutritionStore();
 
@@ -47,9 +49,18 @@ const LoginForm = () => {
     reset();
   };
 
+  const login = async (formData: LoginForm) => {
+    try {
+      await signInWithCredentials(formData);
+      router.push('/home');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(formData => signInWithCredentials(formData))}
+      onSubmit={handleSubmit(login)}
       className="flex flex-col gap-3.5 items-start w-full"
     >
       <button type="button" onClick={logout}>

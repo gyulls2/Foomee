@@ -15,7 +15,7 @@ const WeightForm = ({ user }: { user: UserData | undefined }) => {
   const [refresh, setRefresh] = useState(false); // 데이터를 다시 불러오기 위한 상태
   const [diff, setDiff] = useState('-0');
   const [bmi, setBmi] = useState(0);
-  const { getDate } = useDateStore();
+  const { date, getDate } = useDateStore();
 
   // 오늘 체중 조회
   useEffect(() => {
@@ -23,14 +23,14 @@ const WeightForm = ({ user }: { user: UserData | undefined }) => {
       const res = await fetchPosts('weight', undefined, getDate());
       if (res.length === 0) {
         setData(null);
-        return;
+        setIsEdit(false);
       } else {
         setData(res[0]);
         setIsEdit(true);
       }
     };
     fetchWeight();
-  }, [refresh]);
+  }, [refresh, date, getDate]);
 
   // 체중 변화 계산
   useEffect(() => {

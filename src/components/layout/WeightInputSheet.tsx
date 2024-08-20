@@ -58,7 +58,7 @@ const WeightInputSheet: React.FC<Props> = ({
   };
 
   return (
-    <div className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-10">
+    <div className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-30">
       <div className="max-w-[475px] bg-white rounded-t-3xl py-14 px-12 flex flex-col gap-12 fixed bottom-0">
         <button className="absolute top-10 right-10" onClick={close}>
           <span className="sr-only">닫기</span>

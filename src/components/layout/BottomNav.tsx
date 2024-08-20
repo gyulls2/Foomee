@@ -23,7 +23,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="w-full fixed bottom-0 left-0 right-0 bg-white mx-auto max-w-[475px]">
+    <nav className="w-full fixed bottom-0 left-0 right-0 bg-white mx-auto max-w-[475px] z-20">
       <ul className="flex justify-around py-3 px-1">
         {menuItems.map((item, index) => {
           const IconComponent = item.icon;
