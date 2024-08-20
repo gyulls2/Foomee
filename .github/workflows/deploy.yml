@@ -63,7 +63,7 @@ jobs:
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          npm install -g pm2
+          sudo npm install -g pm2
           pm2 stop all || true
           pm2 start npm --name "foomee-app" -- run start
           pm2 save
