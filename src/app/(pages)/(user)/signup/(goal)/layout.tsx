@@ -2,8 +2,7 @@
 
 import { BackArrowIcon } from '@/components/icons/IconComponents';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 export default function GoalLayout({
   children,
@@ -11,12 +10,7 @@ export default function GoalLayout({
   children: React.ReactNode;
 }) {
   const methods = useForm();
-  const allValues = useWatch({ control: methods.control });
   const router = useRouter();
-
-  useEffect(() => {
-    console.log('폼 값 변경:', allValues);
-  }, [allValues]);
 
   return (
     <div className="flex flex-col min-h-screen h-screen bg-white">

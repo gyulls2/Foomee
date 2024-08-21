@@ -1,8 +1,15 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthError } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JWT } from 'next-auth/jwt';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+
+class customError extends AuthError {
+  constructor(message: string) {
+    super();
+    this.message = message;
+  }
+}
 
 export const {
   handlers,
@@ -25,14 +32,15 @@ export const {
             body: JSON.stringify(credentials),
           });
 
+          const data = await res.json();
+
           if (!res.ok) {
             console.error(`서버 오류: ${res.status} ${res.statusText}`);
-            return null;
+            throw new Error(data.message || 'Authentication failed');
           }
 
-          const resJson = await res.json();
-          if (res.ok && resJson.ok) {
-            const user = resJson.item;
+          if (data.ok) {
+            const user = data.item;
             return {
               _id: user._id,
               name: user.name,
@@ -45,16 +53,23 @@ export const {
               refreshToken: user.token.refreshToken,
             };
           } else {
-            console.error(`인증 실패: ${resJson.message}`);
-            return null;
+            console.error(`인증 실패: ${data.message}`);
+            throw new Error(data.message || 'Authentication failed');
           }
         } catch (error) {
-          console.error('인증 요청 중 오류 발생:', error);
-          return null;
+          if (error instanceof Error) {
+            throw new customError(
+              error.message ||
+                '로그인 중 문제가 발생했습니다. 다시 시도해 주세요.',
+            );
+          } else {
+            throw new customError('알 수 없는 오류가 발생했습니다.');
+          }
         }
       },
     }),
   ],
+  // debug: true,
   session: {
     strategy: 'jwt', // default 'jwt'
     maxAge: 60 * 60 * 24,
