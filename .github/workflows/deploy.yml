@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy on EC2
         env:
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           AUTH_TRUST_HOST: ${{ secrets.AUTH_TRUST_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -62,7 +62,7 @@ jobs:
           cd /home/${{ secrets.EC2_USER }}
           tar -xzf next-app.tar.gz
           npm install --production
-          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
           echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
           echo "AUTH_TRUST_HOST=${{ secrets.AUTH_TRUST_HOST }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
