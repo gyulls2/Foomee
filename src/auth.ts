@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { JWT } from 'next-auth/jwt';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 class customError extends AuthError {
   constructor(message: string) {
@@ -27,7 +28,7 @@ export const {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'client-id': '04-Foomee',
+              'client-id': `${CLIENT_ID}`,
             },
             body: JSON.stringify(credentials),
           });

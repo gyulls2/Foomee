@@ -29,6 +29,7 @@ jobs:
           NEXT_PUBLIC_TRIAL_EMAIL: ${{ secrets.NEXT_PUBLIC_TRIAL_EMAIL }}
           NEXT_PUBLIC_TRIAL_PW: ${{ secrets.NEXT_PUBLIC_TRIAL_PW }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_NEXT_PUBLIC_API_KEY }}
+          NEXT_PUBLIC_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_CLIENT_ID }}
 
         run: npm run build
 
@@ -55,7 +56,6 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           AUTH_TRUST_HOST: ${{ secrets.AUTH_TRUST_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           ssh -i ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
@@ -65,7 +65,6 @@ jobs:
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
           echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
           echo "AUTH_TRUST_HOST=${{ secrets.AUTH_TRUST_HOST }}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
           sudo npm install -g pm2
           pm2 stop all || true
