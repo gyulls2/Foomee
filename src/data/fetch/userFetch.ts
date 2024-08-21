@@ -1,6 +1,8 @@
 import { ApiRes, SingleItem, UserData } from '@/types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+
 // const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
 // const DELAY = process.env.NEXT_PUBLIC_DELAY;
 
@@ -16,7 +18,7 @@ export async function fetchUser(_id: number, accessToken: string) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'client-id': '04-Foomee',
+      'client-id': `${CLIENT_ID}`,
       Authorization: `Bearer ${accessToken}`,
     },
   });
