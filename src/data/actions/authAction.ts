@@ -2,7 +2,7 @@
 'use server';
 
 import { signIn, update, auth } from '@/auth';
-// import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
 
 type LoginForm = {
   email: string;
@@ -20,15 +20,21 @@ export async function signInWithCredentials(formData: LoginForm) {
       password,
     });
 
+    console.log('result:', result);
+
     if (result?.error) {
       console.error('로그인 실패:', result.error);
       throw new Error(result.error);
     }
     console.log('로그인 성공, 리다이렉트 시작');
     return true;
-  } catch (err) {
-    console.error(err);
-    return false;
+  } catch (error) {
+    console.error('로그인 중 오류 발생:', error);
+    if (error instanceof AuthError) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('로그인 중 문제가 발생했습니다. 다시 시도해 주세요.');
+    }
   }
   // redirect('/home');
 }

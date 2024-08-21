@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { signOut } from 'next-auth/react';
 import useNutritionStore from '@/zustand/nutritionStore';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { AuthError } from 'next-auth';
 
 type LoginForm = {
   email: string;
@@ -28,6 +30,8 @@ const LoginForm = () => {
 
   const { reset } = useNutritionStore();
 
+  const [loginError, setLoginError] = useState<string | null>(null);
+
   // 체험하기 선택 시 폼 자동 채우기
   const handleExperienceChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -42,6 +46,7 @@ const LoginForm = () => {
     }
 
     trigger(['email', 'password']);
+    setLoginError(null);
   };
 
   const logout = () => {
@@ -51,10 +56,15 @@ const LoginForm = () => {
 
   const login = async (formData: LoginForm) => {
     try {
-      await signInWithCredentials(formData);
-      router.push('/home');
-    } catch (err) {
-      console.error(err);
+      const isLogin = await signInWithCredentials(formData);
+      if (isLogin) router.push('/home');
+    } catch (error) {
+      if (error instanceof AuthError) {
+        console.error('로그인 에러 : ', error.message);
+        setLoginError(error.message);
+      } else {
+        setLoginError('로그인 중 문제가 발생했습니다. 다시 시도해 주세요.');
+      }
     }
   };
 
@@ -106,6 +116,12 @@ const LoginForm = () => {
           })}
         />
         <InputError target={errors.password} />
+
+        {loginError && (
+          <p className="ml-2 mt-2 text-sm text-red-500 dark:text-red-400">
+            ⚠ {loginError}
+          </p>
+        )}
       </div>
       <button
         type="submit"
