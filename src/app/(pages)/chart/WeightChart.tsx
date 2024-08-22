@@ -72,7 +72,7 @@ const WeightChart = ({ startDate }: Props) => {
           data: weightData,
         },
       ]}
-      margin={{ top: 30, right: 20, bottom: 10, left: 20 }}
+      margin={{ top: 30, right: 30, bottom: 10, left: 30 }}
       xScale={{ type: 'point' }}
       yScale={{
         type: 'linear',
@@ -92,9 +92,10 @@ const WeightChart = ({ startDate }: Props) => {
       pointLabelYOffset={-14}
       useMesh={false}
       enablePointLabel={true} // 포인트 위에 데이터 표시
-      pointLabel={(datum: Point) =>
-        datum.data.isDerived ? '' : `${datum.data.y}`
-      }
+      pointLabel={(datum: Point) => {
+        const customDatum = datum.data as unknown as TChartData;
+        return customDatum.isDerived ? '' : `${customDatum.y}`;
+      }}
       legends={[]}
       lineWidth={4}
       colors={{ datum: 'color' }}
