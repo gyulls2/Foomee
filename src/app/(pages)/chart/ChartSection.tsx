@@ -1,3 +1,4 @@
+import NutriChart from './NutriChart';
 import WeightChart from './WeightChart';
 
 type Props = {
@@ -14,7 +15,7 @@ const ChartSection = ({ startDate, idx }: Props) => {
       {day}
       {/* 체중 차트 */}
       <div className="max-w-[410px] h-40 mb-6">
-        <WeightChart />
+        <WeightChart startDate={startDate} />
       </div>
       <svg width="100%" height="6px">
         <line
@@ -28,7 +29,9 @@ const ChartSection = ({ startDate, idx }: Props) => {
         />
       </svg>
       {/* 식단 차트 */}
-      <div className="w-[410px] h-72 bg-white mt-6">식단 bar 차트</div>
+      <div className="max-w-[410px] h-72 mt-6">
+        <NutriChart />
+      </div>
     </>
   );
 };

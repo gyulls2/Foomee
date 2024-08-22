@@ -1,48 +1,77 @@
 'use client';
 
-import { ResponsiveLine } from '@nivo/line';
+import { fetchPosts } from '@/data/fetch/postFetch';
+import { ResponsiveLine, Point } from '@nivo/line';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 
-const data = [
-  {
-    id: 'weight',
-    color: 'hsl(43, 100%, 60%)',
-    data: [
-      {
-        x: '2024.08.01',
-        y: 70,
-      },
-      {
-        x: '2024.08.02',
-        y: 71,
-      },
-      {
-        x: '2024.08.03',
-        y: 70.5,
-      },
-      {
-        x: '2024.08.04',
-        y: 71.2,
-      },
-      {
-        x: '2024.08.05',
-        y: 70.8,
-      },
-      {
-        x: '2024.08.06',
-        y: 71.5,
-      },
-      {
-        x: '2024.08.07',
-        y: 70.9,
-      },
-    ],
-  },
-];
+type TChartData = {
+  x: string;
+  y: number;
+  isDerived: boolean;
+};
 
-const WeightChart = () => {
+type Props = {
+  startDate: Date;
+};
+
+const WeightChart = ({ startDate }: Props) => {
+  const [weightData, setWeightData] = useState<TChartData[]>([]);
+
+  useEffect(() => {
+    const fetchWeight = async () => {
+      const keyword = moment(startDate).format('YYYY.MM');
+      const response = await fetchPosts('weight', undefined, keyword);
+
+      if (response) {
+        const startOfRange = moment(startDate).subtract(6, 'days');
+
+        const filteredData = [];
+
+        // 초기 값으로 startDate를 기준으로 가장 가까운 과거 데이터를 찾음
+        let previousData = response.find(item =>
+          moment(item.title, 'YYYY.MM.DD').isSameOrBefore(startOfRange),
+        ) || { title: moment(startOfRange).format('YYYY.MM.DD'), content: '0' };
+
+        for (let i = 0; i <= 6; i++) {
+          const currentDate = moment(startOfRange)
+            .add(i, 'days')
+            .format('YYYY.MM.DD');
+          const dataForDate = response.find(item => item.title === currentDate);
+
+          if (dataForDate) {
+            // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
+            filteredData.push({
+              x: dataForDate.title,
+              y: parseFloat(dataForDate.content),
+              isDerived: false, // 실제 데이터
+            });
+            previousData = dataForDate;
+          } else if (previousData) {
+            // 현재 날짜에 해당하는 데이터가 없으면 전날의 데이터를 복사하여 사용
+            filteredData.push({
+              x: currentDate,
+              y: parseFloat(previousData.content),
+              isDerived: true, // 파생된 데이터
+            });
+          }
+        }
+        console.log(filteredData);
+        setWeightData(filteredData);
+      }
+    };
+    fetchWeight();
+  }, []);
+
   return (
     <ResponsiveLine
-      data={data}
+      data={[
+        {
+          id: 'weight',
+          color: 'hsl(43, 100%, 60%)',
+          data: weightData,
+        },
+      ]}
       margin={{ top: 30, right: 20, bottom: 10, left: 20 }}
       xScale={{ type: 'point' }}
       yScale={{
@@ -63,13 +92,16 @@ const WeightChart = () => {
       pointLabelYOffset={-14}
       useMesh={false}
       enablePointLabel={true} // 포인트 위에 데이터 표시
+      pointLabel={(datum: Point) =>
+        datum.data.isDerived ? '' : `${datum.data.y}`
+      }
       legends={[]}
       lineWidth={4}
       colors={{ datum: 'color' }}
       theme={{
         dots: {
           text: {
-            fontSize: 16, // 텍스트 크기
+            fontSize: 14,
             fontWeight: '600',
           },
         },
