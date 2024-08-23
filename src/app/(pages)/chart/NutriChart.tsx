@@ -1,7 +1,7 @@
 'use client';
 
-import { fetchPosts } from '@/data/fetch/postFetch';
-import { ComputedBarDatum, ResponsiveBar } from '@nivo/bar';
+import { BarDatum, ComputedBarDatum, ResponsiveBar } from '@nivo/bar';
+import { FilterType, TCalorieData } from '@/types';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
@@ -32,8 +32,13 @@ const commonProperties = {
   fill: [{ match: { id: 'enerc' }, id: 'grad' }],
 };
 
+type TCustomDatum = BarDatum & {
+  date: string;
+  enerc: number;
+};
+
 interface CustomLabelProps {
-  bars: readonly ComputedBarDatum<TCalorieData>[];
+  bars: readonly ComputedBarDatum<BarDatum>[];
 }
 
 const CustomLabel: React.FC<CustomLabelProps> = ({ bars }) => {
@@ -57,55 +62,48 @@ const CustomLabel: React.FC<CustomLabelProps> = ({ bars }) => {
   });
 };
 
-type TCalorieData = {
-  date: string;
-  enerc: number;
+type Props = {
+  startDate: Date;
+  filter: FilterType;
+  calorieData: TCalorieData[];
 };
 
-const NutriChart = ({ startDate }: { startDate: Date }) => {
-  const [calorieData, setCalorieData] = useState<TCalorieData[]>([]);
+const NutriChart = ({ startDate, filter, calorieData }: Props) => {
+  const [chartData, setChartData] = useState<TCustomDatum[]>([]);
 
   useEffect(() => {
-    const fetchCalorie = async () => {
-      const keyword = moment(startDate).format('YYYY.MM');
-      const response = await fetchPosts('nutri', undefined, keyword);
-      if (response) {
-        const startOfRange = moment(startDate).subtract(6, 'days');
+    const filteredData: TCustomDatum[] = [];
+    if (filter === 'daily') {
+      const startOfRange = moment(startDate).subtract(6, 'days');
+      for (let i = 0; i < 7; i++) {
+        const currentDate = moment(startOfRange)
+          .add(i, 'days')
+          .format('YYYY.MM.DD');
+        const dataForDate = calorieData.find(item => item.date === currentDate);
 
-        const filteredData = [];
-
-        for (let i = 0; i <= 6; i++) {
-          const currentDate = moment(startOfRange)
-            .add(i, 'days')
-            .format('YYYY.MM.DD');
-          const dataForDate = response.find(item => item.title === currentDate);
-
-          if (dataForDate) {
-            // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
-            filteredData.push({
-              date: dataForDate.title,
-              enerc: Number(dataForDate.extra?.enerc) || 0,
-            });
-          } else {
-            // 현재 날짜에 해당하는 데이터가 없으면 0으로 처리
-            filteredData.push({
-              date: currentDate,
-              enerc: 0,
-            });
-          }
+        if (dataForDate) {
+          // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
+          filteredData.push({
+            date: dataForDate.date,
+            enerc: dataForDate.enerc,
+          });
+        } else {
+          // 현재 날짜에 해당하는 데이터가 없으면 0으로 처리
+          filteredData.push({
+            date: currentDate,
+            enerc: 0,
+          });
         }
-        console.log('nutri:', filteredData);
-
-        setCalorieData(filteredData);
       }
-    };
-    fetchCalorie();
-  }, []);
+    }
+    console.log('filteredData:', filteredData);
+    setChartData(filteredData);
+  }, [filter]);
 
   return (
     <ResponsiveBar
       {...commonProperties}
-      data={calorieData}
+      data={chartData}
       keys={['enerc']}
       indexBy="date"
       axisBottom={{

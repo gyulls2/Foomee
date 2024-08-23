@@ -4,8 +4,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import ChartSection from './ChartSection';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ToggleButton from '@/components/ToggleButton';
+import { fetchPosts } from '@/data/fetch/postFetch';
+import { FilterType, TCalorieData } from '@/types';
 
 // 과거 시작 날짜를 생성하는 함수
 // 주 단위로 생성
@@ -15,11 +17,9 @@ const generatePastDate = (currentStart: Date) => {
   return pastDate;
 };
 
-type FilterType = 'daily' | 'weekly' | 'monthly';
-
 const Slider = () => {
   const [filter, setFilter] = useState<FilterType>('daily');
-  console.log(filter);
+  const [calorieData, setCalorieData] = useState<TCalorieData[]>([]);
 
   // 초기 슬라이드 데이터
   const [slides, setSlides] = useState<Date[]>([
@@ -33,6 +33,22 @@ const Slider = () => {
     setSlides(prevSlides => [...prevSlides, newSlides]);
   };
 
+  // 칼로리 raw data 조회
+  useEffect(() => {
+    const fetchCalorieData = async () => {
+      const response = await fetchPosts('nutri');
+      if (response) {
+        const transformedData = response.map(item => ({
+          date: item.title,
+          enerc: Number(item.extra?.enerc) || 0,
+        }));
+        setCalorieData(transformedData);
+        console.log('calorieData:', transformedData);
+      }
+    };
+    fetchCalorieData();
+  }, []);
+
   return (
     <div className="w-full h-full">
       <Swiper
@@ -44,7 +60,11 @@ const Slider = () => {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <ChartSection startDate={slide} />
+            <ChartSection
+              startDate={slide}
+              filter={filter}
+              calorieData={calorieData}
+            />
             {/* 현재 슬라이드의 시작 날짜를 전달 */}
           </SwiperSlide>
         ))}
