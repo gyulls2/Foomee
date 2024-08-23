@@ -1,6 +1,6 @@
 'use client';
 
-type FilterType = 'daily' | 'weekly' | 'monthly';
+import { FilterType } from '@/types';
 
 type Props = {
   filter: FilterType;

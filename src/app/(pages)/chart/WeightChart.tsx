@@ -1,15 +1,10 @@
 'use client';
 
 import { fetchPosts } from '@/data/fetch/postFetch';
+import { TChartData } from '@/types';
 import { ResponsiveLine, Point } from '@nivo/line';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-
-type TChartData = {
-  x: string;
-  y: number;
-  isDerived: boolean;
-};
 
 type Props = {
   startDate: Date;
