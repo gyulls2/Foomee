@@ -1,5 +1,4 @@
 import BottomNav from '@/components/layout/BottomNav';
-import ToggleButton from '@/components/ToggleButton';
 import Slider from './Slider';
 
 const ChartPage = () => {
@@ -13,7 +12,6 @@ const ChartPage = () => {
           <p className="mt-2">⛳ 목표 50kg 😊 지금까지 -5kg</p>
         </div>
         <Slider />
-        <ToggleButton />
       </section>
 
       <BottomNav />

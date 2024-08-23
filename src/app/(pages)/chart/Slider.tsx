@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import ChartSection from './ChartSection';
 import { useState } from 'react';
+import ToggleButton from '@/components/ToggleButton';
 
 // 과거 시작 날짜를 생성하는 함수
 // 주 단위로 생성
@@ -14,7 +15,12 @@ const generatePastDate = (currentStart: Date) => {
   return pastDate;
 };
 
+type FilterType = 'daily' | 'weekly' | 'monthly';
+
 const Slider = () => {
+  const [filter, setFilter] = useState<FilterType>('daily');
+  console.log(filter);
+
   // 초기 슬라이드 데이터
   const [slides, setSlides] = useState<Date[]>([
     new Date(),
@@ -43,6 +49,8 @@ const Slider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+
+      <ToggleButton filter={filter} setFilter={setFilter} />
     </div>
   );
 };
