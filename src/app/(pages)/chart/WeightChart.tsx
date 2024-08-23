@@ -56,7 +56,7 @@ const WeightChart = ({ startDate }: Props) => {
             });
           }
         }
-        console.log(filteredData);
+        console.log('weight: ', filteredData);
         setWeightData(filteredData);
       }
     };

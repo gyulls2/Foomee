@@ -38,7 +38,7 @@ const Slider = () => {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <ChartSection startDate={slide} idx={index} />
+            <ChartSection startDate={slide} />
             {/* 현재 슬라이드의 시작 날짜를 전달 */}
           </SwiperSlide>
         ))}
