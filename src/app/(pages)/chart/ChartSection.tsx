@@ -1,4 +1,4 @@
-import { TCalorieData } from '@/types';
+import { TCalorieData, TWeightData } from '@/types';
 import NutriChart from './NutriChart';
 import WeightChart from './WeightChart';
 
@@ -6,15 +6,24 @@ type Props = {
   startDate: Date;
   filter: 'daily' | 'weekly' | 'monthly';
   calorieData: TCalorieData[];
+  weightData: TWeightData[];
 };
 
-const ChartSection = ({ startDate, filter, calorieData }: Props) => {
-  const isLoading = calorieData.length === 0;
+const ChartSection = ({
+  startDate,
+  filter,
+  calorieData,
+  weightData,
+}: Props) => {
+  const iscalorieLoad = calorieData.length === 0;
+  const isWeightLoad = weightData.length === 0;
   return (
     <>
       {/* 체중 차트 */}
       <div className="max-w-[410px] h-40 mb-6">
-        <WeightChart startDate={startDate} />
+        {!isWeightLoad && (
+          <WeightChart startDate={startDate} weightData={weightData} />
+        )}
       </div>
       <svg width="100%" height="6px">
         <line
@@ -29,7 +38,7 @@ const ChartSection = ({ startDate, filter, calorieData }: Props) => {
       </svg>
       {/* 식단 차트 */}
       <div className="max-w-[410px] h-72 mt-6">
-        {!isLoading && (
+        {!iscalorieLoad && (
           <NutriChart
             startDate={startDate}
             filter={filter}

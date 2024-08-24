@@ -229,7 +229,6 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
       // 최신 월이 마지막에 추가되므로 역순으로 정렬
       filteredData.reverse();
     }
-    console.log('filteredData:', filteredData);
     setChartData(filteredData);
   }, [filter]);
 

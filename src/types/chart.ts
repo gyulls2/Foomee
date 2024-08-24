@@ -5,7 +5,7 @@ export interface TCalorieData {
   enerc: number;
 }
 
-export interface TChartData {
+export interface TWeightData {
   x: string;
   y: number;
   isDerived: boolean;
