@@ -135,7 +135,7 @@ const WeightChart = ({ startDate, filter, weightData }: Props) => {
     }
 
     setChartData(filteredData);
-  }, [filter]);
+  }, [filter, startDate]);
 
   return (
     <ResponsiveLine
