@@ -32,6 +32,81 @@ const commonProperties = {
   fill: [{ match: { id: 'enerc' }, id: 'grad' }],
 };
 
+type CustomTick = {
+  value: moment.MomentInput;
+  x: unknown;
+  y: number;
+};
+
+const dailyRenderTick = (tick: CustomTick) => {
+  const isToday = moment(tick.value).isSame(moment(), 'day');
+  return (
+    <g transform={`translate(${tick.x},${tick.y + 20})`}>
+      <text
+        textAnchor="middle"
+        style={{
+          fontSize: 12,
+          fill: isToday ? '#ff7a00' : 'black',
+        }}
+      >
+        <tspan x="0" dy="0">
+          {isToday ? '오늘' : `${moment(tick.value).format('ddd')}`}
+        </tspan>
+        <tspan x="0" dy="1.2em">
+          {`${moment(tick.value).format('M.D')}`}
+        </tspan>
+      </text>
+    </g>
+  );
+};
+
+const weeklyRenderTick = (tick: CustomTick) => {
+  const tickDate = moment(tick.value, 'YYYY.MM.DD');
+  const isCurrentWeek = moment().isSame(tickDate, 'week');
+  const isToday = moment().isSame(tickDate, 'day');
+
+  const label = isCurrentWeek ? '이번주' : `${tickDate.format('M.D')} ~`;
+
+  return (
+    <g transform={`translate(${tick.x},${tick.y + 20})`}>
+      <text
+        textAnchor="middle"
+        style={{
+          fontSize: 12,
+          fill: isToday ? '#ff7a00' : 'black',
+        }}
+      >
+        <tspan x="0" dy="0">
+          {label}
+        </tspan>
+      </text>
+    </g>
+  );
+};
+
+const MonthlyRenderTick = (tick: CustomTick) => {
+  const tickDate = moment(tick.value, 'YYYY.MM.DD');
+  const isCurrentMonth = moment().isSame(tickDate, 'month');
+
+  const label = isCurrentMonth ? '이번달' : tickDate.format('YY.MM');
+
+  return (
+    <g transform={`translate(${tick.x},${tick.y + 20})`}>
+      <text
+        textAnchor="middle"
+        style={{
+          fontSize: 12,
+          fill: isCurrentMonth ? '#ff7a00' : 'black',
+        }}
+      >
+        <tspan x="0" dy="0">
+          {label}
+        </tspan>
+      </text>
+    </g>
+  );
+};
+
 type TCustomDatum = BarDatum & {
   date: string;
   enerc: number;
@@ -95,6 +170,64 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
           });
         }
       }
+    } else if (filter === 'weekly') {
+      for (let i = 0; i < 7; i++) {
+        const startOfWeek = moment(startDate)
+          .subtract(i, 'weeks')
+          .startOf('week');
+        const endOfWeek = moment(startDate).subtract(i, 'weeks').endOf('week');
+
+        const weekData = calorieData.filter(item =>
+          moment(item.date).isBetween(startOfWeek, endOfWeek, null, '[]'),
+        );
+
+        const avgEnerc =
+          weekData.length > 0
+            ? parseFloat(
+                (
+                  weekData.reduce((sum, item) => sum + item.enerc, 0) /
+                  weekData.length
+                ).toFixed(0),
+              )
+            : 0;
+
+        filteredData.push({
+          date: endOfWeek.format('YYYY.MM.DD'),
+          enerc: avgEnerc,
+        });
+      }
+      // 최신 주가 마지막에 추가되므로 역순으로 정렬
+      filteredData.reverse();
+    } else if (filter === 'monthly') {
+      for (let i = 0; i < 7; i++) {
+        const startOfMonth = moment(startDate)
+          .subtract(i, 'months')
+          .startOf('month');
+        const endOfMonth = moment(startDate)
+          .subtract(i, 'months')
+          .endOf('month');
+
+        const monthData = calorieData.filter(item =>
+          moment(item.date).isBetween(startOfMonth, endOfMonth, null, '[]'),
+        );
+
+        const avgEnerc =
+          monthData.length > 0
+            ? parseFloat(
+                (
+                  monthData.reduce((sum, item) => sum + item.enerc, 0) /
+                  monthData.length
+                ).toFixed(0),
+              )
+            : 0;
+
+        filteredData.push({
+          date: endOfMonth.format('YYYY.MM.DD'),
+          enerc: avgEnerc,
+        });
+      }
+      // 최신 월이 마지막에 추가되므로 역순으로 정렬
+      filteredData.reverse();
     }
     console.log('filteredData:', filteredData);
     setChartData(filteredData);
@@ -113,27 +246,12 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
         legend: '',
         legendPosition: 'middle',
         legendOffset: 32,
-        renderTick: tick => {
-          const isToday = moment(tick.value).isSame(moment(), 'day');
-          return (
-            <g transform={`translate(${tick.x},${tick.y + 20})`}>
-              <text
-                textAnchor="middle"
-                style={{
-                  fontSize: 12,
-                  fill: isToday ? '#ff7a00' : 'black',
-                }}
-              >
-                <tspan x="0" dy="0">
-                  {isToday ? '오늘' : `${moment(tick.value).format('ddd')}`}
-                </tspan>
-                <tspan x="0" dy="1.2em">
-                  {`${moment(tick.value).format('M.D')}`}
-                </tspan>
-              </text>
-            </g>
-          );
-        },
+        renderTick:
+          filter === 'daily'
+            ? dailyRenderTick
+            : filter === 'weekly'
+              ? weeklyRenderTick
+              : MonthlyRenderTick,
       }}
       enableLabel={false}
       isInteractive={false}
