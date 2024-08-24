@@ -1,5 +1,5 @@
 import { ApiRes, SingleItem, Post, MultiItem } from '@/types';
-import { getSession } from 'next-auth/react';
+import { getSession } from '../actions/authAction';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
