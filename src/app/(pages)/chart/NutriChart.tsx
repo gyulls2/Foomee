@@ -235,6 +235,7 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
 
   return (
     <ResponsiveBar
+      key={`${filter}`}
       {...commonProperties}
       data={chartData}
       keys={['enerc']}
