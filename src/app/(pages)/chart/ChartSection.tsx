@@ -20,9 +20,13 @@ const ChartSection = ({
   return (
     <>
       {/* 체중 차트 */}
-      <div className="max-w-[410px] h-40 mb-6">
+      <div className="max-w-[410px] h-32 mb-6">
         {!isWeightLoad && (
-          <WeightChart startDate={startDate} weightData={weightData} />
+          <WeightChart
+            startDate={startDate}
+            filter={filter}
+            weightData={weightData}
+          />
         )}
       </div>
       <svg width="100%" height="6px">
@@ -37,7 +41,7 @@ const ChartSection = ({
         />
       </svg>
       {/* 식단 차트 */}
-      <div className="max-w-[410px] h-72 mt-6">
+      <div className="max-w-[410px] h-80 mt-6">
         {!iscalorieLoad && (
           <NutriChart
             startDate={startDate}

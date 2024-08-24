@@ -1,50 +1,141 @@
 'use client';
 
-import { TWeightData } from '@/types';
+import { FilterType, TWeightData } from '@/types';
 import { ResponsiveLine, Point } from '@nivo/line';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 type Props = {
   startDate: Date;
+  filter: FilterType;
   weightData: TWeightData[];
 };
 
-const WeightChart = ({ startDate, weightData }: Props) => {
+const WeightChart = ({ startDate, filter, weightData }: Props) => {
   const [chartData, setChartData] = useState<TWeightData[]>([]);
 
   useEffect(() => {
-    const startOfRange = moment(startDate).subtract(6, 'days');
+    const filteredData: TWeightData[] = [];
 
-    const filteredData = [];
+    switch (filter) {
+      case 'daily':
+        {
+          const startOfRange = moment(startDate).subtract(6, 'days');
 
-    // 초기 값으로 startDate를 기준으로 가장 가까운 과거 데이터를 찾음
-    let previousData = weightData.find(item =>
-      moment(item.x, 'YYYY.MM.DD').isSameOrBefore(startOfRange),
-    ) || { x: moment(startOfRange).format('YYYY.MM.DD'), y: 0 };
+          // 초기 값으로 startDate를 기준으로 가장 가까운 과거 데이터를 찾음
+          let previousData = weightData.find(item =>
+            moment(item.x, 'YYYY.MM.DD').isSameOrBefore(startOfRange),
+          ) || { x: moment(startOfRange).format('YYYY.MM.DD'), y: 0 };
 
-    for (let i = 0; i <= 6; i++) {
-      const currentDate = moment(startOfRange)
-        .add(i, 'days')
-        .format('YYYY.MM.DD');
-      const dataForDate = weightData.find(item => item.x === currentDate);
+          for (let i = 0; i <= 6; i++) {
+            const currentDate = moment(startOfRange)
+              .add(i, 'days')
+              .format('YYYY.MM.DD');
+            const dataForDate = weightData.find(item => item.x === currentDate);
 
-      if (dataForDate) {
-        // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
-        filteredData.push(dataForDate);
-        previousData = dataForDate;
-      } else if (previousData) {
-        // 현재 날짜에 해당하는 데이터가 없으면 전날의 데이터를 복사하여 사용
-        filteredData.push({
-          x: currentDate,
-          y: previousData.y,
-          isDerived: true, // 파생된 데이터
-        });
+            if (dataForDate) {
+              // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
+              filteredData.push(dataForDate);
+              previousData = dataForDate;
+            } else if (previousData) {
+              // 현재 날짜에 해당하는 데이터가 없으면 전날의 데이터를 복사하여 사용
+              filteredData.push({
+                x: currentDate,
+                y: previousData.y,
+                isDerived: true, // 파생된 데이터
+              });
+            }
+          }
+        }
+        break;
+      case 'weekly': {
+        for (let i = 6; i >= 0; i--) {
+          const startOfWeek = moment(startDate)
+            .subtract(i, 'weeks')
+            .startOf('week');
+          const endOfWeek = moment(startDate)
+            .subtract(i, 'weeks')
+            .endOf('week');
+
+          const weekData = weightData.filter(item =>
+            moment(item.x, 'YYYY.MM.DD').isBetween(
+              startOfWeek,
+              endOfWeek,
+              null,
+              '[]',
+            ),
+          );
+
+          let avgWeight;
+          if (weekData.length > 0) {
+            avgWeight = parseFloat(
+              (
+                weekData.reduce((sum, item) => sum + item.y, 0) /
+                weekData.length
+              ).toFixed(1),
+            );
+          } else if (filteredData.length > 0) {
+            avgWeight = filteredData[filteredData.length - 1].y; // 이전 주의 평균 사용
+          } else {
+            avgWeight = 0; // 데이터가 없으면 0
+          }
+
+          filteredData.push({
+            x: endOfWeek.format('YYYY.MM.DD'),
+            y: avgWeight,
+            isDerived: weekData.length === 0, // 데이터가 없으면 파생된 데이터로 표시
+          });
+        }
+
+        break;
       }
+      case 'monthly': {
+        for (let i = 6; i >= 0; i--) {
+          const startOfMonth = moment(startDate)
+            .subtract(i, 'months')
+            .startOf('month');
+          const endOfMonth = moment(startDate)
+            .subtract(i, 'months')
+            .endOf('month');
+
+          const monthData = weightData.filter(item =>
+            moment(item.x, 'YYYY.MM.DD').isBetween(
+              startOfMonth,
+              endOfMonth,
+              null,
+              '[]',
+            ),
+          );
+
+          let avgWeight;
+          if (monthData.length > 0) {
+            avgWeight = parseFloat(
+              (
+                monthData.reduce((sum, item) => sum + item.y, 0) /
+                monthData.length
+              ).toFixed(1),
+            );
+          } else if (filteredData.length > 0) {
+            avgWeight = filteredData[filteredData.length - 1].y; // 이전 달의 평균 사용
+          } else {
+            avgWeight = 0; // 데이터가 없으면 0
+          }
+
+          filteredData.push({
+            x: endOfMonth.format('YYYY.MM'),
+            y: avgWeight,
+            isDerived: monthData.length === 0, // 데이터가 없으면 파생된 데이터로 표시
+          });
+        }
+
+        break;
+      }
+      default:
+        break;
     }
-    console.log('weight: ', filteredData);
+
     setChartData(filteredData);
-  }, []);
+  }, [filter]);
 
   return (
     <ResponsiveLine
