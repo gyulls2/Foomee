@@ -49,6 +49,7 @@ interface NutritionData {
     prot: number;
     fatce: number;
   };
+  private?: boolean;
 }
 
 const MealSection = () => {
@@ -82,6 +83,7 @@ const MealSection = () => {
               type: 'nutri',
               title: getDate(),
               extra: totals,
+              private: true,
             };
             await postSubmit({
               body: JSON.stringify(nutriData),
@@ -93,6 +95,7 @@ const MealSection = () => {
               type: 'nutri',
               title: res[0].title,
               extra: totals,
+              private: true,
             };
             await postPatch(id, {
               body: JSON.stringify(nutriData),

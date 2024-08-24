@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "식단관리 앱",
+  "name": "Foomee",
   "type": "collection",
   "ignore": [
     "node_modules",

@@ -1,4 +1,5 @@
 import { ApiRes, SingleItem, Post, MultiItem } from '@/types';
+import { getSession } from '../actions/authAction';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -20,7 +21,10 @@ export async function fetchPosts(
 ): Promise<Post[]> {
   const queryString = `type=${type}${page ? `&page=${page}` : ''}${keyword ? `&keyword=${keyword}` : ''}`;
 
-  const url = `${SERVER}/posts?${queryString}`;
+  const url = `${SERVER}/posts/users?${queryString}`;
+
+  const session = await getSession();
+  const accessToken = session?.accessToken;
 
   try {
     const res = await fetch(url, {
@@ -28,6 +32,7 @@ export async function fetchPosts(
       headers: {
         'Content-Type': 'application/json',
         'client-id': `${CLIENT_ID}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
