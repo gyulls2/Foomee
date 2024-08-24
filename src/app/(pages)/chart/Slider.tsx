@@ -44,7 +44,6 @@ const Slider = () => {
           enerc: Number(item.extra?.enerc) || 0,
         }));
         setCalorieData(transformedData);
-        console.log('calorieData:', transformedData);
       }
     };
     fetchCalorieData();
@@ -61,7 +60,6 @@ const Slider = () => {
           isDerived: false,
         }));
         setWeightData(transformedData);
-        console.log('weightData:', transformedData);
       }
     };
     fetchWeightData();

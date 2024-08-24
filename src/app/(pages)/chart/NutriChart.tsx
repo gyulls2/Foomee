@@ -148,86 +148,100 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
 
   useEffect(() => {
     const filteredData: TCustomDatum[] = [];
-    if (filter === 'daily') {
-      const startOfRange = moment(startDate).subtract(6, 'days');
-      for (let i = 0; i < 7; i++) {
-        const currentDate = moment(startOfRange)
-          .add(i, 'days')
-          .format('YYYY.MM.DD');
-        const dataForDate = calorieData.find(item => item.date === currentDate);
 
-        if (dataForDate) {
-          // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
+    switch (filter) {
+      case 'daily': {
+        const startOfRange = moment(startDate).subtract(6, 'days');
+        for (let i = 0; i < 7; i++) {
+          const currentDate = moment(startOfRange)
+            .add(i, 'days')
+            .format('YYYY.MM.DD');
+          const dataForDate = calorieData.find(
+            item => item.date === currentDate,
+          );
+
+          if (dataForDate) {
+            // 현재 날짜에 해당하는 데이터가 존재하면 그 데이터를 사용
+            filteredData.push({
+              date: dataForDate.date,
+              enerc: dataForDate.enerc,
+            });
+          } else {
+            // 현재 날짜에 해당하는 데이터가 없으면 0으로 처리
+            filteredData.push({
+              date: currentDate,
+              enerc: 0,
+            });
+          }
+        }
+        break;
+      }
+      case 'weekly': {
+        for (let i = 0; i < 7; i++) {
+          const startOfWeek = moment(startDate)
+            .subtract(i, 'weeks')
+            .startOf('week');
+          const endOfWeek = moment(startDate)
+            .subtract(i, 'weeks')
+            .endOf('week');
+
+          const weekData = calorieData.filter(item =>
+            moment(item.date).isBetween(startOfWeek, endOfWeek, null, '[]'),
+          );
+
+          const avgEnerc =
+            weekData.length > 0
+              ? parseFloat(
+                  (
+                    weekData.reduce((sum, item) => sum + item.enerc, 0) /
+                    weekData.length
+                  ).toFixed(0),
+                )
+              : 0;
+
           filteredData.push({
-            date: dataForDate.date,
-            enerc: dataForDate.enerc,
-          });
-        } else {
-          // 현재 날짜에 해당하는 데이터가 없으면 0으로 처리
-          filteredData.push({
-            date: currentDate,
-            enerc: 0,
+            date: endOfWeek.format('YYYY.MM.DD'),
+            enerc: avgEnerc,
           });
         }
+        // 최신 주가 마지막에 추가되므로 역순으로 정렬
+        filteredData.reverse();
+        break;
       }
-    } else if (filter === 'weekly') {
-      for (let i = 0; i < 7; i++) {
-        const startOfWeek = moment(startDate)
-          .subtract(i, 'weeks')
-          .startOf('week');
-        const endOfWeek = moment(startDate).subtract(i, 'weeks').endOf('week');
+      case 'monthly': {
+        for (let i = 0; i < 7; i++) {
+          const startOfMonth = moment(startDate)
+            .subtract(i, 'months')
+            .startOf('month');
+          const endOfMonth = moment(startDate)
+            .subtract(i, 'months')
+            .endOf('month');
 
-        const weekData = calorieData.filter(item =>
-          moment(item.date).isBetween(startOfWeek, endOfWeek, null, '[]'),
-        );
+          const monthData = calorieData.filter(item =>
+            moment(item.date).isBetween(startOfMonth, endOfMonth, null, '[]'),
+          );
 
-        const avgEnerc =
-          weekData.length > 0
-            ? parseFloat(
-                (
-                  weekData.reduce((sum, item) => sum + item.enerc, 0) /
-                  weekData.length
-                ).toFixed(0),
-              )
-            : 0;
+          const avgEnerc =
+            monthData.length > 0
+              ? parseFloat(
+                  (
+                    monthData.reduce((sum, item) => sum + item.enerc, 0) /
+                    monthData.length
+                  ).toFixed(0),
+                )
+              : 0;
 
-        filteredData.push({
-          date: endOfWeek.format('YYYY.MM.DD'),
-          enerc: avgEnerc,
-        });
+          filteredData.push({
+            date: endOfMonth.format('YYYY.MM.DD'),
+            enerc: avgEnerc,
+          });
+        }
+        // 최신 월이 마지막에 추가되므로 역순으로 정렬
+        filteredData.reverse();
+        break;
       }
-      // 최신 주가 마지막에 추가되므로 역순으로 정렬
-      filteredData.reverse();
-    } else if (filter === 'monthly') {
-      for (let i = 0; i < 7; i++) {
-        const startOfMonth = moment(startDate)
-          .subtract(i, 'months')
-          .startOf('month');
-        const endOfMonth = moment(startDate)
-          .subtract(i, 'months')
-          .endOf('month');
-
-        const monthData = calorieData.filter(item =>
-          moment(item.date).isBetween(startOfMonth, endOfMonth, null, '[]'),
-        );
-
-        const avgEnerc =
-          monthData.length > 0
-            ? parseFloat(
-                (
-                  monthData.reduce((sum, item) => sum + item.enerc, 0) /
-                  monthData.length
-                ).toFixed(0),
-              )
-            : 0;
-
-        filteredData.push({
-          date: endOfMonth.format('YYYY.MM.DD'),
-          enerc: avgEnerc,
-        });
-      }
-      // 최신 월이 마지막에 추가되므로 역순으로 정렬
-      filteredData.reverse();
+      default:
+        break;
     }
     setChartData(filteredData);
   }, [filter]);
