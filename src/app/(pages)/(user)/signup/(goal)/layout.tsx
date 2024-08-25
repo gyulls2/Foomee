@@ -1,27 +1,37 @@
-'use client';
+import { fetchUser } from '@/data/fetch/userFetch';
+import { UserData } from '@/types';
+import React from 'react';
+import LayoutContent from './LoyoutContent';
+import { auth } from '@/auth';
 
-import { BackArrowIcon } from '@/components/icons/IconComponents';
-import { useRouter } from 'next/navigation';
-import { FormProvider, useForm } from 'react-hook-form';
-
-export default function GoalLayout({
+export default async function GoalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const methods = useForm();
-  const router = useRouter();
+  const session = await auth();
+
+  // 사용자 extra 정보 조회
+  const fetchUserData = async (): Promise<UserData | undefined> => {
+    if (!session?.user) {
+      throw new Error('User is not authenticated');
+    }
+    try {
+      const userData = await fetchUser(session.user._id, session.accessToken);
+      if (!userData) {
+        throw new Error('Failed to fetch user data');
+      }
+      return userData;
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const user = await fetchUserData();
 
   return (
     <div className="flex flex-col min-h-screen h-screen bg-white">
-      <header className="w-full h-12 px-8 py-4">
-        <button onClick={() => router.back()}>
-          <BackArrowIcon />
-        </button>
-      </header>
-      <main className="flex flex-col flex-grow pt-4 pb-10 px-10">
-        <FormProvider {...methods}>{children}</FormProvider>
-      </main>
+      <LayoutContent user={user}>{children}</LayoutContent>
     </div>
   );
 }

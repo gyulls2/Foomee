@@ -244,11 +244,11 @@ const NutriChart = ({ startDate, filter, calorieData }: Props) => {
         break;
     }
     setChartData(filteredData);
-  }, [filter]);
+  }, [filter, startDate]);
 
   return (
     <ResponsiveBar
-      key={`${filter}`}
+      key={`${filter}-${startDate}`}
       {...commonProperties}
       data={chartData}
       keys={['enerc']}

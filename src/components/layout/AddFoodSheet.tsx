@@ -161,11 +161,13 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
   };
 
   const postDiet = async (data: {
+    private?: boolean;
     type: string;
     title: string;
     extra: Food;
   }) => {
     try {
+      data.private = true;
       await postSubmit({
         body: JSON.stringify(data),
       });

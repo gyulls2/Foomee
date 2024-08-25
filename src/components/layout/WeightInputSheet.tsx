@@ -10,6 +10,7 @@ type WeightInput = {
   content: string;
   type?: string;
   title?: string;
+  private?: boolean;
 };
 
 type Props = {
@@ -36,6 +37,7 @@ const WeightInputSheet: React.FC<Props> = ({
     try {
       data.type = 'weight';
       data.title = getDate();
+      data.private = true;
 
       if (isEdit) {
         // 수정

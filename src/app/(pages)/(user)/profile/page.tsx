@@ -1,62 +1,56 @@
-'use client';
-
-import { useState } from 'react';
-import Image from 'next/image';
 import BottomNav from '@/components/layout/BottomNav';
-import LogoutSheet from '@/components/layout/LogoutSheet';
-import { SettingsIcon } from '@/components/icons/IconComponents';
+import ProfileSection from './ProfileSection';
+import { auth } from '@/auth';
+import { UserData } from '@/types';
+import { fetchUser } from '@/data/fetch/userFetch';
+import { fetchPosts } from '@/data/fetch/postFetch';
+import moment from 'moment';
 
-const ProfilePage = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ProfilePage = async () => {
+  const session = await auth();
+
+  // 사용자 정보 조회
+  const fetchUserData = async (): Promise<UserData | undefined> => {
+    if (!session?.user) {
+      throw new Error('User is not authenticated');
+    }
+    try {
+      const userData = await fetchUser(session.user._id, session.accessToken);
+      if (!userData) {
+        throw new Error('Failed to fetch user data');
+      }
+      return userData;
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const user = await fetchUserData();
+
+  // 가장 최근 체중 데이터 불러오기
+  const fetchWeight = async () => {
+    const response = await fetchPosts('weight');
+    if (response.length > 0) {
+      const mostRecent = response.reduce((latest, current) => {
+        const latestDate = moment(latest.title, 'MMMM.YY.DD');
+        const currentDate = moment(current.title, 'MMMM.YY.DD');
+
+        return currentDate.isAfter(latestDate) ? current : latest;
+      });
+      return parseFloat(mostRecent.content);
+    } else {
+      return 0;
+    }
+  };
+  const weight = await fetchWeight();
+
+  const weightDiff = (user?.extra?.starting_weight ?? 0) - weight;
+  const formattedWeightDiff =
+    weightDiff > 0 ? `-${weightDiff}` : `+${Math.abs(weightDiff)}`;
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
-      {isOpen && <LogoutSheet setIsOpen={setIsOpen} />}
-      <header className="text-center relative w-full h-12 px-8 py-4">
-        <h1 className="font-semibold text-xl">마이페이지</h1>
-        <button
-          className="absolute right-6 top-4"
-          onClick={() => setIsOpen(true)}
-        >
-          <SettingsIcon fill="#d9d9d9" />
-        </button>
-      </header>
-      <section className="py-2.5 px-10 flex flex-col gap-16 items-center relative w-full h-full min-h-without-header-tab">
-        <div className="flex mt-10 gap-10">
-          <div className="flex flex-col justify-center items-center gap-2">
-            <p>⛳ 목표</p>
-            <span className="font-bold text-xl">50kg</span>
-          </div>
-
-          <div className="w-[0.5px] bg-gray-300"></div>
-
-          <div className="flex flex-col justify-center items-center gap-2">
-            <p>😊 변화</p>
-            <span className="font-bold text-xl">-5kg</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="rounded-full flex items-center justify-center bg-[#FFEA79]">
-            <Image
-              src="/images/profile_orange.png"
-              alt="프로필 이미지"
-              width={120}
-              height={120}
-            />
-          </div>
-          <span className="mt-4 font-semibold">User Name</span>
-        </div>
-
-        <div className="flex gap-4 w-full justify-center">
-          <button className="w-32 rounded-full bg-[#FFF7E1] py-2.5">
-            <p className="text-center">프로필 편집</p>
-          </button>
-          <button className="w-32 rounded-full bg-[#FFF7E1] py-2.5">
-            <p className="text-center">목표 변경</p>
-          </button>
-        </div>
-      </section>
+      <ProfileSection user={user} formattedWeightDiff={formattedWeightDiff} />
 
       <BottomNav />
     </main>

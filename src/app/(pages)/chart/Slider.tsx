@@ -4,16 +4,25 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import ChartSection from './ChartSection';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ToggleButton from '@/components/ToggleButton';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import { FilterType, TCalorieData, TWeightData } from '@/types';
 
 // 과거 시작 날짜를 생성하는 함수
-// 주 단위로 생성
-const generatePastDate = (currentStart: Date) => {
+const generatePastDate = (
+  currentStart: Date,
+  filter: FilterType,
+  amount: number,
+) => {
   const pastDate = new Date(currentStart);
-  pastDate.setDate(pastDate.getDate() - 7);
+  if (filter === 'daily') {
+    pastDate.setDate(pastDate.getDate() - amount);
+  } else if (filter === 'weekly') {
+    pastDate.setDate(pastDate.getDate() - amount * 7);
+  } else if (filter === 'monthly') {
+    pastDate.setMonth(pastDate.getMonth() - amount);
+  }
   return pastDate;
 };
 
@@ -22,15 +31,25 @@ const Slider = () => {
   const [calorieData, setCalorieData] = useState<TCalorieData[]>([]);
   const [weightData, setWeightData] = useState<TWeightData[]>([]);
 
+  // 필터에 따라 초기 슬라이드 설정
+  const initialSlides = useMemo(() => {
+    const slides: Date[] = [new Date()];
+    slides.push(generatePastDate(new Date(), filter, 7));
+    return slides;
+  }, [filter]);
+
   // 초기 슬라이드 데이터
-  const [slides, setSlides] = useState<Date[]>([
-    new Date(),
-    generatePastDate(new Date()),
-  ]);
+  const [slides, setSlides] = useState<Date[]>(initialSlides);
+
+  // 필터 변경 시 슬라이드 데이터 재설정
+  useEffect(() => {
+    setSlides(initialSlides);
+  }, [filter, initialSlides]);
 
   // 슬라이드의 끝에 도달하면, 과거 날짜를 생성하여 슬라이드에 추가
   const handleReachEnd = () => {
-    const newSlides = generatePastDate(slides[slides.length - 1]);
+    const lastSlideDate = slides[slides.length - 1];
+    const newSlides = generatePastDate(lastSlideDate, filter, 7);
     setSlides(prevSlides => [...prevSlides, newSlides]);
   };
 

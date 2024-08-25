@@ -1,0 +1,20 @@
+meta {
+  name: 체중 게시물 등록
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/posts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "type": "weight",
+      "title": "2024.08.24",
+      "content": "80",
+      "private": true
+  }
+}
