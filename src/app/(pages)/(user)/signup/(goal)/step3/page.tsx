@@ -5,8 +5,9 @@ import StepIndicator from '@/components/StepIndicator';
 import { ChevronRightIcon } from '@/components/icons/IconComponents';
 import { useFormContext } from 'react-hook-form';
 import InputSheet from '@/components/layout/InputSheet';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PageContext } from '../LoyoutContent';
 
 // 기초대사량 계산
 const getBMR = (
@@ -48,7 +49,8 @@ const Step3Page = () => {
   const weight = getValues('starting_weight');
   const height = getValues('height');
   const age = getValues('age');
-  const activityLevel = getValues('activity-level');
+  const activityLevel = getValues('activity_level');
+  const user = useContext(PageContext);
 
   const bmr = getBMR(gender, weight, height, age)?.toFixed(0);
   const amr = getAMR(Number(bmr), activityLevel)?.toFixed(0);
@@ -58,6 +60,12 @@ const Step3Page = () => {
     setValue('goal_calories', goalCal);
     router.push('/signup/step4');
   };
+
+  useEffect(() => {
+    if (user && user.extra) {
+      setValue('goal_calories', user.extra.goal_calories);
+    }
+  }, [user, setValue]);
 
   return (
     <div className="flex flex-col min-h-full h-full relative">

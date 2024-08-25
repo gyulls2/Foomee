@@ -6,37 +6,37 @@ import WelcomeModal from '@/components/WelcomeModal';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { PageContext } from '../layout';
-import { UserData } from '@/types';
+import { PageContext } from '../LoyoutContent';
 
 const Step1Page = () => {
   const {
     register,
     watch,
     trigger,
+    setValue,
     formState: { isValid },
   } = useFormContext();
   const selectedGender = watch('gender');
-  const selectedActive = watch('activity-level');
+  const selectedActive = watch('activity_level');
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(true);
   const user = useContext(PageContext);
-  const [userData, setUserData] = useState<Pick<UserData, 'extra'> | null>(
-    null,
-  );
 
   useEffect(() => {
-    if (user) {
-      setUserData({ extra: user.extra });
+    if (user && user.extra) {
+      setValue('gender', user.extra.gender);
+      setValue('age', user.extra.age);
+      setValue('height', user.extra.height);
+      setValue('activity_level', user.extra.activity_level);
     }
-  }, [user]);
+  }, [user, setValue]);
 
   const handleNext = async () => {
     const isValid = await trigger([
       'gender',
       'age',
       'height',
-      'activity-level',
+      'activity_level',
     ]);
     if (isValid) {
       router.push('/signup/step2');
@@ -45,7 +45,9 @@ const Step1Page = () => {
 
   return (
     <>
-      {isOpened && <WelcomeModal setIsOpened={setIsOpened} />}
+      {isOpened && user && !user.extra && (
+        <WelcomeModal setIsOpened={setIsOpened} />
+      )}
       <div className="flex flex-col gap-6 min-h-full h-full">
         <StepIndicator current="1" />
         <h2 className="font-semibold leading-9 text-2xl text-gray-900">
@@ -153,7 +155,7 @@ const Step1Page = () => {
         <div className="flex flex-col items-start">
           <label
             className="text-center leading-7 text-sm text-[#757575] mb-4"
-            htmlFor="activity-level"
+            htmlFor="activity_level"
           >
             평소 활동량
           </label>
@@ -163,7 +165,7 @@ const Step1Page = () => {
                 type="radio"
                 value={1}
                 className="hidden"
-                {...register('activity-level', {
+                {...register('activity_level', {
                   required: '활동량은 필수입니다.',
                 })}
               />
@@ -188,7 +190,7 @@ const Step1Page = () => {
                 type="radio"
                 value={2}
                 className="hidden"
-                {...register('activity-level', {
+                {...register('activity_level', {
                   required: '활동량은 필수입니다.',
                 })}
               />
@@ -213,7 +215,7 @@ const Step1Page = () => {
                 type="radio"
                 value={3}
                 className="hidden"
-                {...register('activity-level', {
+                {...register('activity_level', {
                   required: '활동량은 필수입니다.',
                 })}
               />
@@ -238,7 +240,7 @@ const Step1Page = () => {
                 type="radio"
                 value={4}
                 className="hidden"
-                {...register('activity-level', {
+                {...register('activity_level', {
                   required: '활동량은 필수입니다.',
                 })}
               />

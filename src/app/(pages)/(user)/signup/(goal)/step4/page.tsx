@@ -48,7 +48,7 @@ const Step4Page = () => {
               탄수화물
             </label>
             <div className="mt-2 flex items-center gap-4">
-              <div className="relative w-5/6">
+              <div className="relative w-9/12">
                 <input
                   id="carbohydrates"
                   type="number"
@@ -81,7 +81,7 @@ const Step4Page = () => {
               단백질
             </label>
             <div className="mt-2 flex items-center gap-4">
-              <div className="relative w-5/6 ">
+              <div className="relative w-9/12">
                 <input
                   id="protein"
                   type="number"
@@ -116,9 +116,9 @@ const Step4Page = () => {
               지방
             </label>
             <div className="mt-2 flex items-center gap-4">
-              <div className="relative w-5/6 ">
+              <div className="relative w-9/12">
                 <input
-                  id="sfat"
+                  id="fat"
                   type="number"
                   placeholder="0"
                   className="rounded-lg w-full h-14 bg-[#fff7e1] focus:outline-none focus:border-orange-400 px-6 font-semibold pr-14"

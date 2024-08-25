@@ -6,16 +6,26 @@ import { patchUser } from '@/data/actions/userAction';
 import { useRouter } from 'next/navigation';
 import { UserData } from '@/types';
 import { Session } from 'next-auth';
+import { useContext, useEffect } from 'react';
+import { PageContext } from '../LoyoutContent';
 
 const Step5Form = ({ session }: { session: Session | null }) => {
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { isValid },
   } = useFormContext();
   const selected = watch('character');
   const router = useRouter();
+  const user = useContext(PageContext);
+
+  useEffect(() => {
+    if (user && user.extra) {
+      setValue('character', user.extra.character);
+    }
+  }, [user, setValue]);
 
   const onSubmit = async (data: Pick<UserData, 'extra'>) => {
     const _id = session?.user._id;

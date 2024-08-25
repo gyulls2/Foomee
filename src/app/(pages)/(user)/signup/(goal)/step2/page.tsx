@@ -2,15 +2,19 @@
 
 import StepIndicator from '@/components/StepIndicator';
 import { useRouter } from 'next/navigation';
+import { useContext, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { PageContext } from '../LoyoutContent';
 
 const Step2Page = () => {
   const {
     register,
     trigger,
+    setValue,
     formState: { isValid },
   } = useFormContext();
   const router = useRouter();
+  const user = useContext(PageContext);
 
   const handleNext = async () => {
     const isValid = await trigger(['starting_weight', 'goal-weight']);
@@ -18,6 +22,13 @@ const Step2Page = () => {
       router.push('/signup/step3');
     }
   };
+
+  useEffect(() => {
+    if (user && user.extra) {
+      setValue('starting_weight', user.extra.starting_weight);
+      setValue('goal_weight', user.extra.goal_weight);
+    }
+  }, [user, setValue]);
 
   return (
     <div className="flex flex-col min-h-full h-full">
