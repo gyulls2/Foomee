@@ -59,7 +59,7 @@ export const initData = async (clientId, nextSeq) => {
           gender: 'female',
           age: 28,
           height: 175,
-          activity_level: 'moderate',
+          activity_level: '1',
           starting_weight: 80,
           goal_weight: 70,
           goal_calories: 2000,
