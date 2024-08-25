@@ -4,6 +4,7 @@ import { SettingsIcon } from '@/components/icons/IconComponents';
 import LogoutSheet from '@/components/layout/LogoutSheet';
 import { UserData } from '@/types';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type Props = {
@@ -13,7 +14,11 @@ type Props = {
 
 const ProfileSection = ({ user, formattedWeightDiff }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(user);
+  const router = useRouter();
+
+  const handleChangeGoal = () => {
+    router.push('/signup/step1');
+  };
 
   return (
     <>
@@ -63,7 +68,10 @@ const ProfileSection = ({ user, formattedWeightDiff }: Props) => {
           >
             <p className="text-center">프로필 편집</p>
           </button>
-          <button className="w-32 rounded-full bg-[#FFF7E1] py-2.5">
+          <button
+            className="w-32 rounded-full bg-[#FFF7E1] py-2.5"
+            onClick={handleChangeGoal}
+          >
             <p className="text-center">목표 변경</p>
           </button>
         </div>

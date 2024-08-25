@@ -63,11 +63,11 @@ const Step2Page = () => {
             </label>
             <div className="relative mt-2">
               <input
-                id="goal-weight"
+                id="goal_weight"
                 type="number"
                 placeholder="0"
                 className="rounded-lg w-full h-14 bg-[#fff7e1] focus:outline-none focus:border-orange-400 px-6 font-semibold pr-14"
-                {...register('goal-weight', {
+                {...register('goal_weight', {
                   required: '목표 체중은 필수입니다.',
                   min: 1,
                   max: 200,

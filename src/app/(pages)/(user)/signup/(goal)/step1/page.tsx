@@ -4,8 +4,10 @@ import { SmileyIcon } from '@/components/icons/IconComponents';
 import StepIndicator from '@/components/StepIndicator';
 import WelcomeModal from '@/components/WelcomeModal';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { PageContext } from '../layout';
+import { UserData } from '@/types';
 
 const Step1Page = () => {
   const {
@@ -18,6 +20,16 @@ const Step1Page = () => {
   const selectedActive = watch('activity-level');
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(true);
+  const user = useContext(PageContext);
+  const [userData, setUserData] = useState<Pick<UserData, 'extra'> | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (user) {
+      setUserData({ extra: user.extra });
+    }
+  }, [user]);
 
   const handleNext = async () => {
     const isValid = await trigger([
