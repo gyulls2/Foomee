@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react';
 import useNutritionStore from '@/zustand/nutritionStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AuthError } from 'next-auth';
+import { UserLoginForm } from '@/types';
 
 type LoginForm = {
   email: string;
@@ -25,6 +25,7 @@ const LoginForm = () => {
     trigger,
     setValue,
     formState: { isSubmitting, errors, isValid },
+    setError,
   } = useForm<LoginForm>({ mode: 'onChange' });
   const router = useRouter();
 
@@ -54,16 +55,22 @@ const LoginForm = () => {
     reset();
   };
 
-  const login = async (formData: LoginForm) => {
-    try {
-      const isLogin = await signInWithCredentials(formData);
-      if (isLogin) router.push('/home');
-    } catch (error) {
-      if (error instanceof AuthError) {
-        console.error('로그인 에러 : ', error.message);
-        setLoginError(error.message);
-      } else {
-        setLoginError('로그인 중 문제가 발생했습니다. 다시 시도해 주세요.');
+  const login = async (loginData: UserLoginForm) => {
+    // 프로그래밍 방식으로 서버액션 호출
+    // 로그인 성공시 리턴값 없음
+    const resData = await signInWithCredentials(loginData);
+    console.log('로그인 결과', resData);
+    if (typeof resData === 'string') {
+      router.push('/home');
+    } else if (resData && !resData.ok) {
+      // API 서버의 에러 메시지 처리
+      if ('errors' in resData) {
+        resData.errors.forEach(error => {
+          setError(error.path, { message: error.msg });
+          setLoginError(error.msg);
+        });
+      } else if (resData.message) {
+        setLoginError(resData.message);
       }
     }
   };

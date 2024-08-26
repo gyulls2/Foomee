@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import OAuthButtons from './OAuthButtons';
 
 const LoginPage = () => {
   return (
@@ -33,6 +34,7 @@ const LoginPage = () => {
             회원가입
           </p>
         </Link>
+        <OAuthButtons />
       </div>
     </div>
   );

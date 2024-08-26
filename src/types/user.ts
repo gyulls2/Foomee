@@ -5,7 +5,7 @@ export interface UserData {
   phone?: string;
   address?: string;
   type: string;
-  loginType?: 'email' | 'kakao';
+  loginType?: string;
   profileImage?: string;
   profile?: string;
 
@@ -14,6 +14,8 @@ export interface UserData {
 
   createdAt?: string;
   updatedAt?: string;
+
+  providerAccountId?: string;
 
   extra?: {
     character: 'orange' | 'peach' | 'cabbage';
@@ -44,3 +46,10 @@ export type UserForm = {
   attach?: string | string[];
   profileImage?: string;
 };
+
+export type OAuthUser = Required<Pick<UserData, 'type' | 'loginType'>> &
+  Partial<
+    Pick<UserData, 'name' | 'email' | 'profileImage' | 'providerAccountId'>
+  >;
+
+export type UserLoginForm = Pick<UserForm, 'email' | 'password'>;

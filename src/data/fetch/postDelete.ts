@@ -1,4 +1,6 @@
-import { getSession } from '../actions/authAction';
+'use server';
+
+import { auth } from '@/auth';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -7,7 +9,7 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 // const DELAY = process.env.NEXT_PUBLIC_DELAY;
 
 const postDelete = async (id: number) => {
-  const session = await getSession();
+  const session = await auth();
   const accessToken = session?.accessToken;
 
   const url = `${SERVER}/posts/${id}`;

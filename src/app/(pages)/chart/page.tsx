@@ -15,7 +15,7 @@ const ChartPage = async () => {
       throw new Error('User is not authenticated');
     }
     try {
-      const userData = await fetchUser(session.user._id, session.accessToken);
+      const userData = await fetchUser(session.user.id!, session.accessToken);
       if (!userData) {
         throw new Error('Failed to fetch user data');
       }

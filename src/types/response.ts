@@ -61,6 +61,10 @@ export type ApiResWithValidation<T, E> =
 // 데이터 검증 로직이 없는 요청의 응답
 export type ApiRes<T> = T | CoreErrorRes | AuthErrorRes;
 
+export interface RefreshTokenRes extends CoreSuccessRes {
+  accessToken: string;
+}
+
 // export type ErrorRes<E> = CoreErrorRes | AuthErrorRes | ValidationErrorRes<E>;
 
 /**

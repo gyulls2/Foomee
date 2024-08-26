@@ -12,7 +12,7 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
  * @param accessToken 사용자 액세스 토큰
  * @returns 사용자 정보
  */
-export async function fetchUser(_id: number, accessToken: string) {
+export async function fetchUser(_id: string, accessToken: string) {
   const url = `${SERVER}/users/${_id}`;
   const res = await fetch(url, {
     method: 'GET',
@@ -27,4 +27,16 @@ export async function fetchUser(_id: number, accessToken: string) {
     return null;
   }
   return resJson.item;
+}
+
+// 액세스 토큰 재발행
+export async function fetchAccessToken(refreshToken: string) {
+  const url = `${SERVER}/auth/refresh`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+  return res;
 }

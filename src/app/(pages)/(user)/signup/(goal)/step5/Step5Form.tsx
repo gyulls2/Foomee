@@ -28,7 +28,7 @@ const Step5Form = ({ session }: { session: Session | null }) => {
   }, [user, setValue]);
 
   const onSubmit = async (data: Pick<UserData, 'extra'>) => {
-    const _id = session?.user._id;
+    const _id = session?.user.id;
     if (!_id) return console.log('User not found');
     const res = await patchUser(_id, data);
     if (res) router.push('/home');

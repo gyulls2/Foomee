@@ -1,5 +1,7 @@
+'use server';
+
 import { ApiRes, SingleItem, Post, MultiItem } from '@/types';
-import { getSession } from '../actions/authAction';
+import { auth } from '@/auth';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -23,7 +25,7 @@ export async function fetchPosts(
 
   const url = `${SERVER}/posts/users?${queryString}`;
 
-  const session = await getSession();
+  const session = await auth();
   const accessToken = session?.accessToken;
 
   try {

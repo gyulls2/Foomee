@@ -1,50 +1,86 @@
-// 서버 액션 정의
 'use server';
 
-import { signIn, update, auth } from '@/auth';
-import { AuthError } from 'next-auth';
+import { signIn } from '@/auth';
+import {
+  ApiRes,
+  ApiResWithValidation,
+  CoreErrorRes,
+  OAuthUser,
+  SingleItem,
+  UserData,
+  UserForm,
+  UserLoginForm,
+} from '@/types';
 
-type LoginForm = {
-  email: string;
-  password: string;
-  experience?: 'auto-login' | 'trial';
-};
+import { redirect } from 'next/navigation';
 
-// email/password 로그인
-export async function signInWithCredentials(formData: LoginForm) {
-  try {
-    const { email, password } = formData;
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
+const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-    console.log('result:', result);
+// auth provider 인증 후 자동 회원 가입
+export async function signupWithOAuth(
+  user: OAuthUser,
+): Promise<ApiResWithValidation<SingleItem<UserData>, UserForm>> {
+  const res = await fetch(`${SERVER}/users/signup/oauth`, {
+    method: 'POST',
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
 
-    if (result?.error) {
-      console.error('로그인 실패:', result.error);
-      throw new Error(result.error);
-    }
-    console.log('로그인 성공, 리다이렉트 시작');
-    return true;
-  } catch (error) {
-    console.error('로그인 중 오류 발생:', error);
-    if (error instanceof AuthError) {
-      throw new Error(error.message);
-    } else {
-      throw new Error('로그인 중 문제가 발생했습니다. 다시 시도해 주세요.');
-    }
-  }
-  // redirect('/home');
+  return res.json();
 }
 
-// export async function signInWithGoogle(formData: FormData) {
-//   await signIn('google', { redirectTo: '/' });
-// }
+// Auth.js 기반 아이디/패스워드 인증 로직
+export async function signInWithCredentials(loginData: UserLoginForm) {
+  try {
+    const result = await signIn('credentials', {
+      ...loginData,
+      redirect: false,
+    });
+    console.log('signInWithCredentials 로그인한 결과', result);
+    return result;
+  } catch (err) {
+    console.error(err);
+    if (err instanceof Error) {
+      return err.cause as CoreErrorRes;
+    }
+  }
+}
 
-// export async function signInWithGithub(formData: FormData) {
-//   await signIn('github', { redirectTo: '/' });
-// }
+// 아이디/패스워드 로그인
+export async function login(
+  userObj: UserLoginForm,
+): Promise<ApiResWithValidation<SingleItem<UserData>, UserLoginForm>> {
+  const res = await fetch(`${SERVER}/users/login`, {
+    method: 'POST',
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(userObj),
+  });
+  return res.json();
+}
 
-export { auth as getSession, update as updateSession };
+// auth provider로 인증된 사용자 로그인
+export async function loginOAuth(
+  providerAccountId: string,
+): Promise<ApiRes<SingleItem<UserData>>> {
+  const res = await fetch(`${SERVER}/users/login/with`, {
+    method: 'POST',
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({ providerAccountId }),
+  });
+  return res.json();
+}
+
+// 구글 로그인
+export async function signInWithGoogle(formData: FormData) {
+  await signIn('google', { redirectTo: `/` });
+}
