@@ -4,7 +4,7 @@ import OAuthButtons from './OAuthButtons';
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col justify-center items-end min-h-screen h-full px-12 py-14 bg-[#FFF9EA]">
+    <div className="flex flex-col justify-center items-end min-h-screen h-full px-12 py-8 bg-[#FFF9EA]">
       <div className="w-full flex-grow flex flex-col justify-center items-center gap-4">
         <Image
           src="/images/logo_icon.png"
@@ -20,7 +20,7 @@ const LoginPage = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-6 relative w-full bg-transparent">
+      <div className="flex flex-col gap-4 relative w-full bg-transparent">
         <Link
           href="login/email"
           className="rounded-full w-full py-5 bg-[#ffb800]"
