@@ -89,8 +89,8 @@ jobs:
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
-          sudo pnpm install -g pm2
+          sudo npm install -g pm2
           pm2 stop all || true
-          pm2 start pnpm --name "foomee-app" -- run start
+          pm2 start npm --name "foomee-app" -- run start
           pm2 save
           EOF
