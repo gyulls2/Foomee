@@ -31,7 +31,7 @@ const AddFoodCard = ({ item, setIsOpened, setFoodData }: Props) => {
           <AddIcon fill="#ffffff" />
         </button>
         <span className="text-sm font-medium text-gray-500">
-          {item.AMT_NUM1}kcal
+          {parseInt(item.AMT_NUM1)}kcal
         </span>
       </div>
     </div>

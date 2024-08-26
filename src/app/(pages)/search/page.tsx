@@ -15,6 +15,7 @@ const SearchPage = () => {
   const [foodList, setFoodList] = useState<FoodData[]>([]);
   const [isOpened, setIsOpened] = useState(false);
   const [foodData, setFoodData] = useState<FoodData | null>(null);
+  const [text, setText] = useState('오늘 먹은 음식을 검색해보세요');
 
   const inputValue = watch('foodName');
 
@@ -24,7 +25,10 @@ const SearchPage = () => {
     if (debouncedValue) {
       const fetchFoodData = async (foodName: string) => {
         const data = await foodApiFetch(foodName);
-        if (data) {
+        if (data && !data.items) {
+          setText('검색 결과가 없습니다 😥\n직접 입력 기능을 개발 중이에요!');
+        }
+        if (data && data.items) {
           setFoodList(data.items);
         }
       };
@@ -54,7 +58,7 @@ const SearchPage = () => {
         {!foodList.length && (
           <div className="flex flex-col gap-4 items-center my-auto">
             <MealIcon height="52" width="52" />
-            <h2>오늘 먹은 음식을 검색해보세요</h2>
+            <h2 className="whitespace-pre-line text-center">{text}</h2>
           </div>
         )}
 

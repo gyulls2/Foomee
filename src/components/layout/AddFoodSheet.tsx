@@ -28,14 +28,23 @@ interface Props {
 }
 
 const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
-  const {
-    FOOD_NM_KR: name,
+  console.log(foodData);
+  const { FOOD_NM_KR: name } = foodData;
+  let {
     AMT_NUM1: enerc,
     AMT_NUM7: chocdf,
     AMT_NUM3: prot,
     AMT_NUM4: fatce,
     SERVING_SIZE: size,
   } = foodData;
+
+  // 값이 없을 경우 0으로 설정
+  enerc = enerc || '0';
+  chocdf = chocdf || '0';
+  prot = prot || '0';
+  fatce = fatce || '0';
+  size = size || '0';
+
   const [isServing, setIsServing] = useState(true);
   const [quantity, setQuantity] = useState<string>('1'); // 초기값을 '1'로 설정
   const [isInputting, setIsInputting] = useState(false); // 사용자가 입력 중인지 추적
