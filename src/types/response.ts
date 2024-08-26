@@ -61,21 +61,6 @@ export type ApiResWithValidation<T, E> =
 // 데이터 검증 로직이 없는 요청의 응답
 export type ApiRes<T> = T | CoreErrorRes | AuthErrorRes;
 
-// export type ErrorRes<E> = CoreErrorRes | AuthErrorRes | ValidationErrorRes<E>;
-
-/**
- * @param T: 성공했을 때의 데이터 타입
- * @param E: ValidationError을 응답할 경우 Form의 name 값 목록
- *
- *
- */
-// export type ApiRes<T> = T | ErrorRes;
-
-/**
- * E의 전달 여부에 따라 ApiRes 타입 선택
- * @param T: 데이터 패칭에 성공했을 때의 데이터 타입
- * @param E: 서버에서 ValidationError을 응답할 경우 표함 될 수 있는 path 값 목록
- *
- *
- */
-// export type ApiRes<T, E = never> = E extends never ? ApiResWithoutValidation<T> : ApiResWithValidation<T, E>;
+export interface RefreshTokenRes extends CoreSuccessRes {
+  accessToken: string;
+}

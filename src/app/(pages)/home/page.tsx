@@ -4,32 +4,30 @@ import MainSection from './MainSection';
 import MealSection from './MealSection';
 import { auth } from '@/auth';
 import { fetchUser } from '@/data/fetch/userFetch';
-import { UserData } from '@/types';
 import Header from './Header';
+import { redirect } from 'next/navigation';
 
 const HomePage = async () => {
   const session = await auth();
 
   // 사용자 extra 정보 조회
-  const fetchUserData = async (): Promise<UserData | undefined> => {
-    if (!session?.user) {
-      throw new Error('User is not authenticated');
-    }
+  const userId = session!.user?.id;
+  const accessToken = session!.accessToken;
 
-    try {
-      const userData = await fetchUser(session.user._id, session.accessToken);
+  if (!userId || !accessToken) {
+    throw new Error('Invalid session data');
+  }
 
-      if (!userData) {
-        throw new Error('Failed to fetch user data');
-      }
+  const user = await fetchUser(userId, accessToken);
 
-      return userData;
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+  if (!user) {
+    throw new Error('Failed to fetch user data');
+  }
 
-  const user = await fetchUserData();
+  if (!user.extra?.age) {
+    redirect('/signup/step1');
+    return null; // 렌더링 중단
+  }
 
   return (
     <main className="flex-col justify-center min-h-screen h-full bg-white">
