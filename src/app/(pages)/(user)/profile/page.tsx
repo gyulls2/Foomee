@@ -44,7 +44,7 @@ const ProfilePage = async () => {
   };
   const weight = await fetchWeight();
 
-  const weightDiff = (user?.extra?.starting_weight ?? 0) - weight;
+  const weightDiff = weight ? (user?.extra?.starting_weight ?? 0 - weight) : 0;
   const formattedWeightDiff =
     weightDiff > 0 ? `-${weightDiff}` : `+${Math.abs(weightDiff)}`;
 

@@ -82,3 +82,8 @@ export async function loginOAuth(
 export async function signInWithGoogle() {
   await signIn('google', { redirectTo: '/home' });
 }
+
+// 네이버 로그인
+export async function signInWithNaver() {
+  await signIn('naver', { redirectTo: '/home' });
+}

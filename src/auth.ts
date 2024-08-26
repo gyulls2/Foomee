@@ -1,7 +1,7 @@
 import NextAuth, { CredentialsSignin, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import github from 'next-auth/providers/github';
 import google from 'next-auth/providers/google';
+import naver from 'next-auth/providers/naver';
 import { OAuthUser, RefreshTokenRes, UserData, UserLoginForm } from './types';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
@@ -42,9 +42,9 @@ export const {
         }
       },
     }),
-    github({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    naver({
+      clientId: process.env.NAVER_CLIENT_ID,
+      clientSecret: process.env.NAVER_CLIENT_SECRET,
     }),
     google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -71,72 +71,14 @@ export const {
     // profile: OAuth 제공자가 반환한 사용자 프로필 정보
     // credentials: authorize()에 전달된 로그인 정보(사용자가 입력한 id, password 등)
     async signIn({ user, account, profile, credentials }) {
-      /* id/pwd
-        callbacks.signIn {
-          id: '2',
-          email: 's1@market.com',
-          name: '네오',
-          type: 'seller',
-          image: 'http://localhost/files/00-next-level/user-neo.webp',
-          accessToken: '...',
-          refreshToken: '...'
-        } {
-          providerAccountId: '2',
-          type: 'credentials',
-          provider: 'credentials'
-        } undefined undefined {
-          email: 's1@market.com',
-          password: '11111111',
-          callbackUrl: '/movies'
-        }
-      */
-
-      /* github
-        callbacks.signIn {
-          id: 'b0fcfc5b-2458-4087-b7cb-064647716ff0',
-          name: 'Kilyong Jeong',
-          email: 'uzoolove@gmail.com',
-          image: 'https://avatars.githubusercontent.com/u/7599569?v=4'
-        } {
-          access_token: '...',
-          token_type: 'bearer',
-          scope: 'read:user,user:email',
-          provider: 'github',
-          type: 'oauth',
-          providerAccountId: '7599569'
-        } {
-          login: 'uzoolove',
-          id: 7599569,
-          node_id: 'MDQ6VXNlcjc1OTk1Njk=',
-          ...
-        } undefined
-      */
       console.log('callbacks.signIn', user, account, profile, credentials);
       switch (account?.provider) {
         case 'credentials':
-          /*
-            id/pwd 로그인 {
-              id: '2',
-              email: 's1@market.com',
-              name: '네오',
-              type: 'seller',
-              image: 'https://api.fesp.shop/files/00-sample/user-neo.webp',
-              accessToken: '...',
-              refreshToken: '...'
-            }
-          */
           console.log('id/pwd 로그인', user);
           break;
         case 'google':
+        case 'naver':
         case 'github':
-          /*
-            OAuth 로그인 {
-              id: '409716c3-f6d3-4988-bf0e-062d85b3114e',
-              name: 'dainhome',
-              email: 'homedain01@gmail.com',
-              image: 'https://lh3.googleusercontent.com/a/ACg8ocKqRBGG4QfyzlASvT7kARFlFHW7s8tQ6XQ-3fDQD6U7lLsqHQ=s96-c'   
-            }
-          */
           console.log('OAuth 로그인', user);
 
           {
