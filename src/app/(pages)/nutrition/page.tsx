@@ -1,14 +1,11 @@
-import { CloseIcon } from '@/components/icons/IconComponents';
+import CloseButton from './CloseButton';
 
 const NutritionPage = () => {
   return (
     <div className="w-full mx-auto py-4 px-8">
       <div className="flex justify-between items-center pb-4">
         <h1 className="text-xl font-semibold">영양정보</h1>
-        <button className="text-gray-500">
-          <span className="sr-only">닫기</span>
-          <CloseIcon />
-        </button>
+        <CloseButton />
       </div>
       <div className="py-4 flex flex-col gap-2">
         <div className="flex justify-between items-end">

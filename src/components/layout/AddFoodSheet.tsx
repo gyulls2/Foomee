@@ -189,6 +189,12 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     }
   };
 
+  // TODO: 음식 상세 페이지로 이동
+  const handleOpenDetail = () => {
+    console.log('음식 상세 페이지로 이동');
+    router.push('/nutrition');
+  };
+
   return (
     <div
       className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-30 flex flex-col justify-end"
@@ -318,6 +324,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
           <button
             type="button"
             className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]"
+            onClick={handleOpenDetail}
           >
             음식 상세
           </button>
