@@ -24,6 +24,11 @@ const Step5Form = ({ session }: { session: Session | null }) => {
   useEffect(() => {
     if (user && user.extra) {
       setValue('character', user.extra.character);
+      setValue('character', user.extra.character);
+    }
+
+    if (user && user.extra && user.extra.providerAccountId) {
+      setValue('providerAccountId', user.extra.providerAccountId);
     }
   }, [user, setValue]);
 

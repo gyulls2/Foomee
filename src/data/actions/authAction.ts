@@ -12,8 +12,6 @@ import {
   UserLoginForm,
 } from '@/types';
 
-import { redirect } from 'next/navigation';
-
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
@@ -81,6 +79,6 @@ export async function loginOAuth(
 }
 
 // 구글 로그인
-export async function signInWithGoogle(formData: FormData) {
-  await signIn('google', { redirectTo: `/` });
+export async function signInWithGoogle() {
+  await signIn('google', { redirectTo: '/home' });
 }

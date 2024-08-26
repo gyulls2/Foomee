@@ -1,4 +1,4 @@
-import NextAuth, { CredentialsSignin } from 'next-auth';
+import NextAuth, { CredentialsSignin, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import github from 'next-auth/providers/github';
 import google from 'next-auth/providers/google';
@@ -6,7 +6,7 @@ import { OAuthUser, RefreshTokenRes, UserData, UserLoginForm } from './types';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { login, loginOAuth, signupWithOAuth } from './data/actions/authAction';
-import { fetchAccessToken, fetchUser } from './data/fetch/userFetch';
+import { fetchAccessToken } from './data/fetch/userFetch';
 
 export const {
   handlers,
@@ -36,7 +36,7 @@ export const {
             type: user.type,
             accessToken: user.token!.accessToken,
             refreshToken: user.token!.refreshToken,
-          };
+          } as User;
         } else {
           throw new CredentialsSignin(resJson.message, { cause: resJson });
         }
@@ -139,42 +139,42 @@ export const {
           */
           console.log('OAuth 로그인', user);
 
-          // DB에서 id를 조회해서 있으면 로그인 처리를 없으면 자동 회원 가입 후 로그인 처리
-          let userInfo: UserData | null = null;
-          try {
-            // 자동 회원 가입
-            const newUser: OAuthUser = {
-              type: 'user',
-              loginType: account.provider,
-              name: user.name || '',
-              email: user.email || '',
-              extra: { providerAccountId: account.providerAccountId },
-            };
+          {
+            // DB에서 id를 조회해서 있으면 로그인 처리를 없으면 자동 회원 가입 후 로그인 처리
+            let userInfo: UserData | null = null;
+            try {
+              // 자동 회원 가입
+              const newUser: OAuthUser = {
+                type: 'user',
+                loginType: account.provider,
+                name: user.name || '',
+                email: user.email || '',
+                extra: { providerAccountId: account.providerAccountId },
+              };
 
-            // 이미 가입된 회원이면 회원가입이 되지 않고 에러를 응답하므로 무시하면 됨
-            const result = await signupWithOAuth(newUser);
-            console.log('회원 가입', result);
+              // 이미 가입된 회원이면 회원가입이 되지 않고 에러를 응답하므로 무시하면 됨
+              const result = await signupWithOAuth(newUser);
+              console.log('회원 가입', result);
 
-            // 자동 로그인
-            const resData = await loginOAuth(account.providerAccountId);
-            if (resData.ok) {
-              userInfo = resData.item;
-              console.log(userInfo);
-            } else {
-              // API 서버의 에러 메시지 처리
-              throw new Error(resData.message);
+              // 자동 로그인
+              const resData = await loginOAuth(account.providerAccountId);
+              if (resData.ok) {
+                userInfo = resData.item;
+                console.log(userInfo);
+              } else {
+                // API 서버의 에러 메시지 처리
+                throw new Error(resData.message);
+              }
+            } catch (err) {
+              console.error(err);
+              throw err;
             }
-          } catch (err) {
-            console.error(err);
-            throw err;
+
+            user.id = String(userInfo._id);
+            user.type = userInfo.type;
+            user.accessToken = userInfo.token!.accessToken;
+            user.refreshToken = userInfo.token!.refreshToken;
           }
-
-          user.id = String(userInfo._id);
-          user.type = userInfo.type;
-          user.accessToken = userInfo.token!.accessToken;
-          user.refreshToken = userInfo.token!.refreshToken;
-          user.isNewUser = userInfo.extra?.age ? false : true;
-
           break;
       }
 
@@ -184,52 +184,7 @@ export const {
     // JWT 토큰이 생성될 때, 업데이트될 때 호출
     // 로그인 성공한 회원 정보로 token 객체 설정
     // 최초 로그인시 user 객체 전달, 업데이트시나 세션 조회용으로 호출되면 user는 없음
-    async jwt({ token, user, account, profile, session, trigger }) {
-      /*
-        callbacks.jwt {
-          name: '네오',
-          email: 's1@market.com',
-          picture: 'http://localhost/files/00-next-level/user-neo.webp',
-          sub: '2'
-        } {
-          id: '2',
-          email: 's1@market.com',
-          name: '네오',
-          type: 'seller',
-          image: 'http://localhost/files/00-next-level/user-neo.webp',
-          accessToken: '...',
-          refreshToken: '...'
-        } {
-          providerAccountId: '2',
-          type: 'credentials',
-          provider: 'credentials'
-        } undefined undefined
-      */
-
-      /* 로그인 완료 후 메인 페이지로 이동
-        signInWithCredentials 로그인한 결과 http://localhost:3000
-        ○ Compiling / ...
-        ✓ Compiled / in 1005ms (1122 modules)
-        callbacks.redirect http://localhost:3000 http://localhost:3000
-      */
-
-      /* 메인 페이지로 이동 후 세션 가져옴
-        callbacks.jwt {
-          name: '네오',
-          email: 's1@market.com',
-          picture: 'http://localhost/files/00-next-level/user-neo.webp',
-          sub: '2',
-          id: '2',
-          type: 'seller',
-          accessToken: '...',
-          refreshToken: '...',
-          iat: 1723078694,
-          exp: 1723165094,
-          jti: '1535edee-7491-4bd5-9efe-7daf0e4a6698'
-        } undefined undefined undefined undefined
-      */
-      // console.log('callbacks.jwt', token, user, account, profile, session);
-
+    async jwt({ token, user, session, trigger }) {
       // 토큰 만료 체크, 리플래시 토큰으로 재발급
       // 리플레시 토큰도 만료되었으면 로그아웃 처리
       if (user) {
@@ -237,11 +192,12 @@ export const {
         token.type = user.type;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.isNewUser = user.isNewUser;
       }
 
       // JWT 자체의 만료 시간 추출
-      const decodedToken = jwt.decode(token.accessToken) as JwtPayload | null;
+      const decodedToken = jwt.decode(
+        token.accessToken as string,
+      ) as JwtPayload | null;
       const accessTokenExpires = decodedToken?.exp
         ? decodedToken?.exp * 1000
         : 0; // 밀리초 단위로 변환
@@ -251,7 +207,7 @@ export const {
       if (shouldRefreshToken) {
         try {
           console.log('토큰 만료됨.', Date.now() + ' > ' + accessTokenExpires);
-          const res = await fetchAccessToken(token.refreshToken);
+          const res = await fetchAccessToken(token.refreshToken as string);
           if (res.ok) {
             const resJson: RefreshTokenRes = await res.json();
             return {
@@ -280,7 +236,7 @@ export const {
         // console.log(`토큰 ${accessTokenExpires - Date.now()} ms 남음`);
       }
 
-      // 세션 없데이트
+      // 세션 업데이트
       if (trigger === 'update' && session) {
         token.name = session.name;
       }
@@ -292,47 +248,13 @@ export const {
     // 세션에 저장할 사용자 정보를 지정(세션 정보 수정)
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
-      /*
-        callbacks.session {
-          user: {
-            name: '네오',
-            email: 's1@market.com',
-            image: 'http://localhost/files/00-next-level/user-neo.webp'
-          },
-          expires: '2024-08-09T00:58:15.653Z'
-        } {
-          name: '네오',
-          email: 's1@market.com',
-          picture: 'http://localhost/files/00-next-level/user-neo.webp',
-          sub: '2',
-          id: '2',
-          type: 'seller',
-          accessToken: '...',
-          refreshToken: '...',
-          iat: 1723078694,
-          exp: 1723165094,
-          jti: '1535edee-7491-4bd5-9efe-7daf0e4a6698'
-        }
-      */
       // console.log('callbacks.session', session, token);
       session.user.id = token.id as string;
       session.user.type = token.type as string;
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      session.isNewUser = token.isNewUser;
+      session.accessToken = token.accessToken as string;
+      session.refreshToken = token.refreshToken as string;
       return session;
     },
-    // async redirect({ url, baseUrl }) {
-    //   console.log('callbacks.redirect', url, baseUrl);
-    //   // 토큰 정보를 가져와서 사용자의 extra 속성 확인
-      
-    //   if (!userData?.isNewUser) {
-    //     return `${baseUrl}/home`; // 목표 설정이 된 회원은 홈으로 리디렉션
-    //   } else {
-    //     return `${baseUrl}/signup/step1`; // 회원가입이 안된 회원은 목표 설정 페이지로 리디렉션
-    //   }
-    },
-
     // 로그인/로그아웃 후 리디렉션할 URL 지정
     // redirect 함수를 제공할 경우 signIn 호출시 두번째 인자로 전달하는 옵션의 redirectTo는 동작하지 않음
     // signIn('google', { redirectTo: '/music' });

@@ -9,15 +9,16 @@ export interface UserData {
   profileImage?: string;
   profile?: string;
 
-  accessToken: string;
-  refreshToken: string;
+  token?: {
+    accessToken: string;
+    refreshToken: string;
+  };
 
   createdAt?: string;
   updatedAt?: string;
 
-  providerAccountId?: string;
-
   extra?: {
+    providerAccountId?: string;
     character: 'orange' | 'peach' | 'cabbage';
     gender: string;
     age: number;
@@ -48,8 +49,10 @@ export type UserForm = {
 };
 
 export type OAuthUser = Required<Pick<UserData, 'type' | 'loginType'>> &
-  Partial<
-    Pick<UserData, 'name' | 'email' | 'profileImage' | 'providerAccountId'>
-  >;
+  Partial<Pick<UserData, 'name' | 'email' | 'profileImage'>> & {
+    extra?: {
+      providerAccountId?: string;
+    };
+  };
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password'>;

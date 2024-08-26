@@ -28,9 +28,7 @@ declare module 'next-auth' {
     extra?: ExtraInfo;
   }
 
-  interface User extends AuthBase {
-    isNewUser: boolean;
-  }
+  interface User extends AuthBase {}
 
   interface Session extends AuthBase {
     user: User;
