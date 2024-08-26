@@ -12,6 +12,7 @@ import {
 } from '@/data/actions/authAction';
 
 const OAuthButtons = () => {
+  console.log('배포 테스트');
   return (
     <div className="flex flex-col justify-center gap-2">
       <span className="text-center text-xs text-gray-500">
