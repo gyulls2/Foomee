@@ -2,11 +2,13 @@ import NextAuth, { CredentialsSignin, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import google from 'next-auth/providers/google';
 import naver from 'next-auth/providers/naver';
+import kakao from 'next-auth/providers/kakao';
 import { OAuthUser, RefreshTokenRes, UserData, UserLoginForm } from './types';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { login, loginOAuth, signupWithOAuth } from './data/actions/authAction';
 import { fetchAccessToken } from './data/fetch/userFetch';
+import github from 'next-auth/providers/github';
 
 export const {
   handlers,
@@ -50,6 +52,14 @@ export const {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
+    kakao({
+      clientId: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+    }),
+    github({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
   ],
   session: {
     strategy: 'jwt', // JSON Web Token 사용(기본값)
@@ -76,6 +86,7 @@ export const {
         case 'credentials':
           console.log('id/pwd 로그인', user);
           break;
+        case 'kakao':
         case 'google':
         case 'naver':
         case 'github':

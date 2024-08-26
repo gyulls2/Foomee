@@ -78,6 +78,27 @@ export async function loginOAuth(
   return res.json();
 }
 
+// DB 카카오 로그인
+export async function loginWithKakao(
+  code: string, // 카카오 인증 코드
+  redirectUri: string, // 카카오 인가 코드 받기 API에 사용한 redirect_uri 값
+  user: Partial<UserData> = {}, // 추가적인 사용자 정보
+): Promise<ApiRes<SingleItem<UserData>> | undefined> {
+  const res = await fetch(`${SERVER}/users/login/kakao`, {
+    method: 'POST',
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      code,
+      redirect_uri: redirectUri,
+      user,
+    }),
+  });
+  return res.json();
+}
+
 // 구글 로그인
 export async function signInWithGoogle() {
   await signIn('google', { redirectTo: '/home' });
@@ -86,4 +107,14 @@ export async function signInWithGoogle() {
 // 네이버 로그인
 export async function signInWithNaver() {
   await signIn('naver', { redirectTo: '/home' });
+}
+
+// 카카오 로그인
+export async function signInWithKakao() {
+  await signIn('kakao', { redirectTo: '/home' });
+}
+
+// github 로그인
+export async function signInWithGithub() {
+  await signIn('github', { redirectTo: '/home' });
 }
