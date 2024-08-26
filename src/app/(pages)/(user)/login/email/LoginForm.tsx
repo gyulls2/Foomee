@@ -3,8 +3,6 @@
 import InputError from '@/components/InputError';
 import { signInWithCredentials } from '@/data/actions/authAction';
 import { useForm } from 'react-hook-form';
-import { signOut } from 'next-auth/react';
-import useNutritionStore from '@/zustand/nutritionStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { UserLoginForm } from '@/types';
@@ -28,8 +26,6 @@ const LoginForm = () => {
   } = useForm<LoginForm>({ mode: 'onChange' });
   const router = useRouter();
 
-  const { reset } = useNutritionStore();
-
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // 체험하기 선택 시 폼 자동 채우기
@@ -47,11 +43,6 @@ const LoginForm = () => {
 
     trigger(['email', 'password']);
     setLoginError(null);
-  };
-
-  const logout = () => {
-    signOut();
-    reset();
   };
 
   const login = async (loginData: UserLoginForm) => {
@@ -73,9 +64,6 @@ const LoginForm = () => {
       onSubmit={handleSubmit(login)}
       className="flex flex-col gap-3.5 items-start w-full"
     >
-      <button type="button" onClick={logout}>
-        로그아웃
-      </button>
       <div className="w-full">
         <label htmlFor="email" className="sr-only">
           이메일
