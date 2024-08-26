@@ -15,6 +15,7 @@
     "@nivo/pie": "^0.87.0",
     "@nivo/tooltip": "^0.87.0",
     "@tanstack/react-query": "^5.51.16",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.20",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.51.16",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-calendar": "^3.9.0",
