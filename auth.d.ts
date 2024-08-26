@@ -1,4 +1,4 @@
-import { AuthBase } from 'next-auth';
+import { AuthBase as Base } from 'next-auth';
 
 declare module 'next-auth' {
   interface ExtraInfo {
@@ -15,7 +15,7 @@ declare module 'next-auth' {
     fat: number;
   }
 
-  interface AuthBase {
+  interface AuthBase extends Base {
     _id: number;
     type: string;
     email?: string;

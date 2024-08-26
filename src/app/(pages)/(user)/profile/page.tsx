@@ -15,7 +15,7 @@ const ProfilePage = async () => {
       throw new Error('User is not authenticated');
     }
     try {
-      const userData = await fetchUser(session.user._id, session.accessToken);
+      const userData = await fetchUser(session.user.id!, session.accessToken);
       if (!userData) {
         throw new Error('Failed to fetch user data');
       }
@@ -44,7 +44,7 @@ const ProfilePage = async () => {
   };
   const weight = await fetchWeight();
 
-  const weightDiff = (user?.extra?.starting_weight ?? 0) - weight;
+  const weightDiff = weight ? (user?.extra?.starting_weight ?? 0 - weight) : 0;
   const formattedWeightDiff =
     weightDiff > 0 ? `-${weightDiff}` : `+${Math.abs(weightDiff)}`;
 

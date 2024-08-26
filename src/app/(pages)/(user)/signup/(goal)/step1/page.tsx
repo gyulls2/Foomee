@@ -45,7 +45,7 @@ const Step1Page = () => {
 
   return (
     <>
-      {isOpened && user && !user.extra && (
+      {isOpened && user && !user.extra?.age && (
         <WelcomeModal setIsOpened={setIsOpened} />
       )}
       <div className="flex flex-col gap-6 min-h-full h-full">

@@ -1,16 +1,16 @@
 'use server';
 
 import { UserData, UserForm } from '@/types';
-import { getSession } from '../actions/authAction';
+import { auth } from '@/auth';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 export async function patchUser(
-  _id: number,
+  _id: string,
   formData: Pick<UserData, 'extra'>,
 ) {
-  const session = await getSession();
+  const session = await auth();
   const accessToken = session?.accessToken;
   console.log('accessToken', accessToken);
   try {
@@ -58,7 +58,6 @@ export async function signup(formData: UserForm) {
     }
 
     const data = await res.json();
-    console.log('data', data);
     return data;
   } catch (error) {
     console.error('Error signing up:', error);

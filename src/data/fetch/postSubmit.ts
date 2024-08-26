@@ -1,13 +1,12 @@
-import { getSession } from '../actions/authAction';
+'use server';
+
+import { auth } from '@/auth';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-// const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
-// const DELAY = process.env.NEXT_PUBLIC_DELAY;
-
 const postSubmit = async <T>(options: RequestInit = {}): Promise<T> => {
-  const session = await getSession();
+  const session = await auth();
   const accessToken = session?.accessToken;
 
   const url = `${SERVER}/posts`;
