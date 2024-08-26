@@ -49,7 +49,6 @@ const LoginForm = () => {
     // 프로그래밍 방식으로 서버액션 호출
     // 로그인 성공시 리턴값 없음
     const resData = await signInWithCredentials(loginData);
-    console.log('로그인 결과', resData);
     if (typeof resData === 'string') {
       router.push('/home');
     } else if (resData && !resData.ok) {

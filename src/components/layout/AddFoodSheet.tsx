@@ -28,7 +28,6 @@ interface Props {
 }
 
 const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
-  console.log(foodData);
   const { FOOD_NM_KR: name } = foodData;
   let {
     AMT_NUM1: enerc,
@@ -191,7 +190,6 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
 
   // TODO: 음식 상세 페이지로 이동
   const handleOpenDetail = () => {
-    console.log('음식 상세 페이지로 이동');
     router.push('/nutrition');
   };
 
