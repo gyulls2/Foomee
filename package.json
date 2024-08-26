@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@jacobkim/oauth4webapi": "^2.10.4",
     "@nivo/bar": "^0.87.0",
     "@nivo/core": "^0.87.0",
     "@nivo/line": "^0.87.0",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.51.16",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/moment": "^2.13.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-calendar": "^3.9.0",
@@ -45,5 +47,10 @@
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "oauth4webapi": "npm:@jacobkim/oauth4webapi@^2.10.4"
+    }
   }
 }
