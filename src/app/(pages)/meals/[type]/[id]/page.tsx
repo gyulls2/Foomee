@@ -118,29 +118,35 @@ const MealsPage = ({ params }: { params: { type: MealKey; id: string } }) => {
           <div className="w-[85%] h-2 bg-white rounded-full mx-auto flex flex-nowrap">
             <div
               className="h-full bg-main-primary-yellow rounded-l-full"
-              style={{ width: `${width.chocdf || 0}%` }}
+              style={{ width: `${width.chocdf || 33.3}%` }}
             ></div>
             <div
               className="h-full bg-point-light-green"
-              style={{ width: `${width.prot || 0}%` }}
+              style={{ width: `${width.prot || 33.3}%` }}
             ></div>
             <div
               className="h-full bg-point-pink rounded-r-full"
-              style={{ width: `${width.fatce || 0}%` }}
+              style={{ width: `${width.fatce || 33.3}%` }}
             ></div>
           </div>
           <div className="w-[85%] flex justify-around mt-6 mx-auto">
             <div className="text-center">
-              <p className="text-sm text-gray-600">탄수화물</p>
-              <p className="text-lg font-semibold">{total?.chocdf || 0}g</p>
+              <p className="text-sm">탄수화물</p>
+              <p className="text-lg font-semibold text-main-primary-yellow">
+                {total?.chocdf || 0}g
+              </p>
             </div>
             <div className="text-center">
-              <p className="text-sm text-gray-600">단백질</p>
-              <p className="text-lg font-semibold">{total?.prot || 0}g</p>
+              <p className="text-sm">단백질</p>
+              <p className="text-lg font-semibold text-point-light-green">
+                {total?.prot || 0}g
+              </p>
             </div>
             <div className="text-center">
-              <p className="text-sm text-gray-600">지방</p>
-              <p className="text-lg font-semibold">{total?.fatce || 0}g</p>
+              <p className="text-sm">지방</p>
+              <p className="text-lg font-semibold text-point-pink">
+                {total?.fatce || 0}g
+              </p>
             </div>
           </div>
         </div>
