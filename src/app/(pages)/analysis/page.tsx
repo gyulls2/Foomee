@@ -2,6 +2,7 @@
 
 import { ArrowCircleIcon } from '@/components/icons/IconComponents';
 import BottomNav from '@/components/layout/BottomNav';
+import { TargetArea } from '@/components/Spinner';
 import { getChatResponse } from '@/data/actions/chatAction';
 import { fetchPosts } from '@/data/fetch/postFetch';
 import { Post } from '@/types';
@@ -135,6 +136,7 @@ const AnalysisPage = () => {
               </ReactMarkdown>
             </div>
           )}
+          {loading && <TargetArea msg="분석 중입니다..." />}
         </div>
 
         <div className="fixed bottom-0 px-8 pb-20 pt-4 max-w-[475px] w-full mx-auto bg-white">
