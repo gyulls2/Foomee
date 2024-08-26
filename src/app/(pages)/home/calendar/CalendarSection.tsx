@@ -18,7 +18,7 @@ type PostType = {
   title: string;
 };
 
-const CalendarSection = () => {
+const CalendarSection = ({ goalCal }: { goalCal: number }) => {
   const [value, onChange] = useState<Value>(new Date());
   const [isDiet, setIsDiet] = useState(true);
   const [activeStartDate, setActiveStartDate] = useState<ValuePiece>(() => {
@@ -100,8 +100,11 @@ const CalendarSection = () => {
           item.title === moment(date).format('YYYY.MM.DD') && item.content,
       );
 
-      if (match) {
-        return isDiet ? 'diet-recorded' : 'weight-recorded';
+      if (match && isDiet) {
+        const consumedCal = parseInt(match.content || '0', 10);
+        return consumedCal > goalCal ? 'diet-over-goal' : 'diet-recorded';
+      } else if (match) {
+        return 'weight-recorded';
       }
     }
     return '';
