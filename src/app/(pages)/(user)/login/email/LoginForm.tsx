@@ -25,7 +25,6 @@ const LoginForm = () => {
     trigger,
     setValue,
     formState: { isSubmitting, errors, isValid },
-    setError,
   } = useForm<LoginForm>({ mode: 'onChange' });
   const router = useRouter();
 
@@ -63,13 +62,7 @@ const LoginForm = () => {
     if (typeof resData === 'string') {
       router.push('/home');
     } else if (resData && !resData.ok) {
-      // API 서버의 에러 메시지 처리
-      if ('errors' in resData) {
-        resData.errors.forEach(error => {
-          setError(error.path, { message: error.msg });
-          setLoginError(error.msg);
-        });
-      } else if (resData.message) {
+      if (resData.message) {
         setLoginError(resData.message);
       }
     }
