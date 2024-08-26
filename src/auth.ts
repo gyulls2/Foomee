@@ -57,8 +57,8 @@ export const {
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
     }),
     github({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.AUTH_GITHUB_CLIENT_ID,
+      clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET,
     }),
   ],
   session: {
