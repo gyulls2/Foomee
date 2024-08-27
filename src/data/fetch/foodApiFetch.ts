@@ -1,7 +1,5 @@
 import { FoodDataResponse } from '@/types';
 
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-
 export const foodApiFetch = async (
   foodName: string,
   pageNo: number = 1,
@@ -9,11 +7,16 @@ export const foodApiFetch = async (
   try {
     const url =
       'https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01';
+    // const encodedApiKey = encodeURIComponent(API_KEY ?? '').replace(
+    //   /\+/g,
+    //   '%2B',
+    // );
+
     const queryParams =
       '?' +
       encodeURIComponent('serviceKey') +
       '=' +
-      encodeURIComponent(API_KEY ?? '') +
+      encodeURIComponent(process.env.NEXT_PUBLIC_API_KEY ?? '') +
       '&' +
       encodeURIComponent('pageNo') +
       '=' +
