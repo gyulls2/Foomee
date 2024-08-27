@@ -15,11 +15,11 @@ export function FullScreen() {
   );
 }
 
-export function TargetArea({ msg = '로딩중...' }: { msg?: string }) {
+export function TargetArea({ msg }: { msg?: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-7 h-[80vh]">
       <BeatLoader color="#ff7a00" />
-      <p className="text-sm">{msg}</p>
+      {msg && <p className="text-sm">{msg}</p>}
     </div>
   );
 }
