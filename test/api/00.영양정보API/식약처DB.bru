@@ -5,15 +5,15 @@ meta {
 }
 
 get {
-  url: http://api.data.go.kr/openapi/tn_pubr_public_nutri_info_api?serviceKey={{DB_API_KEY}}&type=json&numOfRows=30&pageNo=1&foodNm=바나나
+  url: https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01?serviceKey={{API_KEY}}&type=json&numOfRows=30&pageNo=1&FOOD_NM_KR=김
   body: none
   auth: none
 }
 
 params:query {
-  serviceKey: {{DB_API_KEY}}
+  serviceKey: {{API_KEY}}
   type: json
   numOfRows: 30
   pageNo: 1
-  foodNm: 바나나
+  FOOD_NM_KR: 김
 }

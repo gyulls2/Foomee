@@ -154,10 +154,19 @@
   background-color: #2ab58b;
 }
 
+.react-calendar__month-view__days__day.diet-over-goal::before {
+  background-color: #ff7070b1; /* 목표 초과 시 빨간색 */
+}
+
+.react-calendar__month-view__days__day.diet-under-goal::before {
+  background-color: #2ab58b81; /* 목표 이하 시 연한 초록색 */
+}
+
 .react-calendar__month-view__days__day.weight-recorded::before {
   background-color: #ff7081;
 }
 
+.react-calendar__month-view__days__day.diet-over-goal > abbr,
 .react-calendar__month-view__days__day.diet-recorded > abbr,
 .react-calendar__month-view__days__day.weight-recorded > abbr {
   color: white;

@@ -64,7 +64,7 @@ const ProfileSection = ({ user, formattedWeightDiff }: Props) => {
         <div className="flex gap-4 w-full justify-center">
           <button
             className="w-32 rounded-full bg-[#FFF7E1] py-2.5"
-            onClick={() => alert('준비중인 기능입니다.')}
+            onClick={() => window.alert('준비중인 기능입니다.')}
           >
             <p className="text-center">프로필 편집</p>
           </button>

@@ -36,6 +36,17 @@ const config: Config = {
       'bg-point-light-green',
       'bg-point-green',
     ],
+    keyframes: {
+      fadeInUp: {
+        '0%': { opacity: '0', transform: 'translateY(20px)' },
+        '60%': { opacity: '1', transform: 'translateY(-5px)' },
+        '80%': { opacity: '1', transform: 'translateY(5px)' },
+        '100%': { opacity: '1', transform: 'translateY(0)' },
+      },
+    },
+    animation: {
+      fadeInUp: 'fadeInUp 1s ease-out forwards',
+    },
   },
   plugins: [],
 };

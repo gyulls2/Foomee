@@ -1,5 +1,7 @@
+import { FullScreen } from '@/components/Spinner';
+
 const Loading = () => {
-  return <h1>loading . . . </h1>;
+  return <FullScreen />;
 };
 
 export default Loading;

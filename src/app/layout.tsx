@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${pretendard.variable}`}>
       <body
-        className={`${pretendard.className} w-full flex justify-center h-full min-h-screen bg-gray-400`}
+        className={`${pretendard.className} w-full flex justify-center h-full min-h-screen bg-[#f5f5f5]`}
       >
         <SessionProvider>
           <div className="overflow-hidden flex flex-col relative w-full min-h-screen h-full max-w-[475px] bg-white">

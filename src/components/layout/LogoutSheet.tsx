@@ -1,14 +1,18 @@
 import React from 'react';
 import { ChevronRightIcon } from '../icons/IconComponents';
 import { signOut } from 'next-auth/react';
+import useNutritionStore from '@/zustand/nutritionStore';
 
 type Props = {
   setIsOpen: (isOpen: boolean) => void;
 };
 
 const LogoutSheet: React.FC<Props> = ({ setIsOpen }) => {
+  const { reset } = useNutritionStore();
+
   const handleSighOut = async () => {
     await signOut({ callbackUrl: '/login' });
+    reset();
     setIsOpen(false);
   };
 
