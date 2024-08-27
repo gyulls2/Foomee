@@ -4,7 +4,7 @@ import { CloseIcon } from '@/components/icons/IconComponents';
 import { useRouter } from 'next/navigation';
 
 const CloseButton = () => {
-  alert('개발중인 기능입니다!');
+  window.alert('개발중인 기능입니다!');
 
   const router = useRouter();
   const handleClose = () => {
