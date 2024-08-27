@@ -72,7 +72,7 @@ const AnalysisPage = () => {
   // OpenAI API 호출
   const handleSubmit = async () => {
     if (dietList.length === 0) {
-      // todo: 식단 입력 알림창 추가
+      alert('식단을 먼저 등록해주세요.');
       return router.push('/search');
     }
     const result = dietList
@@ -149,8 +149,13 @@ const AnalysisPage = () => {
             type="button"
             className="absolute top-6 right-10"
             onClick={handleSubmit}
+            disabled={dietList.length === 0}
           >
-            <ArrowCircleIcon width="38" height="38" fill="#ffb800" />
+            <ArrowCircleIcon
+              width="38"
+              height="38"
+              fill={dietList.length === 0 ? '#fee39d' : '#ffb800'}
+            />
           </button>
         </div>
       </section>
