@@ -2,9 +2,14 @@
 
 import { CloseIcon } from '@/components/icons/IconComponents';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const CloseButton = () => {
-  window.alert('개발중인 기능입니다!');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.alert('개발중인 기능입니다!');
+    }
+  }, []);
 
   const router = useRouter();
   const handleClose = () => {
