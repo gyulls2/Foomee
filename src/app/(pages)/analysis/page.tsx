@@ -72,7 +72,7 @@ const AnalysisPage = () => {
   // OpenAI API 호출
   const handleSubmit = async () => {
     if (dietList.length === 0) {
-      alert('식단을 먼저 입력해주세요.');
+      // todo: 식단 입력 알림창 추가
       return router.push('/search');
     }
     const result = dietList
