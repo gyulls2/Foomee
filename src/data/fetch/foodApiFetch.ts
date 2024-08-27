@@ -4,6 +4,7 @@ const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
 export const foodApiFetch = async (
   foodName: string,
+  pageNo: number = 1,
 ): Promise<FoodDataResponse | null> => {
   try {
     const url =
@@ -16,11 +17,11 @@ export const foodApiFetch = async (
       '&' +
       encodeURIComponent('pageNo') +
       '=' +
-      encodeURIComponent('1') +
+      encodeURIComponent(pageNo.toString()) +
       '&' +
       encodeURIComponent('numOfRows') +
       '=' +
-      encodeURIComponent('10') +
+      encodeURIComponent('20') +
       '&' +
       encodeURIComponent('type') +
       '=' +

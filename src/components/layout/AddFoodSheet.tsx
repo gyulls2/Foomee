@@ -28,14 +28,22 @@ interface Props {
 }
 
 const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
-  const {
-    FOOD_NM_KR: name,
+  const { FOOD_NM_KR: name } = foodData;
+  let {
     AMT_NUM1: enerc,
     AMT_NUM7: chocdf,
     AMT_NUM3: prot,
     AMT_NUM4: fatce,
     SERVING_SIZE: size,
   } = foodData;
+
+  // 값이 없을 경우 0으로 설정
+  enerc = enerc || '0';
+  chocdf = chocdf || '0';
+  prot = prot || '0';
+  fatce = fatce || '0';
+  size = size || '0';
+
   const [isServing, setIsServing] = useState(true);
   const [quantity, setQuantity] = useState<string>('1'); // 초기값을 '1'로 설정
   const [isInputting, setIsInputting] = useState(false); // 사용자가 입력 중인지 추적
@@ -180,6 +188,11 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
     }
   };
 
+  // TODO: 음식 상세 페이지로 이동
+  const handleOpenDetail = () => {
+    router.push('/nutrition');
+  };
+
   return (
     <div
       className="overflow-hidden absolute w-full min-h-screen h-full bg-black/70 z-30 flex flex-col justify-end"
@@ -309,6 +322,7 @@ const AddFoodSheet: React.FC<Props> = ({ type, foodData, setIsOpened }) => {
           <button
             type="button"
             className="w-4/12 rounded-full h-12 border-2 border-[#ffb800] text-center font-semibold leading-7 text-lg text-[#ffb800]"
+            onClick={handleOpenDetail}
           >
             음식 상세
           </button>
