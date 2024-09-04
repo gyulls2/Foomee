@@ -4,22 +4,25 @@
 
 ## 목차
 
-- [1. 프로젝트 소개 및 개요](#1-프로젝트-소개-및-개요)
-- [2. 기술스택 및 개발환경](#2-기술스택-및-개발환경)
-- [3. 폴더 구조](#3-폴더-구조)
-- [4. 구현 기능](#4-구현-기능)
-- [5. User Flow](#5-user-flow)
-- [6. 스크린샷](#6-스크린샷)
-- [7. 핵심 기능 및 코드](#7-핵심-기능-및-코드)
-- [8. 트러블슈팅](#8-트러블슈팅)
-- [9. Branch 전략](#9-branch-전략)
-- [10. 문서](#10-문서)
-- [11. 리팩토링](#11-리팩토링)
-- [12. 회고](#12-회고)
+1. [프로젝트 소개 및 개요](#프로젝트-소개-및-개요)
+2. [기술 스택 및 개발 환경](#기술-스택-및-개발-환경)
+3. [User Flow](#user-flow)
+4. [UI 구성 요소](#ui-구성-요소)
+5. [핵심 기능 및 코드](#핵심-기능-및-코드)
+   - [5-1. ChatGPT 프롬프트 생성](#5-1-chatgpt-프롬프트-생성)
+   - [5-2. 자동 빌드 및 배포(CI/CD)](#5-2-자동-빌드-및-배포cicd)
+   - [5-3. Swiper 라이브러리를 활용한 무한히 과거로 가는 차트 생성](#5-3-swiper-라이브러리를-활용한-무한히-과거로-가는-차트-생성)
+   - [5-4. 무한스크롤 커스텀 훅](#5-4-무한스크롤-커스텀-훅)
+6. [트러블슈팅](#트러블슈팅)
+   - [6-1. NextAuth 네이버 소셜 로그인 expires_in Type Error](#6-1-nextauth-네이버-소셜-로그인-expires_in-type-error)
+7. [Branch 전략](#branch-전략)
+8. [문서](#문서)
+9. [User Test](#user-test)
+10. [회고](#회고)
 
 ## **1. 프로젝트 소개 및 개요**
 
-- 프로젝트 기간 : 2024.07.29 ~ `진행중`
+- 프로젝트 기간 : 2024.07.29 ~ 2024.08.28
 - [배포 URL 🔗](https://foomee.vercel.app/)
 - [Notion 🔗](https://nifty-airmail-658.notion.site/405c1e6905064eb797f037787093baee?v=36303f63f46d41519e6b739b2a50e82b&pvs=4)
 
@@ -61,9 +64,13 @@
 
 ![FESP2 project figjam.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F8480a773-c75b-4a64-9a5f-7a62a73734c8%2Fimage.png?table=block&id=5f8b7f23-3cc5-4745-bbab-19dbf1df101f&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
 
-## 4. 핵심 기능 및 코드
+## 4. UI 구성 요소
+`추가 예정`
 
-### 4-1. ChatGPT 프롬프트 생성
+## 5. 핵심 기능 및 코드
+
+
+### 5-1. ChatGPT 프롬프트 생성
 
 - 사용자의 식단 데이터를 입력받아, 이를 분석하는 데 적합한 프롬프트를 생성하고, OpenAI의 gpt-4o-mini 모델을 이용해 분석 결과를 제공합니다.
 
@@ -101,7 +108,7 @@ export async function getChatResponse(prompt: string) {
 }
 ```
 
-### 4-2. **자동 빌드 및 배포(CI/CD)**
+### 5-2. **자동 빌드 및 배포(CI/CD)**
 
 - GitHub Actions를 사용하여 코드가 메인 브랜치에 푸시될 때 자동으로 빌드하고 `AWS EC2`에 배포되는 CI/CD 파이프라인을 구현했습니다.
 
@@ -206,11 +213,11 @@ jobs:
           EOF
 ```
 
-### 4-3. Swiper 라이브러리를 활용한 무한히 과거로 가는 차트 생성
+### 5-3. Swiper 라이브러리를 활용한 무한히 과거로 가는 차트 생성
 
 `추가 예정`
 
-### 4-4. 무한스크롤 커스텀 훅
+### 5-4. 무한스크롤 커스텀 훅
 
 - 모바일 사용자의 경험을 개선하기 위해, 페이지네이션 대신 무한 스크롤 기능을 구현하여 사용자의 편의성을 높였습니다.
 - `Intersection Observer API`를 활용하여 스크롤 이벤트로 인한 성능 저하를 방지하고, 부드러운 무한 스크롤 경험을 제공합니다.
@@ -260,9 +267,9 @@ const useInfiniteScroll = ({ hasMore, loadMore }: UseInfiniteScrollProps) => {
 export default useInfiniteScroll;
 ```
 
-## 5. 트러블슈팅
+## 6. 트러블슈팅
 
-### 5-1. NextAuth 네이버 소셜 로그인 **`expires_in` Type Error**
+### 6-1. NextAuth 네이버 소셜 로그인 **`expires_in` Type Error**
 
 NextAuth v5를 사용하여 네이버 소셜 로그인을 구현하는 과정에서 `expires_in` 필드의 타입 오류로 인해 `OperationProcessingError`가 발생했습니다.
 네이버의 OAuth2.0 응답에서 `expires_in` 값이 공식 문서와 달리 문자열로 반환되는 문제였습니다.
@@ -288,7 +295,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 이 설정을 통해 네이버의 비표준 응답을 처리할 수 있는 커스터마이즈된 `oauth4webapi` 패키지를 사용할 수 있었습니다.
 이를 통해 NextAuth에서 네이버 로그인을 구현할 수 있었고, 추가적으로 `pnpm`을 도입하면서 패키지를 더욱 효율적으로 관리할 수 있었습니다.
 
-## 9. Branch 전략
+## 7. Branch 전략
 
 **main - develop - feature**
 
@@ -313,7 +320,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 | RENAME   | 파일 혹은 폴더명을 수정하거나 옮기는 작업         |
 | REMOVE   | 파일을 삭제하는 작업만 수행한 경우                |
 
-## 10. 문서
+## 8. 문서
 
 [🖥️ 개발일지](https://www.notion.so/f7f2ffc731f8401a828acdbb30cdd068?pvs=21)
 
@@ -325,10 +332,10 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 
 [🎨 Figma | 프로토타입](https://www.figma.com/design/LmQzCnWpU99RaJEYYiVJiC/FESP2-project-figma?node-id=0-1&t=zQu8JNTBubhipiXF-1)
 
-## 11. User Test
+## 9. User Test
 
 - 구글 폼을 이용한 사용자 피드백 수집
-  [https://forms.gle/6RnAgbz5A2LDZHvS8](https://forms.gle/6RnAgbz5A2LDZHvS8)
+- [https://forms.gle/6RnAgbz5A2LDZHvS8](https://forms.gle/6RnAgbz5A2LDZHvS8)
 
 <details>
   <summary>사용자 피드백</summary>
@@ -341,7 +348,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 
 </details>
 
-## 12. 회고
+## 10. 회고
 ### [개발 과정에서의 노력]
 이번 프로젝트는 개인 프로젝트임에도 불구하고, 최대한 팀 프로젝트처럼 체계적으로 진행하고자 노력했습니다.
 Eslint와 Prettier 설정을 통해 코드 스타일을 일관되게 유지하고, GitHub의 Issue, PR 템플릿, Git의 Commit 템플릿을 활용하여 코드 변경 사항을 명확하게 기록하고 추적할 수 있도록 했습니다.
