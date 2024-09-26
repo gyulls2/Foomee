@@ -1,6 +1,6 @@
 # Foomee
 
-![Cover](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2Fe80fbf93-39c3-4640-85c7-af6d6cdb914f%2Fimage.png?table=block&id=39a42436-7475-4bec-897e-24b4f7df4b40&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
+![Cover](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/cover.png?raw=true)
 
 ## 목차
 
@@ -47,7 +47,7 @@
 
 ### [프로젝트 일정]
 
-![프로젝트 일정](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F01c56c9a-0f69-4483-8d90-1f0b144362de%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2024-08-27_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_11.19.05.png?table=block&id=d29fb13a-7bc6-4124-b6ec-0c86f29f4890&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
+![프로젝트 일정](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/schedule.png?raw=true)
 
 ## 2. 기술스택 및 개발환경
 
