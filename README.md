@@ -64,7 +64,7 @@
 
 ## **3. User Flow**
 
-![FESP2 project figjam.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F8480a773-c75b-4a64-9a5f-7a62a73734c8%2Fimage.png?table=block&id=5f8b7f23-3cc5-4745-bbab-19dbf1df101f&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
+![FESP2 project figjam.png](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/userflow.png)
 
 ## 4. UI 구성 요소
 
@@ -279,7 +279,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 
 문제 해결을 위해 네이버 개발자 포럼에서 관련 오류에 대한 네이버의 답변을 확인했습니다.
 네이버 측은 현재 OAuth2.0 스펙과 다르게 동작하고 있음을 인정하면서도, 기존 스펙을 수정하기는 어렵다는 입장을 밝혔습니다.
-![스크린샷 2024-08-28 오전 2.12.22.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F78b6dee2-bdb1-48c5-8033-99c719ef66cc%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2024-08-28_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%258C%25E1%2585%25A5%25E1%2586%25AB_2.12.22.png?table=block&id=2959004f-91c2-4b0c-b8b3-5140304be7c3&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
+![스크린샷 2024-08-28 오전 2.12.22.png](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/naver.png?raw=true)
 
 문제를 해결하기 위해 `expires_in` 필드가 문자열 타입이어도 문제없이 처리할 수 있는 forked 버전의 `oauth4webapi` 패키지를 사용했습니다.
 이를 위해 `pnpm`을 사용하여 `oauth4webapi` 패키지를 오버라이드했습니다.
@@ -339,7 +339,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 - 구글 폼을 이용한 사용자 피드백 수집
 - [https://forms.gle/6RnAgbz5A2LDZHvS8](https://forms.gle/6RnAgbz5A2LDZHvS8)
 
-<details>
+<!-- <details>
   <summary>사용자 피드백</summary>
 
 ![KakaoTalk_Snapshot_20240827_235227.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F07105c06-9151-46a0-b04c-b7dd21f3b28e%2FKakaoTalk_Snapshot_20240828_003023.png?table=block&id=94291dd8-9714-4bb6-92db-a56fb136b336&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
@@ -348,7 +348,7 @@ OAuth2.0 스펙에 따르면 `expires_in` 필드는 숫자형이어야 하지만
 
 ![KakaoTalk_Snapshot_20240828_003005.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2F34d0a4d7-1c3f-47b5-ba3f-48a669acf855%2FKakaoTalk_Snapshot_20240827_235227.png?table=block&id=2cc8b7da-b088-44ee-a52f-0f7deb022f19&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
 
-</details>
+</details> -->
 
 ## 10. 회고
 
