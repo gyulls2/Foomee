@@ -64,11 +64,11 @@
 
 ## **3. User Flow**
 
-![FESP2 project figjam.png](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/userflow.png)
+![FESP2 project figjam.png](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/userflow.png?raw=true)
 
 ## 4. UI 구성 요소
 
-![UI PREVIEW.png](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbfb5a48f-115e-4757-a1dd-1b668428a1fa%2Ff8192b44-1349-4035-8072-336960fad9f5%2FUI_PREVIEW.png?table=block&id=5bc26696-67ec-43c6-9b22-69dd173e58df&spaceId=bfb5a48f-115e-4757-a1dd-1b668428a1fa&width=2000&userId=20a52541-f6a7-4160-bec8-f1855dc5f692&cache=v2)
+![UI PREVIEW.png](https://github.com/gyulls2/Foomee/blob/main/public/images/readme/uipreview.png?raw=true)
 
 ## 5. 핵심 기능 및 코드
 
